@@ -1,0 +1,78 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.26"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Parser",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Parser::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Parser-Debug-4cc8229420c36b306d68.json",
+					"name" : "Parser",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Regex::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Regex-Debug-9d34ce08b11f827c0237.json",
+					"name" : "Regex",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Token::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Token-Debug-91469eeb2237742b6b52.json",
+					"name" : "Token",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/Parser/cmake-build-debug",
+		"source" : "/home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/Parser"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 5
+	}
+}

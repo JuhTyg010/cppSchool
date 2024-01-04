@@ -1,0 +1,5 @@
+/home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/Parser/cmake-build-debug/CMakeFiles/Parser.dir
+/home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/Parser/cmake-build-debug/CMakeFiles/Regex.dir
+/home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/Parser/cmake-build-debug/CMakeFiles/Token.dir
+/home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/Parser/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/Parser/cmake-build-debug/CMakeFiles/rebuild_cache.dir
