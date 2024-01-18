@@ -30,46 +30,6 @@ namespace expressions {
         virtual Value::ptr add(double rhs) const = 0;
     };
 
-// use `final` if you don't want to allow further inheritance (use sparingly, here it is mainly for demonstration purposes)
-    class Int final : public Value { // public inheritance keeps the access rights to the members of the base class as they are (this is the most common case)
-    public:
-        explicit Int(int value) : value_(value) {} // `explicit` prevents implicit conversions from `int` to `Int`
-
-        int get() const { return value_; }
-
-        // `override` specifies that we require the base class to define a virtual method of the same signature
-        //   note that `override` is optional, but it helps the compiler catch errors
-        std::ostream& print(std::ostream& out) const override {
-            return out << value_;
-        }
-
-        // TODO: implement `operator+` (it calls the `add` method on `rhs`) and the two `add` methods
-        Value::ptr operator+(const Value& rhs) const override {
-            return rhs.add(value_);
-        }
-
-        Value::ptr add(int rhs) const override {
-            int sum = value_ + rhs;
-            return std::make_shared<Int>(sum);
-        }
-
-        Value::ptr add(double rhs) const override {
-            double sum = value_ + rhs;
-            return std::make_shared<Int>(sum);
-        }
-
-        Value::ptr operator+(const int rhs) const {
-            return add(rhs);
-        }
-
-
-        operator int() const { return value_; } // implicit conversion to `int`
-        operator double() const { return value_; } // implicit conversion to `double`
-
-    private:
-        int value_;
-    };
-
     class Double final : public Value {
     public:
         explicit Double(double value) : value_(value) {} // `explicit` prevents implicit conversions from `double` to `Double`
@@ -102,6 +62,43 @@ namespace expressions {
     private:
         double value_;
     };
+
+// use `final` if you don't want to allow further inheritance (use sparingly, here it is mainly for demonstration purposes)
+    class Int final : public Value { // public inheritance keeps the access rights to the members of the base class as they are (this is the most common case)
+    public:
+        explicit Int(int value) : value_(value) {} // `explicit` prevents implicit conversions from `int` to `Int`
+
+        int get() const { return value_; }
+
+        // `override` specifies that we require the base class to define a virtual method of the same signature
+        //   note that `override` is optional, but it helps the compiler catch errors
+        std::ostream& print(std::ostream& out) const override {
+            return out << value_;
+        }
+
+        // TODO: implement `operator+` (it calls the `add` method on `rhs`) and the two `add` methods
+        Value::ptr operator+(const Value& rhs) const override {
+            return rhs.add(value_);
+        }
+
+        Value::ptr add(int rhs) const override {
+            int sum = value_ + rhs;
+            return std::make_shared<Int>(sum);
+        }
+
+        Value::ptr add(double rhs) const override {
+            double sum = value_ + rhs;
+            return std::make_shared<Double>(sum);
+        }
+
+        operator int() const { return value_; } // implicit conversion to `int`
+        operator double() const { return value_; } // implicit conversion to `double`
+
+    private:
+        int value_;
+    };
+
+
 
     class Expression {
     public:
