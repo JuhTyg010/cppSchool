@@ -1,5 +1,3 @@
-## Project Specification and Documentation
+## Project source files
 
-Put your project proposal in this folder and create a link from this [README](README.md).
-Zde se nachadza [Specifikace](Specifikacia.md).
-Do the same with project documentation later.
+Put your main project files (`CMakeLists.txt`, `.vcxproj` etc.) here. Put your source files here or in subdirectories.
