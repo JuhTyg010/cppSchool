@@ -1,0 +1,1 @@
+CMakeLists.txt not found in /home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/sadovsm/finalhw Select CMakeLists.txt
