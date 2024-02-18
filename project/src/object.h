@@ -10,17 +10,18 @@
 
 class Object {
 
-    float x, y;
-    float width, height;
+
     float vertical_speed;
     float horizontal_speed;
 
-
 public:
+    float x, y;
+    float width, height;
     sf::RectangleShape body;
-    Object(float x, float y, float width, float height);
-    void update();
-    void set_speed();
+    Object() = default;
+    ~Object() = default;
+    virtual void update();
+    virtual void set_speed();
 };
 
 
