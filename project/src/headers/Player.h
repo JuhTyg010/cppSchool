@@ -6,16 +6,16 @@
 #define INC_3D_GAME_PLAYER_H
 #include <SFML/Graphics.hpp>
 #include "object.h"
+#include <memory>
 
 class Player: public Object{
 private:
     float acceleration;
     float speed;
     float rotationSpeed;
-    float jump;
-
 public:
     Player(sf::Vector2f size, sf::Vector2f position);
+    Player(sf::Vector2f size, sf::Vector2f position, sf::Color color);
     void update(float dt) override;
 
 

@@ -6,15 +6,15 @@
 #define INC_3D_GAME_MAP_H
 #include <vector>
 #include "wall.h"
+#include "Player.h"
 #include <sstream>
 #include <memory>
+#include <fstream>
 
 class Map {
 private:
-    std::vector<Object> walls;
 public:
-    Map(std::string& map, sf::Color color);
-    std::vector<Object>& getWalls();
+    Map(std::string& file, sf::Color color, float Width, float Height);
 };
 
 

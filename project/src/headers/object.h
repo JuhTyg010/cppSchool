@@ -10,19 +10,17 @@
 
 class Object {
 
-    float x, y;
-    float width, height;
-    sf::Vector2f OldPosition;
 
 public:
 
     sf::RectangleShape body;
     sf::Vector2f velocity;
     Object() = default;
+    Object(sf::Vector2f size, sf::Vector2f position, sf::Color color);
     ~Object() = default;
     virtual void update(float dt);
-    virtual Collider getCollider();
-    virtual void onCollision(sf::Vector2f &direction);
+    virtual Collider getCollider(){ return (body);};
+    virtual void Render(sf::RenderWindow &window) {window.draw(body);};
 };
 
 

@@ -13,7 +13,6 @@ Player::Player(sf::Vector2f size, sf::Vector2f position) {
     body.setFillColor(sf::Color::Green);
     speed = 10;
     rotationSpeed = 100;
-    jump = 0.0f;
 }
 
 void Player::update(float dt) {
@@ -26,6 +25,7 @@ void Player::update(float dt) {
     }*/ //this will be later now we use it to rotate the player
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
         body.rotate(-rotationSpeed * dt);
+        std::cout << "rotating left" << std::endl;
     } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
         body.rotate(rotationSpeed * dt);
     }
@@ -41,5 +41,14 @@ void Player::update(float dt) {
     velocity *= 0.95f;
     sf::Vector2f pos = body.getPosition();
     body.setPosition(pos.x + velocity.x, pos.y + velocity.y);
+}
+
+Player::Player(sf::Vector2f size, sf::Vector2f position, sf::Color color) : Object(size, position, color) {
+    body.setSize(size);
+    body.setOrigin(size / 2.0f);
+    body.setPosition(position);
+    body.setFillColor(color);
+    speed = 10;
+    rotationSpeed = 100;
 }
 

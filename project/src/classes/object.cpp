@@ -2,23 +2,21 @@
 // Created by juhtyg on 18.1.24.
 //
 #include "../headers/object.h"
+#include <iostream>
 
 void Object::update(float dt) {
-    x += velocity.x;
-    y += velocity.y;
+    float x = body.getPosition().x + velocity.x;
+    float y = body.getPosition().y + velocity.y;
     body.setPosition(x, y);
 
 }
 
-Collider Object::getCollider() {return (body);}
-
-void Object::onCollision(sf::Vector2f &direction) {
-    if (direction.x != 0.0f) {
-        velocity.x = 0.0f;
-    }
-    if (direction.y != 0.0f) {
-        velocity.y = 0.0f;
-    }
-    body.setPosition(OldPosition);
+Object::Object(sf::Vector2f size, sf::Vector2f position, sf::Color color) {
+    body.setSize(size);
+    body.setFillColor(color);
+    body.setOrigin(size / 2.0f);
+    body.setPosition(position);
 }
+
+
 
