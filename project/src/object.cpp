@@ -3,11 +3,24 @@
 //
 #include "object.h"
 
-void Object::update() {
-    x += horizontal_speed;
-    y += vertical_speed;
+void Object::update(float dt) {
+    x += velocity.x;
+    y += velocity.y;
     body.setPosition(x, y);
 
 }
 
+Collider Object::getCollider() {
+    return Collider(body, velocity);
+}
+
+void Object::onCollision(sf::Vector2f &direction) {
+    if (direction.x != 0.0f) {
+        velocity.x = 0.0f;
+    }
+    if (direction.y != 0.0f) {
+        velocity.y = 0.0f;
+    }
+    body.setPosition(OldPosition);
+}
 

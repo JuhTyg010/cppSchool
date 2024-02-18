@@ -1,51 +1,38 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "object.h"
+#include "Player.h"
 
 int main() {
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "Demonstration");
-
-    sf::RectangleShape button(sf::Vector2f(100, 50));
-    button.setPosition(350, 275);
-    button.setFillColor(sf::Color::White);
-
-    Object Player(50,50,800,600);
-
-    std::vector<sf::Color> colorList = {
-            sf::Color::Red,
-            sf::Color::Green,
-            sf::Color::Blue,
-            sf::Color::Yellow,
-            sf::Color::Magenta
-    };
-    int color = 0;
+    std::vector<Object> objects;
+    std::string map = "#########"
+                      "#       #"
+                      "#       #"
+                      "#       #"
+                      "#       #"
+                      "#########";
+    Player player(sf::Vector2f(20, 30), sf::Vector2f(400, 300));
+    objects.push_back(player);
     sf::Clock clock;
 
     while (window.isOpen()) {
         sf::Event event;
+        sf::Time dt = clock.restart();
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
-
-            if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
-                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-                if (button.getGlobalBounds().contains(mousePos)) {
-
-                    ++color %= colorList.size();
-                }
-            }
-            sf::Time deltaTime = clock.restart();
 
             // Handle keyboard input
 
         }
 
-        Player.update();
-
-        window.clear(colorList[color]);
-        window.draw(Player.body);
-        window.draw(button);
+        player.update(dt.asSeconds());
+        window.clear();
+        for(auto &object : objects) {
+            window.draw(object.body);
+        }
         window.display();
     }
 

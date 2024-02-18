@@ -6,22 +6,23 @@
 #define INC_3D_GAME_OBJECT_H
 
 #include <SFML/Graphics.hpp>
-
+#include "Collider.h"
 
 class Object {
 
-
-    float vertical_speed;
-    float horizontal_speed;
-
-public:
     float x, y;
     float width, height;
+    sf::Vector2f OldPosition;
+
+public:
+
     sf::RectangleShape body;
+    sf::Vector2f velocity;
     Object() = default;
     ~Object() = default;
-    virtual void update();
-    virtual void set_speed();
+    virtual void update(float dt);
+    virtual Collider getCollider();
+    virtual void onCollision(sf::Vector2f &direction);
 };
 
 
