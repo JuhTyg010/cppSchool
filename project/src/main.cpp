@@ -8,12 +8,9 @@ int main() {
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "Demonstration");
     std::vector<std::shared_ptr<Object>> objects;
-    std::string map = "#########";
+    std::string map = "\n\n    ########";
     Map m(map, sf::Color::White);
-    std::vector<Object> walls = m.getWalls();
-    for(auto &wall : walls) {
-        objects.push_back(std::make_shared<Object>(wall));
-    }
+
     Player player(sf::Vector2f(60, 50), sf::Vector2f(400, 300));
     objects.push_back(std::make_shared<Player>(player));
     sf::Clock clock;
@@ -29,9 +26,16 @@ int main() {
         for(auto &object : objects) {
             object->update(dt.asSeconds());
         }
+        for(auto &wall : m.getWalls()) {
+            for(auto &object : objects)
+            wall.getCollider().checkCollision( object->getCollider(), 1.0f);
+        }
         window.clear();
         for(auto &object : objects) {
             window.draw(object->body);
+        }
+        for(auto &wall : m.getWalls()) {
+            window.draw(wall.body);
         }
         window.display();
     }

@@ -10,9 +10,7 @@ void Object::update(float dt) {
 
 }
 
-Collider Object::getCollider() {
-    return Collider(body, velocity);
-}
+Collider Object::getCollider() {return (body);}
 
 void Object::onCollision(sf::Vector2f &direction) {
     if (direction.x != 0.0f) {

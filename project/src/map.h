@@ -7,6 +7,7 @@
 #include <vector>
 #include "wall.h"
 #include <sstream>
+#include <memory>
 
 class Map {
 private:
