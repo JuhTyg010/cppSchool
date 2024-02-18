@@ -4,11 +4,16 @@
 
 #ifndef INC_3D_GAME_MAP_H
 #define INC_3D_GAME_MAP_H
-#include <string>
+#include <vector>
+#include "wall.h"
+#include <sstream>
 
 class Map {
+private:
+    std::vector<Object> walls;
 public:
-    Map(std::string map);
+    Map(std::string& map, sf::Color color);
+    std::vector<Object>& getWalls();
 };
 
 

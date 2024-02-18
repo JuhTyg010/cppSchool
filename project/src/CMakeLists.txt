@@ -14,6 +14,8 @@ add_executable(demo main.cpp
 target_link_libraries(demo sfml-graphics sfml-audio sfml-window)
 
 add_executable(project main.cpp
+        map.cpp map.h
+        wall.cpp wall.h
         object.h object.cpp
         Player.h Player.cpp
         Collider.cpp Collider.h

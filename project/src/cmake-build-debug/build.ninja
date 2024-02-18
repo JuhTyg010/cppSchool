@@ -96,6 +96,20 @@ build CMakeFiles/project.dir/main.cpp.o: CXX_COMPILER__project_unscanned_Debug /
   OBJECT_DIR = CMakeFiles/project.dir
   OBJECT_FILE_DIR = CMakeFiles/project.dir
 
+build CMakeFiles/project.dir/map.cpp.o: CXX_COMPILER__project_unscanned_Debug /home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/sadovsm/project/src/map.cpp || cmake_object_order_depends_target_project
+  DEP_FILE = CMakeFiles/project.dir/map.cpp.o.d
+  FLAGS = -g -std=c++23 -fdiagnostics-color=always
+  INCLUDES = -I/home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/sadovsm/project/src/include -I/home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/sadovsm/project/src/Utils
+  OBJECT_DIR = CMakeFiles/project.dir
+  OBJECT_FILE_DIR = CMakeFiles/project.dir
+
+build CMakeFiles/project.dir/wall.cpp.o: CXX_COMPILER__project_unscanned_Debug /home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/sadovsm/project/src/wall.cpp || cmake_object_order_depends_target_project
+  DEP_FILE = CMakeFiles/project.dir/wall.cpp.o.d
+  FLAGS = -g -std=c++23 -fdiagnostics-color=always
+  INCLUDES = -I/home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/sadovsm/project/src/include -I/home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/sadovsm/project/src/Utils
+  OBJECT_DIR = CMakeFiles/project.dir
+  OBJECT_FILE_DIR = CMakeFiles/project.dir
+
 build CMakeFiles/project.dir/object.cpp.o: CXX_COMPILER__project_unscanned_Debug /home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/sadovsm/project/src/object.cpp || cmake_object_order_depends_target_project
   DEP_FILE = CMakeFiles/project.dir/object.cpp.o.d
   FLAGS = -g -std=c++23 -fdiagnostics-color=always
@@ -132,7 +146,7 @@ build CMakeFiles/project.dir/Utils/Utils.cpp.o: CXX_COMPILER__project_unscanned_
 #############################################
 # Link the executable project
 
-build project: CXX_EXECUTABLE_LINKER__project_Debug CMakeFiles/project.dir/main.cpp.o CMakeFiles/project.dir/object.cpp.o CMakeFiles/project.dir/Player.cpp.o CMakeFiles/project.dir/Collider.cpp.o CMakeFiles/project.dir/Utils/Utils.cpp.o | /usr/lib/libsfml-graphics.so.2.6.1 /usr/lib/libsfml-audio.so.2.6.1 /usr/lib/libsfml-window.so.2.6.1 /usr/lib/libsfml-system.so.2.6.1
+build project: CXX_EXECUTABLE_LINKER__project_Debug CMakeFiles/project.dir/main.cpp.o CMakeFiles/project.dir/map.cpp.o CMakeFiles/project.dir/wall.cpp.o CMakeFiles/project.dir/object.cpp.o CMakeFiles/project.dir/Player.cpp.o CMakeFiles/project.dir/Collider.cpp.o CMakeFiles/project.dir/Utils/Utils.cpp.o | /usr/lib/libsfml-graphics.so.2.6.1 /usr/lib/libsfml-audio.so.2.6.1 /usr/lib/libsfml-window.so.2.6.1 /usr/lib/libsfml-system.so.2.6.1
   FLAGS = -g
   LINK_LIBRARIES = /usr/lib/libsfml-graphics.so.2.6.1  /usr/lib/libsfml-audio.so.2.6.1  /usr/lib/libsfml-window.so.2.6.1  /usr/lib/libsfml-system.so.2.6.1
   OBJECT_DIR = CMakeFiles/project.dir
