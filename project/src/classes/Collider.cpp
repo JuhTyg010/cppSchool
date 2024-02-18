@@ -2,7 +2,7 @@
 // Created by juhtyg on 18.2.24.
 //
 
-#include "Collider.h"
+#include "../headers/Collider.h"
 #include <iostream>
 
 Collider::Collider(sf::RectangleShape &body) : body(body) {}

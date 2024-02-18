@@ -2,7 +2,7 @@
 // Created by juhtyg on 18.2.24.
 //
 
-#include "map.h"
+#include "../headers/map.h"
 
 Map::Map(std::string& map, sf::Color color) {
     float width = 50.0f;

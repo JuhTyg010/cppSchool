@@ -1,7 +1,7 @@
 //
 // Created by juhtyg on 18.1.24.
 //
-#include "object.h"
+#include "../headers/object.h"
 
 void Object::update(float dt) {
     x += velocity.x;

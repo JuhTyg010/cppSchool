@@ -9,15 +9,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(SFML COMPONENTS graphics audio window REQUIRED)
 include_directories(include Utils)
 
-add_executable(demo main.cpp
-        object.h object.cpp)
+add_executable(demo classes/main.cpp
+        headers/object.h classes/object.cpp)
 target_link_libraries(demo sfml-graphics sfml-audio sfml-window)
 
-add_executable(project main.cpp
-        map.cpp map.h
-        wall.cpp wall.h
-        object.h object.cpp
-        Player.h Player.cpp
-        Collider.cpp Collider.h
+add_executable(project classes/main.cpp
+        classes/map.cpp headers/map.h
+        classes/wall.cpp headers/wall.h
+        headers/object.h classes/object.cpp
+        headers/Player.h classes/Player.cpp
+        classes/Collider.cpp headers/Collider.h
         Utils/Utils.cpp Utils/Utils.h)
 target_link_libraries(project sfml-graphics sfml-audio sfml-window)

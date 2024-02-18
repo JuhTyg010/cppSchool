@@ -2,7 +2,7 @@
 // Created by juhtyg on 18.2.24.
 //
 
-#include "Player.h"
+#include "../headers/Player.h"
 #include "Utils.h"
 #include <cmath>
 

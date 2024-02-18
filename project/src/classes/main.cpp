@@ -1,14 +1,21 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "object.h"
-#include "Player.h"
-#include "map.h"
+#include "../headers/object.h"
+#include "../headers/Player.h"
+#include "../headers/map.h"
 #include <memory>
 int main() {
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "Demonstration");
     std::vector<std::shared_ptr<Object>> objects;
-    std::string map = "\n\n    ########";
+    std::string map = "########"
+                     "#      #"
+                     "#      #"
+                     "#      #"
+                     "#      #"
+                     "#      #"
+                     "#      #"
+                     "########";
     Map m(map, sf::Color::White);
 
     Player player(sf::Vector2f(60, 50), sf::Vector2f(400, 300));
