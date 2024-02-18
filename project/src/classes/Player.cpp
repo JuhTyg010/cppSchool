@@ -13,42 +13,61 @@ Player::Player(sf::Vector2f size, sf::Vector2f position) {
     body.setFillColor(sf::Color::Green);
     speed = 10;
     rotationSpeed = 100;
+    angle = 0;
 }
 
 void Player::update(float dt) {
-    /*if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
         acceleration.x = -speed * dt;
     } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
         acceleration.x = speed * dt;
     } else {
         acceleration.x = 0;
-    }*/ //this will be later now we use it to rotate the player
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-        body.rotate(-rotationSpeed * dt);
-        std::cout << "rotating left" << std::endl;
-    } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-        body.rotate(rotationSpeed * dt);
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q)) {
+        angle -= rotationSpeed * dt;
+    } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E)) {
+        angle += rotationSpeed * dt;
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-        acceleration = -speed * dt;
+        acceleration.y = -speed * dt;
     } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-        acceleration = speed * dt;
+        acceleration.y = speed * dt;
     } else {
-        acceleration = 0;
+        acceleration.y = 0;
     }
-    velocity.x += acceleration * std::cos(body.getRotation() * 3.14159265359 / 180);
-    velocity.y += acceleration * std::sin(body.getRotation() * 3.14159265359 / 180);
+    velocity.x += acceleration.x;
+    velocity.y += acceleration.y;
     velocity *= 0.95f;
+    if(angle > 360) {
+        angle -= 360;
+    } else if(angle < 0) {
+        angle += 360;
+    }
+    if(angle > 0 && angle < 90) {
+        sprite.setTextureRect(sf::IntRect(0, 0, 100, 100));
+    } else if(angle > 90 && angle < 180) {
+        sprite.setTextureRect(sf::IntRect(100, 0, 100, 100));
+    } else if(angle > 180 && angle < 270) {
+        sprite.setTextureRect(sf::IntRect(100, 100, 100, 100));
+    } else if(angle > 270 && angle < 360) {
+        sprite.setTextureRect(sf::IntRect(0, 100, 100, 100));
+    }
+
     sf::Vector2f pos = body.getPosition();
     body.setPosition(pos.x + velocity.x, pos.y + velocity.y);
 }
 
-Player::Player(sf::Vector2f size, sf::Vector2f position, sf::Color color) : Object(size, position, color) {
+Player::Player(sf::Texture& texture, sf::Vector2f size, sf::Vector2f position, sf::Color color)  {
     body.setSize(size);
     body.setOrigin(size / 2.0f);
     body.setPosition(position);
     body.setFillColor(color);
+    this->texture = texture;
+    sprite.setTexture(texture);
+    sprite.setTextureRect(sf::IntRect(0, 0, 100, 100));
     speed = 10;
+    angle = 0;
     rotationSpeed = 100;
 }
 

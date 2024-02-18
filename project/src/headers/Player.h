@@ -10,12 +10,13 @@
 
 class Player: public Object{
 private:
-    float acceleration;
+    sf::Vector2f acceleration;
     float speed;
     float rotationSpeed;
+    float angle;
 public:
     Player(sf::Vector2f size, sf::Vector2f position);
-    Player(sf::Vector2f size, sf::Vector2f position, sf::Color color);
+    Player(sf::Texture& texture, sf::Vector2f size, sf::Vector2f position, sf::Color color);
     void update(float dt) override;
 
 

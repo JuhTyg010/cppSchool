@@ -25,6 +25,8 @@ void Generate(std::string& file, sf::Color color, float Width, float Height, std
     height = Height / height;
     int row = 0;
     int player = 0;
+    sf::Texture texture;
+    texture.loadFromFile("../external/player.png");
     while(std::getline(openfile, line)) {
         for(int i = 0; i < line.size(); i++) {
             if(line[i] == '#') {
@@ -32,7 +34,7 @@ void Generate(std::string& file, sf::Color color, float Width, float Height, std
             } else if(line[i] == 'P') {
                 if(player == 0) {
                     player = 1;
-                    objects.push_back(std::make_unique<Player>(Player(sf::Vector2f(30, 20), sf::Vector2f(width * i + width / 2, height * row + height / 2), sf::Color::Red)));
+                    objects.push_back(std::make_unique<Player>(Player(texture, sf::Vector2f(30, 20), sf::Vector2f(width * i + width / 2, height * row + height / 2), sf::Color::Red)));
                 }
             }
         }
@@ -65,9 +67,8 @@ int main() {
 
         for(auto& object : objects){
             for(auto& other : objects){
-                if(object != other && !dynamic_cast<Player*>(object.get())){
+                if(dynamic_cast<Wall*>(object.get()) && dynamic_cast<Player*>(other.get())){
                     object->getCollider().checkCollision(other->getCollider(), 1.0f);
-                    //TODO: wall collisions
                 }
             }
         }

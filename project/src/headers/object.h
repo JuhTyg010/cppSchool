@@ -9,18 +9,19 @@
 #include "Collider.h"
 
 class Object {
-
+protected:
+    sf::Texture texture;
+    sf::Sprite sprite;
 
 public:
 
     sf::RectangleShape body;
     sf::Vector2f velocity;
     Object() = default;
-    Object(sf::Vector2f size, sf::Vector2f position, sf::Color color);
     ~Object() = default;
     virtual void update(float dt);
     virtual Collider getCollider(){ return (body);};
-    virtual void Render(sf::RenderWindow &window) {window.draw(body);};
+    virtual void Render(sf::RenderWindow &window) {window.draw(body); window.draw(sprite);};
 };
 
 
