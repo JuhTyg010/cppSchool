@@ -10,8 +10,6 @@
 
 class Object {
 protected:
-    sf::Texture texture;
-    sf::Sprite sprite;
 
 public:
 
@@ -21,7 +19,7 @@ public:
     ~Object() = default;
     virtual void update(float dt);
     virtual Collider getCollider(){ return (body);};
-    virtual void Render(sf::RenderWindow &window) {window.draw(body); window.draw(sprite);};
+    virtual void Render(sf::RenderWindow &window) {window.draw(body);};
 };
 
 

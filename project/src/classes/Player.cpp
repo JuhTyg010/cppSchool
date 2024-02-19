@@ -44,30 +44,31 @@ void Player::update(float dt) {
     } else if(angle < 0) {
         angle += 360;
     }
-    if(angle > 0 && angle < 90) {
-        sprite.setTextureRect(sf::IntRect(0, 0, 100, 100));
-    } else if(angle > 90 && angle < 180) {
-        sprite.setTextureRect(sf::IntRect(100, 0, 100, 100));
-    } else if(angle > 180 && angle < 270) {
-        sprite.setTextureRect(sf::IntRect(100, 100, 100, 100));
-    } else if(angle > 270 && angle < 360) {
-        sprite.setTextureRect(sf::IntRect(0, 100, 100, 100));
+    //0 -> 337.5 - 22.5 1 -> 22.5 - 67.5 2 -> 67.5 - 112.5 3 -> 112.5 - 157.5 4 -> 157.5 - 202.5 5 -> 202.5 - 247.5 6 -> 247.5 - 292.5 7 -> 292.5 - 337.5
+    sf::Vector2f direction = sprite->getCurrentFrame();
+    if(angle < direction.x * 45 - 22.5) {
+        sprite->prevAnimation();
+    } else if(angle > direction.x * 45 + 22.5) {
+        sprite->nextAnimation();
     }
-
     sf::Vector2f pos = body.getPosition();
     body.setPosition(pos.x + velocity.x, pos.y + velocity.y);
 }
 
-Player::Player(sf::Texture& texture, sf::Vector2f size, sf::Vector2f position, sf::Color color)  {
+Player::Player(spriteRenderer& sprite, sf::Vector2f size, sf::Vector2f position, sf::Color color)  {
     body.setSize(size);
     body.setOrigin(size / 2.0f);
     body.setPosition(position);
     body.setFillColor(color);
-    this->texture = texture;
-    sprite.setTexture(texture);
-    sprite.setTextureRect(sf::IntRect(0, 0, 100, 100));
+    this->sprite = std::make_shared<spriteRenderer>(sprite);
+    sprite.setPosition(position);
     speed = 10;
     angle = 0;
     rotationSpeed = 100;
+}
+
+void Player::Render(sf::RenderWindow &window) {
+    Object::Render(window);
+    sprite->Render(window);
 }
 

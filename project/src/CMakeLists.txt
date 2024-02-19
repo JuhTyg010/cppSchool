@@ -19,5 +19,6 @@ add_executable(project classes/main.cpp
         headers/object.h classes/object.cpp
         headers/Player.h classes/Player.cpp
         classes/Collider.cpp headers/Collider.h
-        Utils/Utils.cpp Utils/Utils.h)
+        Utils/Utils.cpp Utils/Utils.h
+        headers/spriteRenderer.h classes/spriteRenderer.cpp)
 target_link_libraries(project sfml-graphics sfml-audio sfml-window)
