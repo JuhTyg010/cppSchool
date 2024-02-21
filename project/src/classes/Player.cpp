@@ -42,8 +42,8 @@ void Player::update(float dt) {
         acceleration.y = 0;
     }
 
-    velocity.x += acceleration.x * cos(MyMath::DegToRad(angle)) - acceleration.y * sin(MyMath::DegToRad(angle));
-    velocity.y += acceleration.y * cos(MyMath::DegToRad(angle)) + acceleration.x * sin(MyMath::DegToRad(angle));
+    velocity.x += acceleration.x * (float) cos(MyMath::DegToRad(angle)) - acceleration.y * (float) sin(MyMath::DegToRad(angle));
+    velocity.y += acceleration.y * (float) cos(MyMath::DegToRad(angle)) + acceleration.x * (float) sin(MyMath::DegToRad(angle));
     velocity *= 0.95f;
     if(angle > 360) {
         angle -= 360;

@@ -6,14 +6,13 @@
 
 
 spriteRenderer::spriteRenderer(const std::string& path, sf::Vector2f position, sf::Vector2f scale,
-                               sf::Vector2f size, sf::Vector2f matrix) :
-position(position), scale(scale), matrix(matrix){
+                               sf::Vector2f size, sf::Vector2f matrix) : matrix(matrix){
     texture.loadFromFile(path);
     sprite.setTexture(texture);
     sprite.setOrigin(size.x / 2, size.y / 2);
     sprite.setPosition(position);
     sprite.setScale(scale);
-    rectSourceSprite = sf::IntRect(0, 0, size.x, size.y);
+    rectSourceSprite = sf::IntRect(0, 0, (int) size.x, (int) size.y);
     currentFrame = sf::Vector2f(0, 0);
 }
 
@@ -24,7 +23,7 @@ void spriteRenderer::nextFrame() {
     } else {
         currentFrame.x = 0;
     }
-    rectSourceSprite.left =  currentFrame.x *  rectSourceSprite.width;
+    rectSourceSprite.left = (int)( currentFrame.x * (float) rectSourceSprite.width);
 }
 
 void spriteRenderer::prevFrame() {
@@ -33,7 +32,7 @@ void spriteRenderer::prevFrame() {
     } else {
         currentFrame.x = matrix.x;
     }
-    rectSourceSprite.left = currentFrame.x * rectSourceSprite.width;
+    rectSourceSprite.left = (int)( currentFrame.x * (float) rectSourceSprite.width);
 }
 
 void spriteRenderer::nextAnimation() {
@@ -42,7 +41,7 @@ void spriteRenderer::nextAnimation() {
     } else {
         currentFrame.y = 0;
     }
-    rectSourceSprite.top = currentFrame.y * rectSourceSprite.height;
+    rectSourceSprite.top = (int)( currentFrame.y * (float) rectSourceSprite.height);
 }
 
 void spriteRenderer::prevAnimation() {
@@ -51,7 +50,7 @@ void spriteRenderer::prevAnimation() {
     } else {
         currentFrame.y = matrix.y;
     }
-    rectSourceSprite.top = currentFrame.y * rectSourceSprite.height;
+    rectSourceSprite.top = (int)( currentFrame.y * (float) rectSourceSprite.height);
 }
 
 sf::Vector2f spriteRenderer::getCurrentFrame() {
@@ -69,6 +68,6 @@ void spriteRenderer::setPosition(sf::Vector2f pos) {
     sprite.setPosition(pos);
 }
 
-void spriteRenderer::setScale(sf::Vector2f scale) {
-    sprite.setScale(scale);
+void spriteRenderer::setScale(sf::Vector2f scale_) {
+    sprite.setScale(scale_);
 }

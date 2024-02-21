@@ -17,6 +17,6 @@ public:
     static double RadToDeg(double rad);
 };
 
-float getDistance(sf::Vector2f vec1, sf::Vector2f vec2);
+double getDistance(sf::Vector2f vec1, sf::Vector2f vec2);
 
 #endif //INC_3D_GAME_UTILS_H

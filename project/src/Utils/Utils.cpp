@@ -10,7 +10,7 @@ sf::Vector2f clampVec(sf::Vector2f vec, sf::Vector2f lower, sf::Vector2f upper) 
     return output;
 }
 
-float getDistance(sf::Vector2f vec1, sf::Vector2f vec2) {
+double getDistance(sf::Vector2f vec1, sf::Vector2f vec2) {
     return std::sqrt(std::pow((vec1.x - vec2.x), 2) + std::pow((vec1.y - vec2.y), 2));
 }
 

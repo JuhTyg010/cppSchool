@@ -22,12 +22,12 @@ void Generate(std::string& file, sf::Color color, float Width, float Height, std
     while(std::getline(openfile, line)) {
         for(int i = 0; i < line.size(); i++) {
             if(line[i] == '#') {
-                objects.push_back(std::make_unique<Wall>(Wall(sf::Vector2f(width, height), sf::Vector2f(width * i + width / 2, height * row + height / 2), color)));
+                objects.push_back(std::make_unique<Wall>(Wall(sf::Vector2f(width, height), sf::Vector2f(width * (float) i + width / 2, height * (float) row + height / 2), color)));
             } else if(line[i] == 'P') {
                 if(player == 0) {
                     player = 1;
                     objects.push_back(std::make_unique<Player>(Player("../external/direction.png",
-                                                                      sf::Vector2f(width * i + width / 2, height * row + height / 2),
+                                                                      sf::Vector2f(width * (float) i + width / 2, height * (float) row + height / 2),
                                                                       sf::Vector2f (.5,.5), sf::Vector2f(64, 64),sf::Vector2f(7,0))));
                 }
             }
