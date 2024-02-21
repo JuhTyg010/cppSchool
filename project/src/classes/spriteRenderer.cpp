@@ -5,9 +5,10 @@
 #include "../headers/spriteRenderer.h"
 
 
-spriteRenderer::spriteRenderer(const std::string& path, sf::Vector2f position, sf::Vector2f scale,
+spriteRenderer::spriteRenderer(sf::Texture& texture, sf::Vector2f position, sf::Vector2f scale,
                                sf::Vector2f size, sf::Vector2f matrix) : matrix(matrix){
-    texture.loadFromFile(path);
+    //texture.loadFromFile(path);
+
     sprite.setTexture(texture);
     sprite.setOrigin(size.x / 2, size.y / 2);
     sprite.setPosition(position);
@@ -58,7 +59,7 @@ sf::Vector2f spriteRenderer::getCurrentFrame() {
 }
 
 void spriteRenderer::Render(sf::RenderWindow &window) {
-    sprite.setTexture(texture);
+    //sprite.setTexture(texture);
     sprite.setTextureRect(rectSourceSprite);
     std::cout << rectSourceSprite.left << " " << rectSourceSprite.top << std::endl;
     window.draw(sprite);

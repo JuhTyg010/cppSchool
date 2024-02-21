@@ -17,7 +17,7 @@ private:
     float angle;
     std::unique_ptr<spriteRenderer> sprite;
 public:
-    Player(const std::string& path, sf::Vector2f position, sf::Vector2f scale, sf::Vector2f size, sf::Vector2f matrix);
+    Player(sf::Texture& texture, sf::Vector2f position, sf::Vector2f scale, sf::Vector2f size, sf::Vector2f matrix);
     void update(float dt) override;
     void Render(sf::RenderWindow &window) override;
 

@@ -5,8 +5,17 @@
 #include "../headers/map.h"
 #include <memory>
 
+std::vector<std::unique_ptr<sf::Texture>> LoadTextures() {
+    std::vector<std::unique_ptr<sf::Texture>> textures;
+    std::unique_ptr<sf::Texture> playerTexture = std::make_unique<sf::Texture>();
 
-void Generate(std::string& file, sf::Color color, float Width, float Height, std::vector<std::unique_ptr<Object>>& objects) {
+    playerTexture->loadFromFile("../external/direction.png");
+    textures.push_back(std::move(playerTexture));
+
+    return textures;
+}
+
+void Generate(std::string& file, sf::Color color, float Width, float Height, std::vector<std::unique_ptr<Object>>& objects,const std::vector<std::unique_ptr<sf::Texture>>& textures) {
     std::ifstream openfile(file);
 
     std::string line;
@@ -26,7 +35,7 @@ void Generate(std::string& file, sf::Color color, float Width, float Height, std
             } else if(line[i] == 'P') {
                 if(player == 0) {
                     player = 1;
-                    objects.push_back(std::make_unique<Player>(Player("../external/direction.png",
+                    objects.push_back(std::make_unique<Player>(Player(*textures[0],
                                                                       sf::Vector2f(width * (float) i + width / 2, height * (float) row + height / 2),
                                                                       sf::Vector2f (.5,.5), sf::Vector2f(64, 64),sf::Vector2f(7,0))));
                 }
@@ -41,7 +50,9 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Working Title");
     std::vector<std::unique_ptr<Object>> objects;
     std::string map = "../external/map1.txt";
-    Generate(map, sf::Color::Blue,800, 600, objects);
+    std::vector<std::unique_ptr<sf::Texture>> textures;
+    textures = LoadTextures();
+    Generate(map, sf::Color::Blue,800, 600, objects, textures);
 
 
     //Player player(sf::Vector2f(60, 50), sf::Vector2f(400, 300));
@@ -77,4 +88,6 @@ int main() {
 
     return 0;
 }
+
+
 

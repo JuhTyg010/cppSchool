@@ -14,11 +14,11 @@ private:
     sf::IntRect rectSourceSprite;
     sf::Vector2f matrix;
     sf::Vector2f currentFrame;
-    sf::Texture texture;
+    //sf::Texture& texture;
 public:
     sf::Sprite sprite;
     spriteRenderer() = default;
-    spriteRenderer(const std::string& path, sf::Vector2f position, sf::Vector2f scale, sf::Vector2f  size, sf::Vector2f matrix);
+    spriteRenderer(sf::Texture& texture, sf::Vector2f position, sf::Vector2f scale, sf::Vector2f  size, sf::Vector2f matrix);
     void nextFrame();
     void prevFrame();
 

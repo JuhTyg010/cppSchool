@@ -7,8 +7,8 @@
 #include <cmath>
 
 
-Player::Player(const std::string &path, sf::Vector2f position, sf::Vector2f scale, sf::Vector2f size,sf::Vector2f matrix) {
-    sprite = std::make_unique<spriteRenderer>(spriteRenderer(path, position, scale, size, matrix));
+Player::Player(sf::Texture& texture, sf::Vector2f position, sf::Vector2f scale, sf::Vector2f size,sf::Vector2f matrix) {
+    sprite = std::make_unique<spriteRenderer>(spriteRenderer(texture, position, scale, size, matrix));
     sf::Vector2f actSize(size.x*scale.x, size.y * scale.y);
     body.setSize(actSize);
     body.setOrigin(size / 2.0f);
