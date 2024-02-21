@@ -19,9 +19,6 @@ void Generate(std::string& file, sf::Color color, float Width, float Height, std
     height = Height / height;
     int row = 0;
     int player = 0;
-    sf::Texture texture;
-    texture.loadFromFile("../external/direction.png");
-    spriteRenderer sprite( texture, sf::Vector2f(100, 100), sf::Vector2f(1, 1), sf::IntRect(0, 0, 64, 64), sf::Vector2f(0, 7));
     while(std::getline(openfile, line)) {
         for(int i = 0; i < line.size(); i++) {
             if(line[i] == '#') {
@@ -29,7 +26,9 @@ void Generate(std::string& file, sf::Color color, float Width, float Height, std
             } else if(line[i] == 'P') {
                 if(player == 0) {
                     player = 1;
-                    objects.push_back(std::make_unique<Player>(Player(sprite, sf::Vector2f(30, 40), sf::Vector2f(width * i + width / 2, height * row + height / 2), sf::Color::Red)));
+                    objects.push_back(std::make_unique<Player>(Player("../external/direction.png",
+                                                                      sf::Vector2f(width * i + width / 2, height * row + height / 2),
+                                                                      sf::Vector2f (.5,.5), sf::Vector2f(64, 64),sf::Vector2f(7,0))));
                 }
             }
         }
@@ -43,12 +42,7 @@ int main() {
     std::vector<std::unique_ptr<Object>> objects;
     std::string map = "../external/map1.txt";
     Generate(map, sf::Color::Blue,800, 600, objects);
-    sf::Texture texture;
-    texture.loadFromFile("../external/player.png");
-    sf::Sprite sprite;
-    sprite.setTexture(texture);
-    sf::IntRect rectSourceSprite(0, 0, 100, 100);
-    sprite.setTextureRect(rectSourceSprite);
+
 
     //Player player(sf::Vector2f(60, 50), sf::Vector2f(400, 300));
 
@@ -78,7 +72,6 @@ int main() {
         window.clear();
 
         for(auto &object : objects) object->Render(window);
-        window.draw(sprite);
         window.display();
     }
 

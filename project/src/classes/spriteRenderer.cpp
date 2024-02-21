@@ -5,24 +5,26 @@
 #include "../headers/spriteRenderer.h"
 
 
-spriteRenderer::spriteRenderer(sf::Texture texture, sf::Vector2f position, sf::Vector2f size,
-                               sf::IntRect&& rectSourceSprite, sf::Vector2f matrix) :
-position(position), size(size), matrix(matrix), rectSourceSprite(rectSourceSprite){
-   // texture.loadFromFile(path);
+spriteRenderer::spriteRenderer(const std::string& path, sf::Vector2f position, sf::Vector2f scale,
+                               sf::Vector2f size, sf::Vector2f matrix) :
+position(position), scale(scale), matrix(matrix){
+    texture.loadFromFile(path);
     sprite.setTexture(texture);
+    sprite.setOrigin(size.x / 2, size.y / 2);
     sprite.setPosition(position);
-    sprite.setScale(size);
-    currentFrame = sf::Vector2f(rectSourceSprite.left, rectSourceSprite.top);
+    sprite.setScale(scale);
+    rectSourceSprite = sf::IntRect(0, 0, size.x, size.y);
+    currentFrame = sf::Vector2f(0, 0);
 }
 
 
 void spriteRenderer::nextFrame() {
     if(matrix.x > currentFrame.x) {
-        currentFrame.x++;
+        currentFrame.x += 1;
     } else {
         currentFrame.x = 0;
     }
-    rectSourceSprite.left = currentFrame.x * rectSourceSprite.width;
+    rectSourceSprite.left =  currentFrame.x *  rectSourceSprite.width;
 }
 
 void spriteRenderer::prevFrame() {
@@ -57,6 +59,7 @@ sf::Vector2f spriteRenderer::getCurrentFrame() {
 }
 
 void spriteRenderer::Render(sf::RenderWindow &window) {
+    sprite.setTexture(texture);
     sprite.setTextureRect(rectSourceSprite);
     std::cout << rectSourceSprite.left << " " << rectSourceSprite.top << std::endl;
     window.draw(sprite);

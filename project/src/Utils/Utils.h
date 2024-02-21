@@ -11,7 +11,11 @@
 #include <cmath>
 
 sf::Vector2f clampVec(sf::Vector2f vec, sf::Vector2f lower, sf::Vector2f upper);
-
+class MyMath {
+public:
+    static double DegToRad(double deg);
+    static double RadToDeg(double rad);
+};
 
 float getDistance(sf::Vector2f vec1, sf::Vector2f vec2);
 

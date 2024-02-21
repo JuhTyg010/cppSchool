@@ -12,14 +12,15 @@
 class spriteRenderer {
 private:
     sf::Vector2f position;
-    sf::Vector2f size;
+    sf::Vector2f scale;
     sf::IntRect rectSourceSprite;
     sf::Vector2f matrix;
     sf::Vector2f currentFrame;
 public:
     sf::Sprite sprite;
-    //sf::Texture texture;
-    spriteRenderer(sf::Texture texture, sf::Vector2f position, sf::Vector2f size, sf::IntRect&& rectSourceSprite, sf::Vector2f matrix);
+    sf::Texture texture;
+    spriteRenderer();
+    spriteRenderer(const std::string& path, sf::Vector2f position, sf::Vector2f scale, sf::Vector2f  size, sf::Vector2f matrix);
     void nextFrame();
     void prevFrame();
 

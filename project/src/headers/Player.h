@@ -15,10 +15,9 @@ private:
     float speed;
     float rotationSpeed;
     float angle;
-    std::shared_ptr<spriteRenderer> sprite;
+    std::unique_ptr<spriteRenderer> sprite;
 public:
-    Player(sf::Vector2f size, sf::Vector2f position);
-    Player(spriteRenderer& sprite, sf::Vector2f size, sf::Vector2f position, sf::Color color);
+    Player(const std::string& path, sf::Vector2f position, sf::Vector2f scale, sf::Vector2f size, sf::Vector2f matrix);
     void update(float dt) override;
     void Render(sf::RenderWindow &window) override;
 
