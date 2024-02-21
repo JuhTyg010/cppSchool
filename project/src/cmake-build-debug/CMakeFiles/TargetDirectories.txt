@@ -1,4 +1,0 @@
-/home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/sadovsm/project/src/cmake-build-debug/CMakeFiles/demo.dir
-/home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/sadovsm/project/src/cmake-build-debug/CMakeFiles/project.dir
-/home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/sadovsm/project/src/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/sadovsm/project/src/cmake-build-debug/CMakeFiles/rebuild_cache.dir
