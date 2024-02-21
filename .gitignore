@@ -12,3 +12,4 @@ Release
 x64
 *.user
 CMakeSettings.json
+cmake-build-debug
