@@ -10,11 +10,22 @@
 #include <sstream>
 #include <memory>
 #include <fstream>
+#include <unordered_map>
+
+using object_ptrs = std::vector<std::unique_ptr<Object>>;
+using texture_ptrs = std::vector<std::unique_ptr<sf::Texture>>;
+
 
 class Map {
 private:
+    std::vector<std::vector<int>>& map;
+    object_ptrs objects;
+    float Width;
+    float Height;
 public:
-    Map(std::string& file, sf::Color color, float Width, float Height);
+    Map(const std::string& file, const std::string& config, float Width, float Height,  std::vector<std::vector<int>>& map, texture_ptrs& textures);
+    void update(float dt);
+    void render(sf::RenderWindow& window);
 };
 
 
