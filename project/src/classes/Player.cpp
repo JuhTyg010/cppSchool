@@ -19,6 +19,13 @@ Player::Player(sf::Texture& texture, sf::Vector2f position, sf::Vector2f scale, 
     rotationSpeed = 150;
 }
 
+sf::Vector2f Player::getPosition() {
+    return body.getPosition();
+}
+
+sf::Vector2f Player::getDirection() {
+    return sf::Vector2f((float) cos(MyMath::DegToRad(angle)), (float) sin(MyMath::DegToRad(angle)));
+}
 
 void Player::update(float dt) {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {

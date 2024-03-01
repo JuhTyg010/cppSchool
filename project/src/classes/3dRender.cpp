@@ -5,12 +5,27 @@
 #include "../headers/3dRender.h"
 
 
-Camera::Camera(sf::Vector2f plane, sf::Vector2u windowSize, std::vector<std::vector<int>>& map) : plane(plane), windowSize(windowSize), map(map) {}
+Camera::Camera(sf::Vector2f plane, sf::Vector2u windowSize, sf::Vector2u textureSize,
+               std::vector<std::vector<int>>& map, sf::Texture& texture):
+               plane(plane), windowSize(windowSize), textureSize(textureSize), map(map) {
+    for(int i = 0; i < windowSize.x; i++){
+        stripes.push_back(std::make_unique<Stripe>(i, textureSize.y, sf::Vector2f(1, 1), texture));
+    }
+}
 
-Camera::Camera(float planeX, float planeY, unsigned int windowWidth, unsigned int windowHeight, std::vector<std::vector<int>>& map) :
-        plane(planeX, planeY), windowSize(windowWidth, windowHeight), map(map) {}
+Camera::Camera(float planeX, float planeY, unsigned int windowWidth, unsigned int windowHeight, sf::Vector2u textureSize,
+               std::vector<std::vector<int>>& map, sf::Texture& texture) :
+        plane(planeX, planeY), windowSize(windowWidth, windowHeight), textureSize(textureSize), map(map) {
+    for(int i = 0; i < windowSize.x; i++){
+        stripes.push_back(std::make_unique<Stripe>(i, textureSize.y, sf::Vector2f(1, 1), texture));
+    }
+}
 
-Camera::Camera(const Camera &other) : plane(other.plane), windowSize(other.windowSize), map(other.map) {}
+Camera::Camera(const Camera &other) : plane(other.plane), windowSize(other.windowSize), textureSize(other.textureSize), map(other.map){
+    for(int i = 0; i < windowSize.x; i++){
+        stripes.push_back(std::make_unique<Stripe>(*other.stripes[i]));
+    }
+}
 
 void Camera::render(const sf::Vector2f &position, const sf::Vector2f &direction, sf::RenderWindow &window) {
     for(int i = 0; i < windowSize.x; i++){
@@ -62,7 +77,7 @@ void Camera::render(const sf::Vector2f &position, const sf::Vector2f &direction,
                 isXAxis = false;
             }
             //Check if ray has hit a wall
-            if(map[mapPos.x][mapPos.y] > 0)     isHit = true;
+            if(map.at(mapPos.x).at(mapPos.y) > 0)     isHit = true;
         }
         if(isXAxis)     perpWallDist = sideDist.x - deltaDist.x;
         else            perpWallDist = sideDist.y - deltaDist.y;
@@ -71,16 +86,31 @@ void Camera::render(const sf::Vector2f &position, const sf::Vector2f &direction,
         int lineHeight = (int)(windowSize.y / perpWallDist);
         int pitch = 100;
 
-        //calculate lowest and highest pixel to fill in current stripe
+        //calculate lowest and highest pixel to fill in current Stripe
         int drawStart = -lineHeight / 2 + windowSize.y / 2 + pitch;
         if(drawStart < 0)   drawStart = 0;
         int drawEnd = lineHeight / 2 + windowSize.y / 2 + pitch;
         if(drawEnd >= windowSize.y) drawEnd = windowSize.y - 1;
 
+        std::cout << drawStart << " " << drawEnd << std::endl;
         int textureNum = map[mapPos.x][mapPos.y] - 1; //to start from 0
-        //TODO: Create stripe with some texture and draw it or make buffer then draw it
+        //TODO: Create Stripe with some texture and draw it or make buffer then draw it
 
+        float wallX; //where exactly the wall was hit
+        if(isXAxis)     wallX = position.y + perpWallDist * rayDir.y;
+        else            wallX = position.x + perpWallDist * rayDir.x;
+        wallX -= std::floor(wallX);
 
-        //window.draw(line, 2, sf::Lines);
+        //x coordinate on the texture
+        int texX = (int)(wallX * (float)textureSize.x);
+        if(isXAxis && rayDir.x > 0) texX = textureSize.x - texX - 1;
+        if(!isXAxis && rayDir.y < 0) texX = textureSize.x - texX - 1;
+
+        //update Stripe
+        stripes[i]->update(texX, drawStart, drawEnd, textureNum);
+
+    }
+    for(auto& stripe : stripes){
+        stripe->Render(window);
     }
 }

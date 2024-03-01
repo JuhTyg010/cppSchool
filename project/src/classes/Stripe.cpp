@@ -10,6 +10,9 @@ Stripe::Stripe(int position, int size, sf::Vector2f matrix, sf::Texture& texture
             (spriteRenderer(texture, sf::Vector2f(position, 0), sf::Vector2f(1,1), sf::Vector2f(1,size), matrix));
 }
 
+Stripe::Stripe(const Stripe &other)
+    : position(other.position), size(other.size), matrix(other.matrix), scale(other.scale), sprite(std::make_unique<spriteRenderer>(*other.sprite)){}
+
 void Stripe::rescale(int drawStart, int drawEnd) {
     int height = drawEnd - drawStart;
     scale = (float) height / (float) size.y;
@@ -17,7 +20,7 @@ void Stripe::rescale(int drawStart, int drawEnd) {
 }
 
 void Stripe::update(int Xdistance, int drawStart, int drawEnd, int texture) {
-    sprite->setPosition(sf::Vector2f(position, drawStart));
+    sprite->setPosition(sf::Vector2f(position, 300-drawStart));
     rescale(drawStart, drawEnd);
     sprite->setTextureRect(sf::IntRect(Xdistance, texture, 1, size.y));
 }

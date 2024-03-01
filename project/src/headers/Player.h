@@ -18,6 +18,10 @@ private:
     std::unique_ptr<spriteRenderer> sprite;
 public:
     Player(sf::Texture& texture, sf::Vector2f position, sf::Vector2f scale, sf::Vector2f size, sf::Vector2f matrix);
+
+    sf::Vector2f getPosition();
+    sf::Vector2f getDirection();
+
     void update(float dt) override;
     void Render(sf::RenderWindow &window) override;
 

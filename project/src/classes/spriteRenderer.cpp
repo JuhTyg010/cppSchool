@@ -72,6 +72,5 @@ void spriteRenderer::setScale(sf::Vector2f scale_) {
 
 void spriteRenderer::Render(sf::RenderWindow &window) {
     sprite.setTextureRect(rectSourceSprite);
-    std::cout << rectSourceSprite.left << " " << rectSourceSprite.top << std::endl;
     window.draw(sprite);
 }

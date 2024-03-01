@@ -4,7 +4,8 @@
 
 #include "../headers/map.h"
 
-Map::Map(const std::string& file, const std::string& config, float Width, float Height, std::vector<std::vector<int>>& map, texture_ptrs& textures) : map(map) {
+Map::Map(const std::string& file, const std::string& config, float Width, float Height, std::vector<std::vector<int>>& map, texture_ptrs& textures)
+        : map(map), Width(Width), Height(Height) {
     std::ifstream openfile(file);
 
     std::unordered_map<std::string, std::string> settings;
@@ -55,6 +56,27 @@ Map::Map(const std::string& file, const std::string& config, float Width, float 
         row++;
     }
     openfile.close();
+}
+
+sf::Vector2f Map::getPlayerPosition() {
+    for(auto& object : objects) {
+        if(dynamic_cast<Player*>(object.get())) {
+            sf::Vector2f pos = dynamic_cast<Player*>(object.get())->getPosition();
+            //recalculate to map coordinates
+            sf::Vector2f tileSize(Width / (float) map[0].size(), Height / (float) map.size());
+            return { pos.x / tileSize.x, pos.y / tileSize.y};
+        }
+    }
+    return {0,0};
+}
+
+sf::Vector2f Map::getPlayerdirection() {
+    for(auto& object : objects) {
+        if(dynamic_cast<Player*>(object.get())) {
+            return dynamic_cast<Player*>(object.get())->getDirection();
+        }
+    }
+    return sf::Vector2f(0,0);
 }
 
 void Map::update(float dt) {
