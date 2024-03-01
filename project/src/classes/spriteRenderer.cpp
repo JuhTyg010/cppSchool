@@ -58,11 +58,8 @@ sf::Vector2f spriteRenderer::getCurrentFrame() {
     return currentFrame;
 }
 
-void spriteRenderer::Render(sf::RenderWindow &window) {
-    //sprite.setTexture(texture);
-    sprite.setTextureRect(rectSourceSprite);
-    std::cout << rectSourceSprite.left << " " << rectSourceSprite.top << std::endl;
-    window.draw(sprite);
+void spriteRenderer::setTextureRect(sf::IntRect rect) {
+    rectSourceSprite = rect;
 }
 
 void spriteRenderer::setPosition(sf::Vector2f pos) {
@@ -71,4 +68,10 @@ void spriteRenderer::setPosition(sf::Vector2f pos) {
 
 void spriteRenderer::setScale(sf::Vector2f scale_) {
     sprite.setScale(scale_);
+}
+
+void spriteRenderer::Render(sf::RenderWindow &window) {
+    sprite.setTextureRect(rectSourceSprite);
+    std::cout << rectSourceSprite.left << " " << rectSourceSprite.top << std::endl;
+    window.draw(sprite);
 }

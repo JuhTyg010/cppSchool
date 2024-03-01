@@ -26,6 +26,7 @@ public:
     void prevAnimation();
     void Render(sf::RenderWindow &window);
     void setPosition(sf::Vector2f position);
+    void setTextureRect(sf::IntRect rect);
     void setScale(sf::Vector2f scale_);
     sf::Vector2f getCurrentFrame();
 

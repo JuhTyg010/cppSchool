@@ -22,5 +22,7 @@ add_executable(project classes/main.cpp
         Utils/Utils.cpp Utils/Utils.h
         headers/spriteRenderer.h classes/spriteRenderer.cpp
         headers/3dRender.h
-        classes/3dRender.cpp)
+        classes/3dRender.cpp
+        headers/Stripe.h
+        classes/Stripe.cpp)
 target_link_libraries(project sfml-graphics sfml-audio sfml-window)

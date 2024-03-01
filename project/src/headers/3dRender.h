@@ -8,12 +8,14 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <vector>
+#include "Stripe.h"
 
 class Camera {
 private:
     sf::Vector2f plane;
     sf::Vector2u windowSize;
     std::vector<std::vector<int>>& map;
+    std::vector<Stripe> stripes;
 
 public:
     Camera(sf::Vector2f plane, sf::Vector2u windowSize, std::vector<std::vector<int>>& map);
