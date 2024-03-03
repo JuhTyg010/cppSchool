@@ -1,8 +1,10 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Font.hpp>
 #include <SFML/Window.hpp>
 #include "../headers/Player.h"
 #include "../headers/map.h"
+#include "../headers/button.h"
 #include <memory>
 
 using texture_ptr = std::unique_ptr<sf::Texture>;
@@ -42,7 +44,11 @@ int main() {
             }
         }
     }
+    sf::Font font;
+    font.loadFromFile("../external/advanced_pixel-7.ttf");
     Player player(*textures[1], pos, sf::Vector2i(WIDTH, HEIGHT), textures[1]->getSize(), map_data);
+    Button resume(sf::Vector2f(600, 400), sf::Vector2f(200, 100), *textures[1], sf::Vector2f(1, 1), "Resume", font, sf::Color::Red);
+    Button quit(sf::Vector2f(600, 600), sf::Vector2f(200, 100), *textures[1], sf::Vector2f(1, 1), "Quit", font, sf::Color::Red);
     sf::Clock clock;
     bool isPaused = false;
 
@@ -62,11 +68,19 @@ int main() {
             window.clear();
             player.Render(window);
             map.render(window);
-            window.display();
         } else {
             window.setMouseCursorVisible(true);
-        }
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+                if(resume.isClicked(sf::Mouse::getPosition(window)))        isPaused = false;
+                else if(quit.isClicked(sf::Mouse::getPosition(window)))     window.close();
 
+            }
+            window.clear();
+            player.Render(window);
+            resume.Render(window);
+            quit.Render(window);
+        }
+        window.display();
 
     }
 
