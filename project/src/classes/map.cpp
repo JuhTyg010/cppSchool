@@ -4,7 +4,7 @@
 
 #include "../headers/map.h"
 
-Map::Map(const std::string& file, const std::string& config, float Width, float Height, std::vector<std::vector<int>>& map, texture_ptrs& textures)
+Map::Map(const std::string& file, const std::string& config, float Width, float Height, std::vector<std::vector<int>>& map)
         : map(map), Width(Width), Height(Height) {
     std::ifstream openfile(file);
 
@@ -30,23 +30,17 @@ Map::Map(const std::string& file, const std::string& config, float Width, float 
     for(int i = 0; i < static_cast<int>(height); i++) {
         map[i].resize(static_cast<int>(width));
     }
-    width = Width / width;
-    height = Height / height;
     int row = 0;
     int player = 0;
     while(std::getline(openfile, line)) {
         for(int i = 0; i < line.size(); i++) {
             try{
-                sf::Vector2f position(width * (float) i + width / 2, height * (float) row + height / 2);
                 if(line[i] == '#') {
                     map.at(row).at(i) = 1;
-                    objects.push_back(std::make_unique<Wall>(Wall(sf::Vector2f(width, height), position, sf::Color::Blue)));
                 } else if(line[i] == 'P') {
                     if(player == 0) {
                         player = 1;
                         map.at(row).at(i) = 2;
-                        objects.push_back(std::make_unique<Player>(Player(*textures[0],position, sf::Vector2f (.5,.5),
-                                                                      sf::Vector2f(64, 64),sf::Vector2f(7,0))));
                     }
                 }
             } catch (std::out_of_range& e) {
@@ -58,35 +52,26 @@ Map::Map(const std::string& file, const std::string& config, float Width, float 
     openfile.close();
 }
 
-sf::Vector2f Map::getPlayerPosition() {
-    for(auto& object : objects) {
-        if(dynamic_cast<Player*>(object.get())) {
-            sf::Vector2f pos = dynamic_cast<Player*>(object.get())->getPosition();
-            //recalculate to map coordinates
-            sf::Vector2f tileSize(Width / (float) map[0].size(), Height / (float) map.size());
-            return { pos.x / tileSize.x, pos.y / tileSize.y};
-        }
-    }
-    return {0,0};
-}
 
-sf::Vector2f Map::getPlayerdirection() {
-    for(auto& object : objects) {
-        if(dynamic_cast<Player*>(object.get())) {
-            return dynamic_cast<Player*>(object.get())->getDirection();
-        }
-    }
-    return sf::Vector2f(0,0);
-}
-
-void Map::update(float dt) {
-    for(auto& object : objects) {
-        object->update(dt);
-    }
-}
 
 void Map::render(sf::RenderWindow& window) {
-    for(auto& object : objects) {
-        object->Render(window);
+    sf::Vector2f size(Width / map.at(0).size(), Height / map.size());
+
+    for(int i = 0; i < map.size(); i++) {
+        for(int j = 0; j < map.at(i).size(); j++) {
+            if(map.at(i).at(j) == 1) {
+                sf::RectangleShape rectangle;
+                rectangle.setSize(size);
+                rectangle.setPosition(j * size.x, i * size.y);
+                rectangle.setFillColor(sf::Color::White);
+                window.draw(rectangle);
+            } else if(map.at(i).at(j) == 2) {
+                sf::RectangleShape rectangle;
+                rectangle.setSize(size / 2.0f);
+                rectangle.setPosition((j+.5f) * size.x, (i+.5f) * size.y);
+                rectangle.setFillColor(sf::Color::Green);
+                window.draw(rectangle);
+            }
+        }
     }
 }

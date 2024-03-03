@@ -5,25 +5,29 @@
 #ifndef INC_3D_GAME_PLAYER_H
 #define INC_3D_GAME_PLAYER_H
 #include <SFML/Graphics.hpp>
-#include "object.h"
-#include "spriteRenderer.h"
+#include "3dRender.h"
+#include "Utils.h"
 #include <memory>
 
-class Player: public Object{
+class Player{
 private:
-    sf::Vector2f acceleration;
+    const int legal[2] = {0,2};
     float speed;
     float rotationSpeed;
-    float angle;
-    std::unique_ptr<spriteRenderer> sprite;
+    Vector2d position;
+    Vector2d direction;
+    Vector2d plane;
+    std::unique_ptr<Camera> camera;
+    std::vector<std::vector<int>>& map;
+    bool isLegalPosition(const Vector2d& position);
 public:
-    Player(sf::Texture& texture, sf::Vector2f position, sf::Vector2f scale, sf::Vector2f size, sf::Vector2f matrix);
+    Player(sf::Texture& texture, Vector2d position, sf::Vector2u windowSize, sf::Vector2u textureSize, std::vector<std::vector<int>>& map);
 
     sf::Vector2f getPosition();
     sf::Vector2f getDirection();
 
-    void update(float dt) override;
-    void Render(sf::RenderWindow &window) override;
+    void update(float dt) ;
+    void Render(sf::RenderWindow &window) ;
 
 
 };

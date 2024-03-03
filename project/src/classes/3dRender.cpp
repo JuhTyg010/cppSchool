@@ -5,43 +5,45 @@
 #include "../headers/3dRender.h"
 
 
-Camera::Camera(sf::Vector2f plane, sf::Vector2u windowSize, sf::Vector2u textureSize,
-               std::vector<std::vector<int>>& map, sf::Texture& texture):
-               plane(plane), windowSize(windowSize), textureSize(textureSize), map(map) {
+Camera::Camera(sf::Vector2u windowSize, sf::Vector2u textureSize, std::vector<std::vector<int>>& map, sf::Texture& texture):
+                windowSize(windowSize), textureSize(textureSize), map(map){
     for(int i = 0; i < windowSize.x; i++){
         stripes.push_back(std::make_unique<Stripe>(i, textureSize.y, sf::Vector2f(1, 1), texture));
     }
 }
 
-Camera::Camera(float planeX, float planeY, unsigned int windowWidth, unsigned int windowHeight, sf::Vector2u textureSize,
+Camera::Camera( unsigned int windowWidth, unsigned int windowHeight, sf::Vector2u textureSize,
                std::vector<std::vector<int>>& map, sf::Texture& texture) :
-        plane(planeX, planeY), windowSize(windowWidth, windowHeight), textureSize(textureSize), map(map) {
+         windowSize(windowWidth, windowHeight), textureSize(textureSize), map(map) {
     for(int i = 0; i < windowSize.x; i++){
         stripes.push_back(std::make_unique<Stripe>(i, textureSize.y, sf::Vector2f(1, 1), texture));
     }
 }
 
-Camera::Camera(const Camera &other) : plane(other.plane), windowSize(other.windowSize), textureSize(other.textureSize), map(other.map){
+Camera::Camera(const Camera &other) :  windowSize(other.windowSize), textureSize(other.textureSize), map(other.map){
     for(int i = 0; i < windowSize.x; i++){
         stripes.push_back(std::make_unique<Stripe>(*other.stripes[i]));
     }
 }
 
-void Camera::render(const sf::Vector2f &position, const sf::Vector2f &direction, sf::RenderWindow &window) {
+void Camera::render(const Vector2d &position, const Vector2d &direction, const Vector2d &plane, sf::RenderWindow &window) {
+    //plane calculation
+
     for(int i = 0; i < windowSize.x; i++){
         //calculate ray position and direction
-        float cameraX = 2 * i / float(windowSize.x) - 1;
-        sf::Vector2f rayDir = direction + plane * cameraX;
+        double cameraX = 2 * i / double(windowSize.x) - 1;
+
+        Vector2d rayDir = direction + plane * cameraX;
 
         //which box of the map we're in
-        sf::Vector2i mapPos = sf::Vector2i(position.x, position.y);
+        sf::Vector2i mapPos = sf::Vector2i((int)position.x, (int)position.y);
 
         //length of ray from current position to next x or y-side for more see docs
-        sf::Vector2f sideDist;
+        Vector2d sideDist{};
 
         //length of ray from one x or y-side to next x or y-side (if rayDir.x or rayDir.y == 0 it will be infinity)
-        sf::Vector2f deltaDist = sf::Vector2f(std::abs(1 / rayDir.x), std::abs(1 / rayDir.y));
-        float perpWallDist;
+        Vector2d deltaDist = Vector2d(std::abs(1 / rayDir.x), std::abs(1 / rayDir.y));
+        double perpWallDist;
 
         //what direction to step in x or y-direction (either +1 or -1)
         sf::Vector2i step;
@@ -84,27 +86,27 @@ void Camera::render(const sf::Vector2f &position, const sf::Vector2f &direction,
 
         //Calculate height of line to draw on screen
         int lineHeight = (int)(windowSize.y / perpWallDist);
-        int pitch = 100;
+        int pitch = 80;
 
         //calculate lowest and highest pixel to fill in current Stripe
         int drawStart = -lineHeight / 2 + windowSize.y / 2 + pitch;
         if(drawStart < 0)   drawStart = 0;
         int drawEnd = lineHeight / 2 + windowSize.y / 2 + pitch;
-        if(drawEnd >= windowSize.y) drawEnd = windowSize.y - 1;
+        if(drawEnd >= windowSize.y) drawEnd = (int)windowSize.y - 1;
 
         std::cout << drawStart << " " << drawEnd << std::endl;
         int textureNum = map[mapPos.x][mapPos.y] - 1; //to start from 0
         //TODO: Create Stripe with some texture and draw it or make buffer then draw it
 
-        float wallX; //where exactly the wall was hit
+        double wallX; //where exactly the wall was hit
         if(isXAxis)     wallX = position.y + perpWallDist * rayDir.y;
         else            wallX = position.x + perpWallDist * rayDir.x;
         wallX -= std::floor(wallX);
 
         //x coordinate on the texture
         int texX = (int)(wallX * (float)textureSize.x);
-        if(isXAxis && rayDir.x > 0) texX = textureSize.x - texX - 1;
-        if(!isXAxis && rayDir.y < 0) texX = textureSize.x - texX - 1;
+        if(isXAxis && rayDir.x > 0) texX = (int)textureSize.x - texX - 1;
+        if(!isXAxis && rayDir.y < 0) texX = (int)textureSize.x - texX - 1;
 
         //update Stripe
         stripes[i]->update(texX, drawStart, drawEnd, textureNum);

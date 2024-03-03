@@ -35,8 +35,16 @@ int main() {
     texture_ptrs textures;
     std::vector<std::vector<int>> map_data;
     textures = LoadTextures();
-    Map map("../external/map1.txt", "../external/config.txt",400 , 300, map_data, textures);
-    Camera cam(0, 1, WIDTH, HEIGHT, sf::Vector2u(64, 64), map_data, *textures[1]);
+    Map map("../external/map1.txt", "../external/config.txt",400 , 300, map_data);
+    Vector2d pos;
+    for(int i = 0; i < map_data.size(); i++){
+        for(int j = 0; j < map_data[i].size(); j++){
+            if(map_data[i][j] == 2){
+                pos = Vector2d(i, j);
+            }
+        }
+    }
+    Player player(*textures[1], pos, window.getSize(), textures[1]->getSize(), map_data);
     sf::Clock clock;
 
     while (window.isOpen()) {
@@ -56,13 +64,10 @@ int main() {
             }
         }*/
 
-        map.update(dt.asSeconds());
+        player.update(dt.asSeconds());
         window.clear();
-        sf::Vector2f position = map.getPlayerPosition();
-        sf::Vector2f direction = map.getPlayerdirection();
-        //direction.x += M_PIf;
-        cam.render(position, direction, window);
-        //map.render(window);
+        player.Render(window);
+        map.render(window);
         window.display();
     }
 

@@ -20,7 +20,7 @@ void Stripe::rescale(int drawStart, int drawEnd) {
 }
 
 void Stripe::update(int Xdistance, int drawStart, int drawEnd, int texture) {
-    sprite->setPosition(sf::Vector2f(position, 300-drawStart));
+    sprite->setPosition(sf::Vector2f(position, 500-drawStart));
     rescale(drawStart, drawEnd);
     sprite->setTextureRect(sf::IntRect(Xdistance, texture, 1, size.y));
 }
