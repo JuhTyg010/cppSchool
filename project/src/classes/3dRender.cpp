@@ -79,7 +79,13 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
                 isXAxis = false;
             }
             //Check if ray has hit a wall
-            if(map.at(mapPos.x).at(mapPos.y) > 0)     isHit = true;
+            if(map.at(mapPos.x).at(mapPos.y) > 0)     {
+                if(map.at(mapPos.x).at(mapPos.y) > 4 ) {
+                    //TODO: item pickup
+                } else {
+                    isHit = true;
+                }
+            }
         }
         if(isXAxis)     perpWallDist = sideDist.x - deltaDist.x;
         else            perpWallDist = sideDist.y - deltaDist.y;

@@ -56,6 +56,10 @@ Map::Map(const std::string& file, const std::string& config, float Width, float 
 
 void Map::render(sf::RenderWindow& window) {
     sf::Vector2f size(Width / map.at(0).size(), Height / map.size());
+    sf::RectangleShape background(sf::Vector2(Width, Height));
+    background.setFillColor(sf::Color::Black);
+    background.setPosition(0, 0);
+    window.draw(background);
 
     for(int i = 0; i < map.size(); i++) {
         for(int j = 0; j < map.at(i).size(); j++) {
@@ -68,7 +72,7 @@ void Map::render(sf::RenderWindow& window) {
             } else if(map.at(i).at(j) == 2) {
                 sf::RectangleShape rectangle;
                 rectangle.setSize(size / 2.0f);
-                rectangle.setPosition((j+.5f) * size.x, (i+.5f) * size.y);
+                rectangle.setPosition((j+.25f) * size.x, (i+.25f) * size.y);
                 rectangle.setFillColor(sf::Color::Green);
                 window.draw(rectangle);
             }
