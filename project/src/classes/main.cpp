@@ -50,6 +50,11 @@ int main() {
     sf::Font font;
     font.loadFromFile("../external/advanced_pixel-7.ttf");
     Player player(*textures[2], pos, sf::Vector2i(WIDTH, HEIGHT), sf::Vector2u(64,64), map_data);
+    sf::RectangleShape sky(sf::Vector2f(WIDTH, HEIGHT / 2));
+    sky.setFillColor(sf::Color::Cyan);
+    sky.setPosition(0, 0);
+
+
     Button resume(sf::Vector2f(600, 400), sf::Vector2f(200, 100), *textures[1], sf::Vector2f(1, 1), "Resume", font, sf::Color::Black);
     Button quit(sf::Vector2f(600, 600), sf::Vector2f(200, 100), *textures[1], sf::Vector2f(1, 1), "Quit", font, sf::Color::Black);
     sf::Clock clock;
@@ -69,6 +74,7 @@ int main() {
             player.update(dt.asSeconds());
             window.setMouseCursorVisible(false);
             window.clear();
+            window.draw(sky);
             player.Render(window);
             map.render(window);
         } else {
@@ -79,6 +85,7 @@ int main() {
 
             }
             window.clear();
+            window.draw(sky);
             player.Render(window);
             resume.Render(window);
             quit.Render(window);
