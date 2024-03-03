@@ -18,14 +18,17 @@ constexpr int HEIGHT = 900;
 texture_ptrs LoadTextures() {
     texture_ptrs textures;
     texture_ptr playerTexture = std::make_unique<sf::Texture>();
-    texture_ptr wallTexture = std::make_unique<sf::Texture>();
+    texture_ptr buttonTexture = std::make_unique<sf::Texture>();
+    texture_ptr wallTexture2 = std::make_unique<sf::Texture>();
+
 
     playerTexture->loadFromFile("../external/direction.png");
-    wallTexture->loadFromFile("../external/background1.png");
+    buttonTexture->loadFromFile("../external/button.png");
+    wallTexture2->loadFromFile("../external/wall.png");
 
     textures.push_back(std::move(playerTexture));
-    textures.push_back(std::move(wallTexture));
-
+    textures.push_back(std::move(buttonTexture));
+    textures.push_back(std::move(wallTexture2));
     return textures;
 }
 
@@ -46,9 +49,9 @@ int main() {
     }
     sf::Font font;
     font.loadFromFile("../external/advanced_pixel-7.ttf");
-    Player player(*textures[1], pos, sf::Vector2i(WIDTH, HEIGHT), textures[1]->getSize(), map_data);
-    Button resume(sf::Vector2f(600, 400), sf::Vector2f(200, 100), *textures[1], sf::Vector2f(1, 1), "Resume", font, sf::Color::Red);
-    Button quit(sf::Vector2f(600, 600), sf::Vector2f(200, 100), *textures[1], sf::Vector2f(1, 1), "Quit", font, sf::Color::Red);
+    Player player(*textures[2], pos, sf::Vector2i(WIDTH, HEIGHT), sf::Vector2u(64,64), map_data);
+    Button resume(sf::Vector2f(600, 400), sf::Vector2f(200, 100), *textures[1], sf::Vector2f(1, 1), "Resume", font, sf::Color::Black);
+    Button quit(sf::Vector2f(600, 600), sf::Vector2f(200, 100), *textures[1], sf::Vector2f(1, 1), "Quit", font, sf::Color::Black);
     sf::Clock clock;
     bool isPaused = false;
 

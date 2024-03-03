@@ -105,7 +105,7 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         if(!isXAxis && rayDir.y < 0) texX = (int)textureSize.x - texX - 1;
 
         //update Stripe
-        stripes[i]->update(texX, drawStart, drawEnd, textureNum);
+        stripes[i]->update(texX , drawStart, drawEnd, textureNum);
 
     }
     for(auto& stripe : stripes){

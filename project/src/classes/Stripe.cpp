@@ -22,9 +22,10 @@ void Stripe::rescale(int drawStart, int drawEnd) {
 void Stripe::update(int Xdistance, int drawStart, int drawEnd, int texture) {
     //sprite->setPosition(position);
     rescale(drawStart, drawEnd);
-    sprite->setTextureRect(sf::IntRect(Xdistance, texture, 1, size.y));
+    sprite->setTextureRect(sf::IntRect(Xdistance, size.y * texture, 1, size.y));
 }
 
 void Stripe::Render(sf::RenderWindow &window) {
     sprite->Render(window);
 }
+
