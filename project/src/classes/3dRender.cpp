@@ -5,18 +5,18 @@
 #include "../headers/3dRender.h"
 
 
-Camera::Camera(sf::Vector2u windowSize, sf::Vector2u textureSize, std::vector<std::vector<int>>& map, sf::Texture& texture):
+Camera::Camera(sf::Vector2i windowSize, sf::Vector2u textureSize, std::vector<std::vector<int>>& map, sf::Texture& texture):
                 windowSize(windowSize), textureSize(textureSize), map(map){
     for(int i = 0; i < windowSize.x; i++){
-        stripes.push_back(std::make_unique<Stripe>(i, textureSize.y, sf::Vector2f(1, 1), texture));
+        stripes.push_back(std::make_unique<Stripe>(sf::Vector2f ((float)i, (float) windowSize.y / 2), textureSize.y, sf::Vector2f(1, 1), texture));
     }
 }
 
-Camera::Camera( unsigned int windowWidth, unsigned int windowHeight, sf::Vector2u textureSize,
+Camera::Camera(int windowWidth, int windowHeight, sf::Vector2u textureSize,
                std::vector<std::vector<int>>& map, sf::Texture& texture) :
          windowSize(windowWidth, windowHeight), textureSize(textureSize), map(map) {
     for(int i = 0; i < windowSize.x; i++){
-        stripes.push_back(std::make_unique<Stripe>(i, textureSize.y, sf::Vector2f(1, 1), texture));
+        stripes.push_back(std::make_unique<Stripe>(sf::Vector2f((float)i, (float) windowHeight / 2), textureSize.y, sf::Vector2f(1, 1), texture));
     }
 }
 
@@ -85,16 +85,12 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         else            perpWallDist = sideDist.y - deltaDist.y;
 
         //Calculate height of line to draw on screen
-        int lineHeight = (int)(windowSize.y / perpWallDist);
-        int pitch = 80;
+        int lineHeight = (int)(windowSize.y / perpWallDist) >> 1;   //divide by 2 to count only half of the screen
 
         //calculate lowest and highest pixel to fill in current Stripe
-        int drawStart = -lineHeight / 2 + windowSize.y / 2 + pitch;
-        if(drawStart < 0)   drawStart = 0;
-        int drawEnd = lineHeight / 2 + windowSize.y / 2 + pitch;
-        if(drawEnd >= windowSize.y) drawEnd = (int)windowSize.y - 1;
+        int drawStart = lineHeight + (windowSize.y >> 1);
+        int drawEnd = -lineHeight + (windowSize.y >> 1);
 
-        std::cout << drawStart << " " << drawEnd << std::endl;
         int textureNum = map[mapPos.x][mapPos.y] - 1; //to start from 0
         //TODO: Create Stripe with some texture and draw it or make buffer then draw it
 

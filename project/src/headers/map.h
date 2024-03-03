@@ -4,13 +4,13 @@
 
 #ifndef INC_3D_GAME_MAP_H
 #define INC_3D_GAME_MAP_H
+#include <SFML/Graphics.hpp>
 #include <vector>
-#include "wall.h"
-#include "Player.h"
 #include <sstream>
 #include <memory>
 #include <fstream>
 #include <unordered_map>
+#include <iostream>
 
 using texture_ptrs = std::vector<std::unique_ptr<sf::Texture>>;
 

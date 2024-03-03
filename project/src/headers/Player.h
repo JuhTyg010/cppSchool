@@ -17,11 +17,12 @@ private:
     Vector2d position;
     Vector2d direction;
     Vector2d plane;
+    int lastMousePositionX;
     std::unique_ptr<Camera> camera;
     std::vector<std::vector<int>>& map;
     bool isLegalPosition(const Vector2d& position);
 public:
-    Player(sf::Texture& texture, Vector2d position, sf::Vector2u windowSize, sf::Vector2u textureSize, std::vector<std::vector<int>>& map);
+    Player(sf::Texture& texture, Vector2d position, sf::Vector2i windowSize, sf::Vector2u textureSize, std::vector<std::vector<int>>& map);
 
     sf::Vector2f getPosition();
     sf::Vector2f getDirection();

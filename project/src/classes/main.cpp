@@ -1,18 +1,16 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "../headers/object.h"
+#include <SFML/Window.hpp>
 #include "../headers/Player.h"
 #include "../headers/map.h"
-#include "../headers/3dRender.h"
 #include <memory>
 
 using texture_ptr = std::unique_ptr<sf::Texture>;
 using texture_ptrs = std::vector<std::unique_ptr<sf::Texture>>;
-using object_ptr = std::unique_ptr<Object>;
-using object_ptrs = std::vector<std::unique_ptr<Object>>;
 
-constexpr int WIDTH = 800;
-constexpr int HEIGHT = 600;
+
+constexpr int WIDTH = 1200;
+constexpr int HEIGHT = 900;
 
 
 texture_ptrs LoadTextures() {
@@ -35,7 +33,7 @@ int main() {
     texture_ptrs textures;
     std::vector<std::vector<int>> map_data;
     textures = LoadTextures();
-    Map map("../external/map1.txt", "../external/config.txt",400 , 300, map_data);
+    Map map("../external/map1.txt", "../external/config.txt",300 , 200, map_data);
     Vector2d pos;
     for(int i = 0; i < map_data.size(); i++){
         for(int j = 0; j < map_data[i].size(); j++){
@@ -44,8 +42,9 @@ int main() {
             }
         }
     }
-    Player player(*textures[1], pos, window.getSize(), textures[1]->getSize(), map_data);
+    Player player(*textures[1], pos, sf::Vector2i(WIDTH, HEIGHT), textures[1]->getSize(), map_data);
     sf::Clock clock;
+    bool isPaused = false;
 
     while (window.isOpen()) {
         sf::Event event{};
@@ -54,21 +53,21 @@ int main() {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)){
+            isPaused = true;
+        }
+        if(!isPaused){
+            player.update(dt.asSeconds());
+            window.setMouseCursorVisible(false);
+            window.clear();
+            player.Render(window);
+            map.render(window);
+            window.display();
+        } else {
+            window.setMouseCursorVisible(true);
+        }
 
 
-        /*for(auto& object : objects){
-            for(auto& other : objects){
-                if(dynamic_cast<Wall*>(object.get()) && dynamic_cast<Player*>(other.get())){
-                    object->getCollider().checkCollision(other->getCollider(), 1.0f);
-                }
-            }
-        }*/
-
-        player.update(dt.asSeconds());
-        window.clear();
-        player.Render(window);
-        map.render(window);
-        window.display();
     }
 
     return 0;
