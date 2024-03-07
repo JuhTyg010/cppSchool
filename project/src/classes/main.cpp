@@ -6,6 +6,7 @@
 #include "../headers/map.h"
 #include "../headers/button.h"
 #include <memory>
+#include <algorithm>
 
 using texture_ptr = std::unique_ptr<sf::Texture>;
 using texture_ptrs = std::vector<std::unique_ptr<sf::Texture>>;
@@ -13,6 +14,8 @@ using texture_ptrs = std::vector<std::unique_ptr<sf::Texture>>;
 
 constexpr int WIDTH = 1200;
 constexpr int HEIGHT = 900;
+constexpr int BUTTON_TEXTURE = 1;
+constexpr int WALL_TEXTURE = 2;
 
 
 texture_ptrs LoadTextures() {
@@ -40,6 +43,11 @@ int main() {
     textures = LoadTextures();
     Map map("../external/map1.txt", "../external/config.txt",300 , 200, map_data);
     Vector2d pos;
+    /*if(auto result = std::find_if(map_data.begin(), map_data.end(),
+                                  [](std::vector<int> a) {return std::find(a.begin(), a.end(), 2) == a.end(); }); result == map_data.end()){
+        pos = Vector2d(map_data.end()-result, std::find (result->begin(), result->end(), 2) - result->begin());
+
+    }*/
     for(int i = 0; i < map_data.size(); i++){
         for(int j = 0; j < map_data[i].size(); j++){
             if(map_data[i][j] == 2){
@@ -49,20 +57,21 @@ int main() {
     }
     sf::Font font;
     font.loadFromFile("../external/advanced_pixel-7.ttf");
-    Player player(*textures[2], pos, sf::Vector2i(WIDTH, HEIGHT), sf::Vector2u(64,64), map_data);
+    Player player(*textures[WALL_TEXTURE], pos, sf::Vector2i(WIDTH, HEIGHT), sf::Vector2u(64,64), map_data);
     sf::RectangleShape sky(sf::Vector2f(WIDTH, HEIGHT / 2));
     sky.setFillColor(sf::Color::Cyan);
     sky.setPosition(0, 0);
 
 
-    Button resume(sf::Vector2f(600, 400), sf::Vector2f(200, 100), *textures[1], sf::Vector2f(1, 1), "Resume", font, sf::Color::Black);
-    Button quit(sf::Vector2f(600, 600), sf::Vector2f(200, 100), *textures[1], sf::Vector2f(1, 1), "Quit", font, sf::Color::Black);
+    Button resume(sf::Vector2f(600, 400), sf::Vector2f(200, 100), *textures[BUTTON_TEXTURE], sf::Vector2f(1, 1), "Resume", font, sf::Color::Black);
+    Button quit(sf::Vector2f(600, 600), sf::Vector2f(200, 100), *textures[BUTTON_TEXTURE], sf::Vector2f(1, 1), "Quit", font, sf::Color::Black);
     sf::Clock clock;
     bool isPaused = false;
 
     while (window.isOpen()) {
         sf::Event event{};
         sf::Time dt = clock.restart();
+
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
