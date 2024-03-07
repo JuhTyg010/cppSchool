@@ -13,10 +13,8 @@ sf::Vector2f clampVec(sf::Vector2f vec, sf::Vector2f lower, sf::Vector2f upper) 
 std::string getExternalPath(){
     std::string path = std::filesystem::current_path().string();
     if(path.find("project") != std::string::npos){
-        if(path.find("src") == std::string::npos){
-            path += "/src";
-        }
-        path += "/external/";
+        path = path.substr(0, path.find("project") + 7);
+        path += "/src/external/";
     }
     return path;
 }
