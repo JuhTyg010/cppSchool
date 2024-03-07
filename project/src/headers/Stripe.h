@@ -17,14 +17,49 @@ private:
     float scale; // scale of the Stripe
     sf::Vector2i size; //x is 1 and y is the height of the texture
     sf::Vector2f matrix;
+
+    /**
+     * @brief calculate the value of scale based on the full size of the stripe
+     * 
+     * @param drawStart 
+     * @param drawEnd 
+     */
     void rescale(int drawStart, int drawEnd);
 
 
 public:
+    /**
+     * @brief Construct a new Stripe object
+     * 
+     * @param position 
+     * @param size 
+     * @param matrix 
+     * @param texture 
+     */
     Stripe(sf::Vector2f position, int size, sf::Vector2f matrix, sf::Texture& texture);
+
+    /**
+     * @brief Construct a new Stripe object
+     * 
+     * @param other 
+     */
     explicit Stripe(const Stripe& other);
 
+    /**
+     * @brief update the stripe, rescale and set the texture
+     * 
+     * @param Xdistance 
+     * @param drawStart 
+     * @param drawEnd 
+     * @param texture 
+     */
     void update(int Xdistance, int drawStart, int drawEnd, int texture);
+
+    /**
+     * @brief render the stripe to the window
+     * 
+     * @param window 
+     */
     void Render(sf::RenderWindow& window);
 };
 

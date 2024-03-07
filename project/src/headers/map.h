@@ -21,9 +21,22 @@ private:
     float Width;
     float Height;
 public:
+    /**
+     * @brief Construct a new Map object
+     * 
+     * @param file 
+     * @param config 
+     * @param Width 
+     * @param Height 
+     * @param map 
+     */
     Map(const std::string& file, const std::string& config, float Width, float Height,  std::vector<std::vector<int>>& map);
 
-
+    /**
+     * @brief renders the map from top-down view 
+     * 
+     * @param window 
+     */
     void render(sf::RenderWindow& window);
 };
 
