@@ -9,8 +9,13 @@
 #include <vector>
 #include <string>
 #include <cmath>
+#include <algorithm> 
+#include <iostream> 
+#include <filesystem> 
 
 sf::Vector2f clampVec(sf::Vector2f vec, sf::Vector2f lower, sf::Vector2f upper);
+std::string getExternalPath();
+
 class MyMath {
 public:
     static double DegToRad(double deg);

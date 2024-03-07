@@ -8,10 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(SFML COMPONENTS graphics audio window REQUIRED)
 include_directories(include Utils)
-
-add_executable(demo classes/main.cpp
-)
-target_link_libraries(demo sfml-graphics sfml-audio sfml-window)
+include_directories(include external)
 
 add_executable(project classes/main.cpp
         classes/map.cpp headers/map.h

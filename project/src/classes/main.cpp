@@ -18,16 +18,16 @@ constexpr int BUTTON_TEXTURE = 1;
 constexpr int WALL_TEXTURE = 2;
 
 
-texture_ptrs LoadTextures() {
+texture_ptrs LoadTextures(std::string& extPath) {
     texture_ptrs textures;
     texture_ptr playerTexture = std::make_unique<sf::Texture>();
     texture_ptr buttonTexture = std::make_unique<sf::Texture>();
     texture_ptr wallTexture2 = std::make_unique<sf::Texture>();
 
 
-    playerTexture->loadFromFile("../external/direction.png");
-    buttonTexture->loadFromFile("../external/button.png");
-    wallTexture2->loadFromFile("../external/wall.png");
+    playerTexture->loadFromFile(extPath + "direction.png");
+    buttonTexture->loadFromFile(extPath + "button.png");
+    wallTexture2->loadFromFile(extPath + "wall.png");
 
     textures.push_back(std::move(playerTexture));
     textures.push_back(std::move(buttonTexture));
@@ -36,12 +36,12 @@ texture_ptrs LoadTextures() {
 }
 
 int main() {
-
+    std::string extPath = getExternalPath();
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Working Title");
     texture_ptrs textures;
     std::vector<std::vector<int>> map_data;
-    textures = LoadTextures();
-    Map map("../external/map1.txt", "../external/config.txt",300 , 200, map_data);
+    textures = LoadTextures(extPath);
+    Map map(extPath + "map1.txt", extPath + "config.txt",300 , 200, map_data);
     Vector2d pos;
     /*if(auto result = std::find_if(map_data.begin(), map_data.end(),
                                   [](std::vector<int> a) {return std::find(a.begin(), a.end(), 2) == a.end(); }); result == map_data.end()){
@@ -56,15 +56,19 @@ int main() {
         }
     }
     sf::Font font;
-    font.loadFromFile("../external/advanced_pixel-7.ttf");
+    font.loadFromFile(extPath + "advanced_pixel-7.ttf");
     Player player(*textures[WALL_TEXTURE], pos, sf::Vector2i(WIDTH, HEIGHT), sf::Vector2u(64,64), map_data);
     sf::RectangleShape sky(sf::Vector2f(WIDTH, HEIGHT / 2));
     sky.setFillColor(sf::Color::Cyan);
     sky.setPosition(0, 0);
 
 
-    Button resume(sf::Vector2f(600, 400), sf::Vector2f(200, 100), *textures[BUTTON_TEXTURE], sf::Vector2f(1, 1), "Resume", font, sf::Color::Black);
-    Button quit(sf::Vector2f(600, 600), sf::Vector2f(200, 100), *textures[BUTTON_TEXTURE], sf::Vector2f(1, 1), "Quit", font, sf::Color::Black);
+    Button resume(sf::Vector2f(600, 400), sf::Vector2f(200, 100), *textures[BUTTON_TEXTURE], 
+    sf::Vector2f(1, 1), "Resume", font, sf::Color::Black);
+    
+    Button quit(sf::Vector2f(600, 600), sf::Vector2f(200, 100), *textures[BUTTON_TEXTURE], 
+    sf::Vector2f(1, 1), "Quit", font, sf::Color::Black);
+
     sf::Clock clock;
     bool isPaused = false;
 
@@ -91,7 +95,6 @@ int main() {
             if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
                 if(resume.isClicked(sf::Mouse::getPosition(window)))        isPaused = false;
                 else if(quit.isClicked(sf::Mouse::getPosition(window)))     window.close();
-
             }
             window.clear();
             window.draw(sky);

@@ -90,8 +90,8 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         if(isXAxis)     perpWallDist = sideDist.x - deltaDist.x;
         else            perpWallDist = sideDist.y - deltaDist.y;
 
-        //Calculate height of line to draw on screen
-        int lineHeight = (int)(windowSize.y / perpWallDist) >> 1;   //divide by 2 to count only half of the screen
+        // Calculate height of line to draw on screen
+        int lineHeight = (int)(windowSize.y / perpWallDist) ;   //divide by 2 to count only half of the screen
 
         //calculate lowest and highest pixel to fill in current Stripe
         int drawStart = lineHeight + (windowSize.y >> 1);

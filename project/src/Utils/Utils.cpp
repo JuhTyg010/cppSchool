@@ -10,6 +10,17 @@ sf::Vector2f clampVec(sf::Vector2f vec, sf::Vector2f lower, sf::Vector2f upper) 
     return output;
 }
 
+std::string getExternalPath(){
+    std::string path = std::filesystem::current_path().string();
+    if(path.find("project") != std::string::npos){
+        if(path.find("src") == std::string::npos){
+            path += "/src";
+        }
+        path += "/external/";
+    }
+    return path;
+}
+
 double getDistance(sf::Vector2f vec1, sf::Vector2f vec2) {
     return std::sqrt(std::pow((vec1.x - vec2.x), 2) + std::pow((vec1.y - vec2.y), 2));
 }
