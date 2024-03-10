@@ -15,7 +15,7 @@ private:
     std::unique_ptr<spriteRenderer> sprite;
     sf::Vector2f position;   // just X axis from left to right
     float scale; // scale of the Stripe
-    sf::Vector2i size; //x is 1 and y is the height of the texture
+    sf::Vector2f size; 
     sf::Vector2f matrix;
 
     /**
@@ -24,7 +24,7 @@ private:
      * @param drawStart 
      * @param drawEnd 
      */
-    void rescale(int drawStart, int drawEnd);
+    void rescale(int drawStart, int drawEnd, bool isHorizontal);
 
 
 public:
@@ -36,7 +36,7 @@ public:
      * @param matrix 
      * @param texture 
      */
-    Stripe(sf::Vector2f position, int size, sf::Vector2f matrix, sf::Texture& texture);
+    Stripe(sf::Vector2f position, sf::Vector2f size, sf::Vector2f matrix, sf::Texture& texture);
 
     /**
      * @brief Construct a new Stripe object
@@ -52,8 +52,9 @@ public:
      * @param drawStart 
      * @param drawEnd 
      * @param texture 
+     * @param isHorizontal
      */
-    void update(int Xdistance, int drawStart, int drawEnd, int texture);
+    void update(int Xdistance, int drawStart, int drawEnd, int texture, bool isHorizontal);
 
     /**
      * @brief render the stripe to the window

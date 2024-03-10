@@ -8,7 +8,7 @@
 Camera::Camera(sf::Vector2i windowSize, sf::Vector2u textureSize, std::vector<std::vector<int>>& map, sf::Texture& texture):
                 windowSize(windowSize), textureSize(textureSize), map(map){
     for(int i = 0; i < windowSize.x; i++){
-        stripes.push_back(std::make_unique<Stripe>(sf::Vector2f ((float)i, (float) windowSize.y / 2), textureSize.y, sf::Vector2f(1, 1), texture));
+        stripes.push_back(std::make_unique<Stripe>(sf::Vector2f ((float)i, (float) windowSize.y / 2), sf::Vector2f(1,textureSize.y), sf::Vector2f(1, 1), texture));
     }
 }
 
@@ -16,7 +16,7 @@ Camera::Camera(int windowWidth, int windowHeight, sf::Vector2u textureSize,
                std::vector<std::vector<int>>& map, sf::Texture& texture) :
          windowSize(windowWidth, windowHeight), textureSize(textureSize), map(map) {
     for(int i = 0; i < windowSize.x; i++){
-        stripes.push_back(std::make_unique<Stripe>(sf::Vector2f((float)i, (float) windowHeight / 2), textureSize.y, sf::Vector2f(1, 1), texture));
+        stripes.push_back(std::make_unique<Stripe>(sf::Vector2f((float)i, (float) windowHeight / 2), sf::Vector2f(1,textureSize.y), sf::Vector2f(1, 1), texture));
     }
 }
 
@@ -95,7 +95,9 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
 
         //calculate lowest and highest pixel to fill in current Stripe
         int drawStart = lineHeight + (windowSize.y >> 1);
+        if(drawStart > 4 * windowSize.y) drawStart = 4*windowSize.y;
         int drawEnd = -lineHeight + (windowSize.y >> 1);
+        if(drawEnd < -4 * windowSize.y) drawEnd = -4 * windowSize.y;
 
         int textureNum = map[mapPos.x][mapPos.y] - 1; //to start from 0
         //TODO: Create Stripe with some texture and draw it or make buffer then draw it
@@ -110,8 +112,8 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         if(isXAxis && rayDir.x > 0) texX = (int)textureSize.x - texX - 1;
         if(!isXAxis && rayDir.y < 0) texX = (int)textureSize.x - texX - 1;
 
-        //update Stripe
-        stripes[i]->update(texX , drawStart, drawEnd, textureNum);
+        //update Stripe of wall is Vertical
+        stripes[i]->update(texX , drawStart, drawEnd, textureNum, false);
 
     }
     for(auto& stripe : stripes){
