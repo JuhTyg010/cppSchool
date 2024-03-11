@@ -40,6 +40,31 @@ public:
         return {x / scalar, y / scalar};
     }
 };
+
+struct Texture{
+private:
+    std::unique_ptr<sf::Texture> texture;
+    std::string name;
+    sf::Vector2u size;
+    sf::Vector2u matrix;
+public:
+
+    Texture(std::string name, const std::string& path, sf::Vector2u size, sf::Vector2u matrix);
+    [[nodiscard]] const sf::Texture& getTexture() const{
+        return *texture;
+    }
+    [[nodiscard]] const std::string& getName() const{
+        return name;
+    }
+    [[nodiscard]] sf::Vector2u getSize() const{
+        return size;
+    }
+    [[nodiscard]] sf::Vector2u getMatrix() const{
+        return matrix;
+    }
+
+};
+
 double getDistance(sf::Vector2f vec1, sf::Vector2f vec2);
 
 #endif //INC_3D_GAME_UTILS_H

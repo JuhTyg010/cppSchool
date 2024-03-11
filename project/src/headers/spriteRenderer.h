@@ -7,12 +7,14 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include "Utils.h"
 
 class spriteRenderer {
 private:
+    Texture& texture;
     sf::IntRect rectSourceSprite;
-    sf::Vector2f matrix;
-    sf::Vector2f currentFrame;
+    Vector2d actualSize;
+    sf::Vector2u currentFrame;
 public:
     sf::Sprite sprite;
 
@@ -30,7 +32,7 @@ public:
      * @param size 
      * @param matrix 
      */
-    spriteRenderer(sf::Texture& texture, sf::Vector2f position, sf::Vector2f scale, sf::Vector2f  size, sf::Vector2f matrix);
+    spriteRenderer(Texture& texture, sf::Vector2f position, Vector2d size);
     /**
      * @brief nextFrame calculate position of the frame on the right side of the texture (is circular)
      * 
@@ -57,6 +59,8 @@ public:
      * 
      * @param window 
      */
+    void Render(sf::RenderWindow &window, sf::Vector2f position);
+
     void Render(sf::RenderWindow &window);
     /**
      * @brief Set the Position of the object
@@ -81,7 +85,7 @@ public:
      * 
      * @return sf::Vector2f 
      */
-    sf::Vector2f getCurrentFrame();
+    sf::Vector2u getCurrentFrame();
 
 };
 

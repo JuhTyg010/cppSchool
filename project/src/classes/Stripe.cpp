@@ -4,37 +4,36 @@
 
 #include "../headers/Stripe.h"
 
-Stripe::Stripe(sf::Vector2f position, sf::Vector2f size, sf::Vector2f matrix, sf::Texture& texture)
-    : position(position), size(size), matrix(matrix), scale(1) {
-    sprite = std::make_unique<spriteRenderer>
-            (spriteRenderer(texture, position, sf::Vector2f(1,1), size, matrix));
+Stripe::Stripe(sf::Vector2f position, Vector2d size, Texture& texture, bool isHorizontal)
+    : position(position), actualSize(size), isHorizontal(isHorizontal) {
+    sprite = std::make_unique<spriteRenderer>(spriteRenderer(texture, position, size));
 }
 
 Stripe::Stripe(const Stripe &other)
-    : position(other.position), size(other.size), matrix(other.matrix), scale(other.scale), sprite(std::make_unique<spriteRenderer>(*other.sprite)){}
+    : position(other.position), actualSize(other.actualSize), sprite(std::make_unique<spriteRenderer>(*other.sprite)){}
 
-void Stripe::rescale(int drawStart, int drawEnd, bool isHorizontal) {
+void Stripe::rescale(int drawStart, int drawEnd) {
     if(isHorizontal){
         int width = std::abs(drawEnd - drawStart);
-        scale = (float) width / (float) size.x;
+        float scale = (float) width / (float) actualSize.x;
         sprite->setScale(sf::Vector2f(scale, 1));
     } else {
         int height = std::abs(drawEnd - drawStart);
-        scale = (float) height / (float) size.y;
+        float scale = (float) height / (float) actualSize.y;
         sprite->setScale(sf::Vector2f(1, scale));
     }
 }
 
-void Stripe::update(int Xdistance, int drawStart, int drawEnd, int texture, bool isHorizontal) {
+void Stripe::update(int Xdistance, int drawStart, int drawEnd, int textureNum) {
     //sprite->setPosition(position);
-    rescale(drawStart, drawEnd, isHorizontal);
+    rescale(drawStart, drawEnd);
     if(isHorizontal) {
-        sprite->setTextureRect(sf::IntRect(size.x * texture, Xdistance, size.x, 1));
+        sprite->setTextureRect(sf::IntRect((int) actualSize.x * textureNum, Xdistance,(int) actualSize.x, 1));
     } else
-    sprite->setTextureRect(sf::IntRect(Xdistance, size.y * texture, 1, size.y));
+    sprite->setTextureRect(sf::IntRect(Xdistance,(int) actualSize.y * textureNum, 1,(int) actualSize.y));
 }
 
 void Stripe::Render(sf::RenderWindow &window) {
-    sprite->Render(window);
+    sprite->Render(window, position);
 }
 

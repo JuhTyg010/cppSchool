@@ -12,7 +12,6 @@
 #include <unordered_map>
 #include <iostream>
 
-using texture_ptrs = std::vector<std::unique_ptr<sf::Texture>>;
 
 
 class Map {

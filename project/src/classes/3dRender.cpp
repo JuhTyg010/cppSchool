@@ -5,20 +5,17 @@
 #include "../headers/3dRender.h"
 
 
-Camera::Camera(sf::Vector2i windowSize, sf::Vector2u textureSize, std::vector<std::vector<int>>& map, sf::Texture& texture):
-                windowSize(windowSize), textureSize(textureSize), map(map){
+Camera::Camera(sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Texture& texture):
+                windowSize(windowSize), textureSize(texture.getSize()), map(map){
     for(int i = 0; i < windowSize.x; i++){
-        stripes.push_back(std::make_unique<Stripe>(sf::Vector2f ((float)i, (float) windowSize.y / 2), sf::Vector2f(1,textureSize.y), sf::Vector2f(1, 1), texture));
+        stripes.push_back(std::make_unique<Stripe>(sf::Vector2f((float)i, (float) windowSize.y / 2),
+                                                   Vector2d(1, textureSize.y), texture, true));
     }
 }
 
-Camera::Camera(int windowWidth, int windowHeight, sf::Vector2u textureSize,
-               std::vector<std::vector<int>>& map, sf::Texture& texture) :
-         windowSize(windowWidth, windowHeight), textureSize(textureSize), map(map) {
-    for(int i = 0; i < windowSize.x; i++){
-        stripes.push_back(std::make_unique<Stripe>(sf::Vector2f((float)i, (float) windowHeight / 2), sf::Vector2f(1,textureSize.y), sf::Vector2f(1, 1), texture));
-    }
-}
+Camera::Camera(int windowWidth, int windowHeight, std::vector<std::vector<int>>& map, Texture& texture) :
+        Camera(sf::Vector2i(windowWidth, windowHeight), map, texture) {}
+
 
 Camera::Camera(const Camera &other) :  windowSize(other.windowSize), textureSize(other.textureSize), map(other.map){
     for(int i = 0; i < windowSize.x; i++){
@@ -113,7 +110,7 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         if(!isXAxis && rayDir.y < 0) texX = (int)textureSize.x - texX - 1;
 
         //update Stripe of wall is Vertical
-        stripes[i]->update(texX , drawStart, drawEnd, textureNum, false);
+        stripes[i]->update(texX , drawStart, drawEnd, textureNum);
 
     }
     for(auto& stripe : stripes){

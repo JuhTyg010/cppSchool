@@ -5,56 +5,56 @@
 #include "../headers/spriteRenderer.h"
 
 
-spriteRenderer::spriteRenderer(sf::Texture& texture, sf::Vector2f position, sf::Vector2f scale,
-                               sf::Vector2f size, sf::Vector2f matrix) : matrix(matrix){
-    //texture.loadFromFile(path);
-
-    sprite.setTexture(texture);
-    sprite.setOrigin(size.x / 2, size.y / 2);
+spriteRenderer::spriteRenderer(Texture& texture, sf::Vector2f position, Vector2d size)
+    : texture(texture), actualSize(size){
+    sprite.setTexture(texture.getTexture());
+    sf::Vector2u textureSize = texture.getSize();
+    sprite.setOrigin((float) textureSize.x / 2, (float)textureSize.y / 2);
     sprite.setPosition(position);
+    sf::Vector2f scale(size.x / textureSize.x, size.y / (float) textureSize.y);
     sprite.setScale(scale);
-    rectSourceSprite = sf::IntRect(0, 0, (int) size.x, (int) size.y);
-    currentFrame = sf::Vector2f(0, 0);
+    rectSourceSprite = sf::IntRect(0, 0,(int) textureSize.x, (int) textureSize.y);
+    currentFrame = sf::Vector2u(0, 0);
 }
 
 
 void spriteRenderer::nextFrame() {
-    if(matrix.x > currentFrame.x) {
+    if(texture.getMatrix().x > currentFrame.x) {
         currentFrame.x += 1;
     } else {
         currentFrame.x = 0;
     }
-    rectSourceSprite.left = (int)( currentFrame.x * (float) rectSourceSprite.width);
+    rectSourceSprite.left = (int)(currentFrame.x * rectSourceSprite.width);
 }
 
 void spriteRenderer::prevFrame() {
     if(currentFrame.x > 0) {
         currentFrame.x--;
     } else {
-        currentFrame.x = matrix.x;
+        currentFrame.x = texture.getMatrix().x;
     }
-    rectSourceSprite.left = (int)( currentFrame.x * (float) rectSourceSprite.width);
+    rectSourceSprite.left = (int)(currentFrame.x * rectSourceSprite.width);
 }
 
 void spriteRenderer::nextAnimation() {
-    if(matrix.y > currentFrame.y) {
+    if(texture.getMatrix().y > currentFrame.y) {
         currentFrame.y++;
     } else {
         currentFrame.y = 0;
     }
-    rectSourceSprite.top = (int)( currentFrame.y * (float) rectSourceSprite.height);
+    rectSourceSprite.top = (int)(currentFrame.y * rectSourceSprite.height);
 }
 
 void spriteRenderer::prevAnimation() {
     if(currentFrame.y > 0) {
         currentFrame.y--;
     } else {
-        currentFrame.y = matrix.y;
+        currentFrame.y = texture.getMatrix().y;
     }
-    rectSourceSprite.top = (int)( currentFrame.y * (float) rectSourceSprite.height);
+    rectSourceSprite.top = (int)(currentFrame.y * rectSourceSprite.height);
 }
 
-sf::Vector2f spriteRenderer::getCurrentFrame() {
+sf::Vector2u spriteRenderer::getCurrentFrame() {
     return currentFrame;
 }
 
@@ -68,6 +68,12 @@ void spriteRenderer::setPosition(sf::Vector2f pos) {
 
 void spriteRenderer::setScale(sf::Vector2f scale_) {
     sprite.setScale(scale_);
+}
+
+void spriteRenderer::Render(sf::RenderWindow &window, sf::Vector2f position) {
+    sprite.setPosition(position);
+    sprite.setTextureRect(rectSourceSprite);
+    window.draw(sprite);
 }
 
 void spriteRenderer::Render(sf::RenderWindow &window) {

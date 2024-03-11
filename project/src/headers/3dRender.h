@@ -22,9 +22,8 @@ private:
     std::vector<std::unique_ptr<Stripe>> stripes;
 
 public:
-    Camera(sf::Vector2i windowSize, sf::Vector2u textureSize, std::vector<std::vector<int>>& map, sf::Texture& texture);
-    Camera(int windowWidth, int windowHeight, sf::Vector2u textureSize ,
-           std::vector<std::vector<int>>& map, sf::Texture& texture);
+    Camera(sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Texture& texture);
+    Camera(int windowWidth, int windowHeight, std::vector<std::vector<int>>& map, Texture& texture);
     Camera(const Camera& other);
 
 
