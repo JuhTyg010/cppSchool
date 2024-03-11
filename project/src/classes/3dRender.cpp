@@ -107,8 +107,8 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         if(isXAxis && rayDir.x > 0) texX = (int)textureSize.x - texX - 1;
         if(!isXAxis && rayDir.y < 0) texX = (int)textureSize.x - texX - 1;
 
-        //update Stripe of wall is Vertical
-         stripes[i]->update(texX , drawStart, drawEnd, textureNum + i%2 , false);
+        //Update Stripe of wall is Vertical
+        stripes[i]->Update(texX, drawStart, drawEnd, textureNum , false);
 
     }
     for(auto& stripe : stripes){
