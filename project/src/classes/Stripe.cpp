@@ -4,10 +4,11 @@
 
 #include "../headers/Stripe.h"
 
-Stripe::Stripe(sf::Vector2f position, sf::Vector2f size, sf::Vector2f matrix, sf::Texture& texture)
-    : position(position), size(size), matrix(matrix), scale(1) {
+Stripe::Stripe(sf::Vector2f position, Texture& texture)
+    : position(position), size(texture.getSize()), matrix(texture.getMatrix()), scale(1) {
     sprite = std::make_unique<spriteRenderer>
-            (spriteRenderer(texture, position, sf::Vector2f(1,1), size, matrix));
+            (spriteRenderer(texture, position, sf::Vector2f(1, texture.getSize().y)));
+    std::cout << sprite->sprite.getOrigin().x << sprite->sprite.getOrigin().y << std::endl;
 }
 
 Stripe::Stripe(const Stripe &other)
@@ -25,13 +26,11 @@ void Stripe::rescale(int drawStart, int drawEnd, bool isHorizontal) {
     }
 }
 
-void Stripe::update(int Xdistance, int drawStart, int drawEnd, int texture, bool isHorizontal) {
+void Stripe::update(int dist, int drawStart, int drawEnd, int textureNum, bool isHorizontal) {
     //sprite->setPosition(position);
     rescale(drawStart, drawEnd, isHorizontal);
-    if(isHorizontal) {
-        sprite->setTextureRect(sf::IntRect(size.x * texture, Xdistance, size.x, 1));
-    } else
-    sprite->setTextureRect(sf::IntRect(Xdistance, size.y * texture, 1, size.y));
+    if(isHorizontal)    sprite->setTextureRect(sf::IntRect(size.x * textureNum, dist, size.x, 1));
+    else                sprite->setTextureRect(sf::IntRect(dist + (textureNum*size.x), textureNum, 1, size.y));
 }
 
 void Stripe::Render(sf::RenderWindow &window) {

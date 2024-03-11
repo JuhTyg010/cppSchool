@@ -16,11 +16,24 @@
 sf::Vector2f clampVec(sf::Vector2f vec, sf::Vector2f lower, sf::Vector2f upper);
 std::string getExternalPath();
 
+double getDistance(sf::Vector2f vec1, sf::Vector2f vec2);
+
+template <typename T>
+T divide(T a, T b){
+    return {a.x / b.x, a.y / b.y};
+}
+template <typename T, typename C>
+T divide(T a, C b){
+    return {a.x / b, a.y / b};
+}
+
+
 class MyMath {
 public:
     static double DegToRad(double deg);
     static double RadToDeg(double rad);
 };
+
 struct Vector2d{
 public:
     double x;
@@ -40,7 +53,6 @@ public:
         return {x / scalar, y / scalar};
     }
 };
-double getDistance(sf::Vector2f vec1, sf::Vector2f vec2);
 
 struct Texture{
 private:
@@ -56,5 +68,9 @@ public:
     const sf::Vector2f& getMatrix();
     const std::string& getName();
 };
+
+const Texture& getTextureByName(const std::string& name, std::vector<Texture>& textures);
+
+
 
 #endif //INC_3D_GAME_UTILS_H

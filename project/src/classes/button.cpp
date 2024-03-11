@@ -4,11 +4,11 @@
 
 #include "../headers/button.h"
 
-Button::Button(sf::Vector2f position, sf::Vector2f size, sf::Texture& texture, sf::Vector2f matrix, const std::string& text,
+Button::Button(Texture& texture, sf::Vector2f position, sf::Vector2f size, const std::string& text,
                sf::Font& font, sf::Color color)
         : text(text, font, 50) {
     sf::Vector2f scale(size.x / texture.getSize().x, size.y / texture.getSize().y);
-    sprite = std::make_unique<spriteRenderer>(texture, position, scale, (sf::Vector2f )texture.getSize(), matrix);
+    sprite = std::make_unique<spriteRenderer>(texture, position, size);
     this->text.setOrigin(this->text.getGlobalBounds().width / 2, 40);
     this->text.setPosition(position.x , position.y );
     this->text.setFillColor(color);

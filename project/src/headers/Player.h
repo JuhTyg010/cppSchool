@@ -31,7 +31,7 @@ public:
      * @param textureSize 
      * @param map 
      */
-    Player(sf::Texture& texture, Vector2d position, sf::Vector2i windowSize, sf::Vector2u textureSize, std::vector<std::vector<int>>& map);
+    Player(Texture& texture, Vector2d position, sf::Vector2i windowSize, sf::Vector2u textureSize, std::vector<std::vector<int>>& map);
     
     /**
      * @brief Get the Position of the object

@@ -36,7 +36,7 @@ public:
      * @param matrix 
      * @param texture 
      */
-    Stripe(sf::Vector2f position, sf::Vector2f size, sf::Vector2f matrix, sf::Texture& texture);
+    Stripe(sf::Vector2f position, Texture& texture);
 
     /**
      * @brief Construct a new Stripe object
@@ -46,15 +46,15 @@ public:
     explicit Stripe(const Stripe& other);
 
     /**
-     * @brief update the stripe, rescale and set the texture
+     * @brief update the stripe, rescale and set the textureNum
      * 
-     * @param Xdistance 
+     * @param dist
      * @param drawStart 
      * @param drawEnd 
-     * @param texture 
+     * @param textureNum
      * @param isHorizontal
      */
-    void update(int Xdistance, int drawStart, int drawEnd, int texture, bool isHorizontal);
+    void update(int dist, int drawStart, int drawEnd, int textureNum, bool isHorizontal);
 
     /**
      * @brief render the stripe to the window

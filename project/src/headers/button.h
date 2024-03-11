@@ -13,7 +13,7 @@ private:
     sf::Text text;
     std::unique_ptr<spriteRenderer> sprite;
 public:
-    Button(sf::Vector2f position, sf::Vector2f size, sf::Texture& texture, sf::Vector2f matrix, const std::string& text,
+    Button(Texture& texture, sf::Vector2f position, sf::Vector2f size, const std::string& text,
            sf::Font& font, sf::Color color);
     void Render(sf::RenderWindow& window);
     bool isClicked(sf::Vector2i mousePosition);

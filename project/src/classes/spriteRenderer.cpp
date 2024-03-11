@@ -5,21 +5,21 @@
 #include "../headers/spriteRenderer.h"
 
 
-spriteRenderer::spriteRenderer(sf::Texture& texture, sf::Vector2f position, sf::Vector2f scale,
-                               sf::Vector2f size, sf::Vector2f matrix) : matrix(matrix){
-    //texture.loadFromFile(path);
-
-    sprite.setTexture(texture);
-    sprite.setOrigin(size.x / 2, size.y / 2);
+spriteRenderer::spriteRenderer(Texture& texture, sf::Vector2f position,
+                               sf::Vector2f size) : texture(texture){
+    sf::Vector2f scale = divide(size, texture.getSize());
+    sprite.setTexture(texture.getTexture());
+    //TODO: fix the origin cause for stripes it 1/2 == 0.5, also using texture.getSize() is not good
+    sprite.setOrigin(divide(texture.getSize(), 2));
     sprite.setPosition(position);
     sprite.setScale(scale);
-    rectSourceSprite = sf::IntRect(0, 0, (int) size.x, (int) size.y);
+    rectSourceSprite = sf::IntRect(0, 0, (int) texture.getSize().x, (int) texture.getSize().y);
     currentFrame = sf::Vector2f(0, 0);
 }
 
 
 void spriteRenderer::nextFrame() {
-    if(matrix.x > currentFrame.x) {
+    if(texture.getMatrix().x > currentFrame.x) {
         currentFrame.x += 1;
     } else {
         currentFrame.x = 0;
@@ -31,13 +31,13 @@ void spriteRenderer::prevFrame() {
     if(currentFrame.x > 0) {
         currentFrame.x--;
     } else {
-        currentFrame.x = matrix.x;
+        currentFrame.x = texture.getMatrix().x;
     }
     rectSourceSprite.left = (int)( currentFrame.x * (float) rectSourceSprite.width);
 }
 
 void spriteRenderer::nextAnimation() {
-    if(matrix.y > currentFrame.y) {
+    if(texture.getMatrix().y > currentFrame.y) {
         currentFrame.y++;
     } else {
         currentFrame.y = 0;
@@ -49,7 +49,7 @@ void spriteRenderer::prevAnimation() {
     if(currentFrame.y > 0) {
         currentFrame.y--;
     } else {
-        currentFrame.y = matrix.y;
+        currentFrame.y = texture.getMatrix().y;
     }
     rectSourceSprite.top = (int)( currentFrame.y * (float) rectSourceSprite.height);
 }
