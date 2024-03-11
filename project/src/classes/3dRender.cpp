@@ -8,7 +8,7 @@
 Camera::Camera(sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Texture& texture):
                 windowSize(windowSize), textureSize(texture.getSize()), map(map){
     for(int i = 0; i < windowSize.x; i++){
-        stripes.push_back(std::make_unique<Stripe>(sf::Vector2f ((float)i, (float) windowSize.y / 2), texture));
+        stripes.push_back(std::make_unique<Stripe>(sf::Vector2f ((float)i, (float) windowSize.y / 2), texture, false));
     }
 }
 
@@ -104,9 +104,9 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
 
         //Update Stripe of wall is Vertical
         if(auto stripe = dynamic_cast<Stripe*>(stripes[i].get())){
-            stripe->Update(texX, drawStart, drawEnd, textureNum, false);
+            stripe->Update(texX, drawStart, drawEnd, textureNum);
         } else if(auto stripe = dynamic_cast<Stripe*>(stripes[i].get())){
-            stripe->Update(texX, drawStart, drawEnd, textureNum, false);
+            stripe->Update(texX, drawStart, drawEnd, textureNum);
         } else {
             throw std::runtime_error("Stripe is not a Stripe");
         }

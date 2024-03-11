@@ -13,15 +13,14 @@
 class Stripe : public VisibleObject {
 private:
     float scale; // scale of the Stripe
-    sf::Vector2f matrix;
-
+    bool isHorizontal; // is the stripe horizontal or vertical
     /**
      * @brief calculate the value of scale based on the full size of the stripe
      * 
      * @param drawStart 
      * @param drawEnd 
      */
-    void rescale(int drawStart, int drawEnd, bool isHorizontal);
+    void rescale(int drawStart, int drawEnd);
 
 
 public:
@@ -33,7 +32,7 @@ public:
      * @param matrix 
      * @param texture 
      */
-    Stripe(sf::Vector2f position, Texture& texture);
+    Stripe(sf::Vector2f position, Texture& texture, bool isHorizontal);
 
 
     /**
@@ -45,7 +44,7 @@ public:
      * @param textureNum
      * @param isHorizontal
      */
-    void Update(int dist, int drawStart, int drawEnd, int textureNum, bool isHorizontal);
+    void Update(int dist, int drawStart, int drawEnd, int textureNum);
 
     void Update(float dt) override {}
 };
