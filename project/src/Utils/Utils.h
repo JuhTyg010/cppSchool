@@ -57,6 +57,4 @@ public:
     const std::string& getName();
 };
 
-};
-
 #endif //INC_3D_GAME_UTILS_H
