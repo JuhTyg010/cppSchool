@@ -13,10 +13,11 @@ protected:
     std::unique_ptr<spriteRenderer> sprite;
     sf::Vector2f position;
     sf::Vector2f size;
+    double distance;
 
 public:
     VisibleObject() = default;
-    VisibleObject(Texture& texture, sf::Vector2f position, sf::Vector2f size): position(position), size(size){
+    VisibleObject(Texture& texture, sf::Vector2f position, sf::Vector2f size): position(position), size(size), distance(0){
         sprite = std::make_unique<spriteRenderer>(texture, position, size);
     }
     VisibleObject(const VisibleObject& other): position(other.position), size(other.size), sprite(std::make_unique<spriteRenderer>(*other.sprite)){}
@@ -25,6 +26,11 @@ public:
         sprite->Render(window);
     }
     virtual ~VisibleObject() = default;
+
+    inline bool operator< (const VisibleObject& rhs) const { return distance < rhs.distance; }
+    inline bool operator> (const VisibleObject& rhs) const { return rhs.distance < distance; }
+    inline bool operator<=(const VisibleObject& rhs) const { return distance <= rhs.distance; }
+    inline bool operator>=(const VisibleObject& rhs) const { return distance >= rhs.distance; }
 };
 
 
