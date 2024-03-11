@@ -104,15 +104,21 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
 
         //Update Stripe of wall is Vertical
         if(auto stripe = dynamic_cast<Stripe*>(stripes[i].get())){
-            stripe->Update(texX, drawStart, drawEnd, textureNum);
+            stripe->Update(texX, drawStart, drawEnd, textureNum, perpWallDist);
         } else if(auto stripe = dynamic_cast<Stripe*>(stripes[i].get())){
-            stripe->Update(texX, drawStart, drawEnd, textureNum);
+            stripe->Update(texX, drawStart, drawEnd, textureNum,perpWallDist);
         } else {
             throw std::runtime_error("Stripe is not a Stripe");
         }
 
     }
+    std::sort(stripes.begin(), stripes.end(), [](const std::unique_ptr<VisibleObject>& a, const std::unique_ptr<VisibleObject>& b){
+        return a->getPosition().x < b->getPosition().x;
+    }
+    );
+
     for(auto& stripe : stripes){
+
         stripe->Render(window);
     }
 }
