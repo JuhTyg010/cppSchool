@@ -12,8 +12,8 @@ using texture_ptr = std::unique_ptr<sf::Texture>;
 using texture_ptrs = std::vector<std::unique_ptr<sf::Texture>>;
 
 
-constexpr int WIDTH = 400;
-constexpr int HEIGHT = 400;
+constexpr int WIDTH = 900;
+constexpr int HEIGHT = 600;
 constexpr int BUTTON_TEXTURE = 1;
 constexpr int WALL_TEXTURE = 2;
 
@@ -88,7 +88,7 @@ int main() {
             window.clear();
             window.draw(sky);
             player.Render(window);
-            //map.render(window);
+            map.render(window);
         } else {
             window.setMouseCursorVisible(true);
             if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
@@ -105,7 +105,7 @@ int main() {
 
             renderer.setTextureRect(sf::IntRect(m++, 0, 1, 64));
         }
-        renderer.Render(window);
+        //renderer.Render(window);
         window.display();
 
     }

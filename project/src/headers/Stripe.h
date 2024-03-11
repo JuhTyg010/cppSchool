@@ -7,15 +7,12 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <vector>
-#include "spriteRenderer.h"
 #include <memory>
+#include "VisibleObject.h"
 
-class Stripe {
+class Stripe : public VisibleObject {
 private:
-    std::unique_ptr<spriteRenderer> sprite;
-    sf::Vector2f position;   // just X axis from left to right
     float scale; // scale of the Stripe
-    sf::Vector2f size; 
     sf::Vector2f matrix;
 
     /**
@@ -38,15 +35,9 @@ public:
      */
     Stripe(sf::Vector2f position, Texture& texture);
 
-    /**
-     * @brief Construct a new Stripe object
-     * 
-     * @param other 
-     */
-    explicit Stripe(const Stripe& other);
 
     /**
-     * @brief update the stripe, rescale and set the textureNum
+     * @brief Update the stripe, rescale and set the textureNum
      * 
      * @param dist
      * @param drawStart 
@@ -54,14 +45,9 @@ public:
      * @param textureNum
      * @param isHorizontal
      */
-    void update(int dist, int drawStart, int drawEnd, int textureNum, bool isHorizontal);
+    void Update(int dist, int drawStart, int drawEnd, int textureNum, bool isHorizontal);
 
-    /**
-     * @brief render the stripe to the window
-     * 
-     * @param window 
-     */
-    void Render(sf::RenderWindow& window);
+    void Update(float dt) override {}
 };
 
 

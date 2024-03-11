@@ -48,7 +48,7 @@ public:
     sf::Vector2f getDirection();
 
     /**
-     * @brief Update the player (check inputs, update position)
+     * @brief Update the player (check inputs, Update position)
      * 
      * @param dt - delta time
      */
