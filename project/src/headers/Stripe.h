@@ -34,6 +34,8 @@ public:
      */
     Stripe(sf::Vector2f position, Texture& texture, bool isHorizontal);
 
+    Stripe(const Stripe& other);
+
 
     /**
      * @brief Update the stripe, rescale and set the textureNum
@@ -44,9 +46,10 @@ public:
      * @param textureNum
      * @param isHorizontal
      */
-    void Update(int dist, int drawStart, int drawEnd, int textureNum, double distance);
+    void Update(int dist, int drawStart, int drawEnd, int textureNum);
 
     void Update(float dt) override {}
+
 };
 
 

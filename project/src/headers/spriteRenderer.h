@@ -32,6 +32,8 @@ public:
      * @param matrix 
      */
     spriteRenderer(Texture& texture, sf::Vector2f position, sf::Vector2f  size);
+
+    spriteRenderer(const spriteRenderer& other);
     /**
      * @brief nextFrame calculate position of the frame on the right side of the texture (is circular)
      * 
@@ -83,6 +85,8 @@ public:
      * @return sf::Vector2f 
      */
     sf::Vector2f getCurrentFrame();
+
+    sf::Vector2f getTextureSize();
 
 };
 

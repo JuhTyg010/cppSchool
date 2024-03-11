@@ -7,6 +7,7 @@
 Stripe::Stripe(sf::Vector2f position, Texture& texture, bool isHorizontal)
     : VisibleObject(texture, position, sf::Vector2f(1, texture.getSize().y)), scale(1), isHorizontal(isHorizontal) {}
 
+Stripe::Stripe(const Stripe& other) : VisibleObject(other), scale(other.scale), isHorizontal(other.isHorizontal) {}
 
 void Stripe::rescale(int drawStart, int drawEnd) {
     if(isHorizontal){
@@ -20,9 +21,8 @@ void Stripe::rescale(int drawStart, int drawEnd) {
     }
 }
 
-void Stripe::Update(int dist, int drawStart, int drawEnd, int textureNum, double distance) {
+void Stripe::Update(int dist, int drawStart, int drawEnd, int textureNum) {
     //sprite->setPosition(position);
-    this->distance = distance;
     rescale(drawStart, drawEnd);
     if(isHorizontal)    sprite->setTextureRect(sf::IntRect(size.x * textureNum, dist, size.x, 1));
     else                sprite->setTextureRect(sf::IntRect(dist + (textureNum*size.x), textureNum, 1, size.y));

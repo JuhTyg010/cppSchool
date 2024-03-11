@@ -5,6 +5,7 @@
 #include "../headers/Player.h"
 #include "../headers/map.h"
 #include "../headers/button.h"
+#include "../headers/Item.h"
 #include <memory>
 #include <algorithm>
 
@@ -54,9 +55,11 @@ int main() {
 
 
     auto playerTex = getTextureByName("wall", textures);
+    auto itemTex = getTextureByName("wall", textures);
+    Item item(itemTex, sf::Vector2f(64, 64), sf::Vector2f(1, 1));
 
-
-    Player player(playerTex, pos, sf::Vector2i(WIDTH, HEIGHT), sf::Vector2u(64,64), map_data);
+    Player player(playerTex, pos, sf::Vector2i(WIDTH, HEIGHT), sf::Vector2u(64,64), map_data, item);
+    std::cout << "Player position: " << std::endl;
     sf::RectangleShape sky(sf::Vector2f(WIDTH, HEIGHT / 2));
     sky.setFillColor(sf::Color::Cyan);
     sky.setPosition(0, 0);
@@ -71,6 +74,7 @@ int main() {
     bool isPaused = false;
     int m=0;
 
+    std::cout << "here" << std::endl;
     while (window.isOpen()) {
         sf::Event event{};
         sf::Time dt = clock.restart();
@@ -83,11 +87,13 @@ int main() {
             isPaused = true;
         }
         if(!isPaused){
-            player.update(dt.asSeconds());
+            player.Update(dt.asSeconds());
             window.setMouseCursorVisible(false);
             window.clear();
             window.draw(sky);
             player.Render(window);
+            std::cout << "lap " <<  std::endl;
+
             map.render(window);
         } else {
             window.setMouseCursorVisible(true);
@@ -105,6 +111,8 @@ int main() {
 
             renderer.setTextureRect(sf::IntRect(m++, 0, 1, 64));
         }
+        std::cout << "lap " <<  std::endl;
+
         //renderer.Render(window);
         window.display();
 

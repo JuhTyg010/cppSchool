@@ -8,14 +8,14 @@
 
 
 Player::Player(Texture &texture, Vector2d position, sf::Vector2i windowSize, sf::Vector2u textureSize,
-               std::vector<std::vector<int>> &map)
+               std::vector<std::vector<int>> &map, Item &item)
                : plane(Vector2d(0, 0.66)), direction(Vector2d(-1, 0)), position(position), speed(2), rotationSpeed(30),
                map(map), lastMousePositionX(400){
-    camera = std::make_unique<Camera>(Camera(windowSize, map, texture)); }
+    camera = std::make_unique<Camera>(Camera(windowSize, map, texture, item)); }
 
 
 
-void Player::update(float dt) {
+void Player::Update(float dt) {
     map.at(static_cast<int>(position.x)).at(static_cast<int>(position.y))  = 0;    //set 2 to 0 so if we move we dont have to find the old position
 
     //when rotating we need to rotate both direction and plane vectors
@@ -60,6 +60,7 @@ void Player::update(float dt) {
 
 void Player::Render(sf::RenderWindow &window) {
     camera->render(position, direction, plane, window);
+
 }
 
 bool Player::isLegalPosition(const Vector2d &pos) {

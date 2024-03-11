@@ -8,6 +8,7 @@
 #include "3dRender.h"
 #include "Utils.h"
 #include <memory>
+#include "Item.h"
 
 class Player{
 private:
@@ -31,7 +32,7 @@ public:
      * @param textureSize 
      * @param map 
      */
-    Player(Texture& texture, Vector2d position, sf::Vector2i windowSize, sf::Vector2u textureSize, std::vector<std::vector<int>>& map);
+    Player(Texture& texture, Vector2d position, sf::Vector2i windowSize, sf::Vector2u textureSize, std::vector<std::vector<int>>& map, Item& item);
     
     /**
      * @brief Get the Position of the object
@@ -52,7 +53,7 @@ public:
      * 
      * @param dt - delta time
      */
-    void update(float dt);
+    void Update(float dt);
 
     /**
      * @brief Render the player and also render the camera(players view)

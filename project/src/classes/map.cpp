@@ -42,6 +42,8 @@ Map::Map(const std::string& file, const std::string& config, float Width, float 
                         player = 1;
                         map.at(row).at(i) = 2;
                     }
+                } else if(line[i] == 'i') {
+                    map.at(row).at(i) = 5;
                 }
             } catch (std::out_of_range& e) {
                 std::cerr << "Corrupted file" << std::endl;

@@ -17,6 +17,14 @@ spriteRenderer::spriteRenderer(Texture& texture, sf::Vector2f position,
     currentFrame = sf::Vector2f(0, 0);
 }
 
+spriteRenderer::spriteRenderer(const spriteRenderer& other) : texture(other.texture) {
+    sprite.setTexture(texture.getTexture());
+    sprite.setOrigin(divide(texture.getSize(), 2));
+    sprite.setPosition(other.sprite.getPosition());
+    sprite.setScale(other.sprite.getScale());
+    rectSourceSprite = other.rectSourceSprite;
+    currentFrame = other.currentFrame;
+}
 
 void spriteRenderer::nextFrame() {
     if(texture.getMatrix().x > currentFrame.x) {
@@ -68,6 +76,10 @@ void spriteRenderer::setPosition(sf::Vector2f pos) {
 
 void spriteRenderer::setScale(sf::Vector2f scale_) {
     sprite.setScale(scale_);
+}
+
+sf::Vector2f spriteRenderer::getTextureSize() {
+    return texture.getSize();
 }
 
 void spriteRenderer::Render(sf::RenderWindow &window) {
