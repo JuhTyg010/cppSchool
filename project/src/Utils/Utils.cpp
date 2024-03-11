@@ -3,6 +3,8 @@
 //
 #include "Utils.h"
 
+#include <utility>
+
 sf::Vector2f clampVec(sf::Vector2f vec, sf::Vector2f lower, sf::Vector2f upper) {
     sf::Vector2f output;
     output.x = std::min(std::max(vec.x, lower.x), upper.x);
@@ -29,4 +31,29 @@ double MyMath::DegToRad(double deg) {
 
 double MyMath::RadToDeg(double rad) {
     return rad * 180 / M_PI;
+}
+
+Texture::Texture(std::string name, const std::string &path, sf::Vector2f size, sf::Vector2f matrix) :
+    name(std::move(name)), size(size), matrix(matrix) {
+    texture = std::make_unique<sf::Texture>();
+    texture->loadFromFile(path);
+}
+
+Texture::Texture(const Texture &other)
+: name(other.name), size(other.size), matrix(other.matrix), texture(std::make_unique<sf::Texture>(*other.texture)) {}
+
+const sf::Texture& Texture::getTexture()  {
+    return *texture;
+}
+
+const sf::Vector2f& Texture::getSize() {
+    return size;
+}
+
+const sf::Vector2f& Texture::getMatrix() {
+    return matrix;
+}
+
+const std::string& Texture::getName() {
+    return name;
 }
