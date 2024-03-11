@@ -67,4 +67,21 @@ public:
 
 double getDistance(sf::Vector2f vec1, sf::Vector2f vec2);
 
+struct Texture{
+private:
+    std::string name;
+    std::unique_ptr<sf::Texture> texture;
+    sf::Vector2f size;
+    sf::Vector2f matrix;
+public:
+    Texture(std::string name,const std::string& path, sf::Vector2f size, sf::Vector2f matrix);
+    Texture(const Texture& other);
+    const sf::Texture & getTexture();
+    const sf::Vector2f& getSize();
+    const sf::Vector2f& getMatrix();
+    const std::string& getName();
+};
+
+};
+
 #endif //INC_3D_GAME_UTILS_H
