@@ -7,7 +7,7 @@
 #include <cmath>
 
 
-Player::Player(Texture &texture, Vector2d position, sf::Vector2i windowSize,
+Player::Player(Texture &texture, Vector2d position, sf::Vector2i windowSize, sf::Vector2u textureSize,
                std::vector<std::vector<int>> &map)
                : plane(Vector2d(0, 0.66)), direction(Vector2d(-1, 0)), position(position), speed(2), rotationSpeed(30),
                map(map), lastMousePositionX(400){

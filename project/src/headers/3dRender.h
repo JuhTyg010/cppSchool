@@ -17,7 +17,7 @@
 class Camera {
 private:
     sf::Vector2i windowSize;
-    sf::Vector2u textureSize;
+    sf::Vector2f textureSize;
     std::vector<std::vector<int>>& map;
     std::vector<std::unique_ptr<Stripe>> stripes;
 

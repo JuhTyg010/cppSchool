@@ -8,18 +8,22 @@
 #include <memory>
 #include <algorithm>
 
+using texture_ptr = std::unique_ptr<sf::Texture>;
+using texture_ptrs = std::vector<std::unique_ptr<sf::Texture>>;
 
 
-constexpr int WIDTH = 1200;
-constexpr int HEIGHT = 900;
-
+constexpr int WIDTH = 400;
+constexpr int HEIGHT = 400;
+constexpr int BUTTON_TEXTURE = 1;
+constexpr int WALL_TEXTURE = 2;
 
 
 std::vector<Texture> LoadTextures(std::string& extPath) {
     std::vector<Texture> textures;
-    textures.push_back(Texture("player", extPath + "direction.png", sf::Vector2u(64, 64), sf::Vector2u(1, 1)));
-    textures.push_back(Texture("button", extPath + "button.png", sf::Vector2u(128, 64), sf::Vector2u(1, 1)));
-    textures.push_back(Texture("wall", extPath + "wall.png", sf::Vector2u(64, 64), sf::Vector2u(1, 1)));
+
+    textures.emplace_back("player", extPath + "direction.png", sf::Vector2f(64, 64), sf::Vector2f(1, 1));
+    textures.emplace_back("button", extPath + "button.png", sf::Vector2f(128, 64), sf::Vector2f(1, 1));
+    textures.emplace_back("wall", extPath + "wall.png", sf::Vector2f(64, 64), sf::Vector2f(1, 1));
 
     return textures;
 }
@@ -33,8 +37,8 @@ int main() {
     Map map(extPath + "map1.txt", extPath + "config.txt",300 , 200, map_data);
     Vector2d pos;
     /*if(auto result = std::find_if(map_data.begin(), map_data.end(),
-                                  [](std::vector<int> a) {return (std::find(a.begin(), a.end(), 2)) == a.end()})){
-
+                                  [](std::vector<int> a) {return std::find(a.begin(), a.end(), 2) == a.end(); }); result == map_data.end()){
+        pos = Vector2d(map_data.end()-result, std::find (result->begin(), result->end(), 2) - result->begin());
 
     }*/
     for(int i = 0; i < map_data.size(); i++){
@@ -44,22 +48,28 @@ int main() {
             }
         }
     }
+
     sf::Font font;
     font.loadFromFile(extPath + "advanced_pixel-7.ttf");
-    auto it = std::find_if(textures.begin(), textures.end(), [&](const Texture& s){return s.getName() == "wall";});
-    Player player(*it, pos, sf::Vector2i(WIDTH, HEIGHT), map_data);
+
+
+    auto playerTex = getTextureByName("wall", textures);
+
+
+    Player player(playerTex, pos, sf::Vector2i(WIDTH, HEIGHT), sf::Vector2u(64,64), map_data);
     sf::RectangleShape sky(sf::Vector2f(WIDTH, HEIGHT / 2));
     sky.setFillColor(sf::Color::Cyan);
     sky.setPosition(0, 0);
 
-    it = std::find_if(textures.begin(), textures.end(), [&](const Texture& s){return s.getName() == "button";});
 
-    Button resume(sf::Vector2f(600, 400), Vector2d(200, 100), *it, "Resume", font, sf::Color::Black);
-    
-    Button quit(sf::Vector2f(600, 600), Vector2d(200, 100), *it, "Quit", font, sf::Color::Black);
+    auto buttonTex = getTextureByName("button", textures);
+    Button resume(buttonTex, sf::Vector2f(WIDTH/2, HEIGHT/2 -100), sf::Vector2f(200, 100), "Resume", font, sf::Color::Black);
+    Button quit(buttonTex, sf::Vector2f(WIDTH/2, HEIGHT/2+100), sf::Vector2f(200, 100), "Quit", font, sf::Color::Black);
 
+    spriteRenderer renderer(playerTex, sf::Vector2f(WIDTH/2, HEIGHT/2), sf::Vector2f(64, 64));
     sf::Clock clock;
     bool isPaused = false;
+    int m=0;
 
     while (window.isOpen()) {
         sf::Event event{};
@@ -78,7 +88,7 @@ int main() {
             window.clear();
             window.draw(sky);
             player.Render(window);
-            map.render(window);
+            //map.render(window);
         } else {
             window.setMouseCursorVisible(true);
             if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
@@ -91,6 +101,11 @@ int main() {
             resume.Render(window);
             quit.Render(window);
         }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::G)){
+
+            renderer.setTextureRect(sf::IntRect(m++, 0, 1, 64));
+        }
+        renderer.Render(window);
         window.display();
 
     }

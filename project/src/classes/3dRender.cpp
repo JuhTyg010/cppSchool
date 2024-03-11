@@ -8,14 +8,12 @@
 Camera::Camera(sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Texture& texture):
                 windowSize(windowSize), textureSize(texture.getSize()), map(map){
     for(int i = 0; i < windowSize.x; i++){
-        stripes.push_back(std::make_unique<Stripe>(sf::Vector2f((float)i, (float) windowSize.y / 2),
-                                                   Vector2d(1, textureSize.y), texture, true));
+        stripes.push_back(std::make_unique<Stripe>(sf::Vector2f ((float)i, (float) windowSize.y / 2), texture));
     }
 }
 
 Camera::Camera(int windowWidth, int windowHeight, std::vector<std::vector<int>>& map, Texture& texture) :
-        Camera(sf::Vector2i(windowWidth, windowHeight), map, texture) {}
-
+        Camera(sf::Vector2i (windowWidth, windowHeight), map, texture){}
 
 Camera::Camera(const Camera &other) :  windowSize(other.windowSize), textureSize(other.textureSize), map(other.map){
     for(int i = 0; i < windowSize.x; i++){
@@ -105,12 +103,12 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         wallX -= std::floor(wallX);
 
         //x coordinate on the texture
-        int texX = (int)(wallX * (float)textureSize.x);
+        int texX = (int)(wallX * textureSize.x);
         if(isXAxis && rayDir.x > 0) texX = (int)textureSize.x - texX - 1;
         if(!isXAxis && rayDir.y < 0) texX = (int)textureSize.x - texX - 1;
 
         //update Stripe of wall is Vertical
-        stripes[i]->update(texX , drawStart, drawEnd, textureNum);
+         stripes[i]->update(texX , drawStart, drawEnd, textureNum + i%2 , false);
 
     }
     for(auto& stripe : stripes){
