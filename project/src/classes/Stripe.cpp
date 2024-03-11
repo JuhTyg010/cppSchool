@@ -4,11 +4,11 @@
 
 #include "../headers/Stripe.h"
 
-Stripe::Stripe(sf::Vector2f position, Texture& texture)
-    : VisibleObject(texture, position, sf::Vector2f(1, texture.getSize().y)), matrix(texture.getMatrix()), scale(1) {}
+Stripe::Stripe(sf::Vector2f position, Texture& texture, bool isHorizontal)
+    : VisibleObject(texture, position, sf::Vector2f(1, texture.getSize().y)), scale(1), isHorizontal(isHorizontal) {}
 
 
-void Stripe::rescale(int drawStart, int drawEnd, bool isHorizontal) {
+void Stripe::rescale(int drawStart, int drawEnd) {
     if(isHorizontal){
         int width = std::abs(drawEnd - drawStart);
         scale = (float) width / (float) size.x;
@@ -20,9 +20,9 @@ void Stripe::rescale(int drawStart, int drawEnd, bool isHorizontal) {
     }
 }
 
-void Stripe::Update(int dist, int drawStart, int drawEnd, int textureNum, bool isHorizontal) {
+void Stripe::Update(int dist, int drawStart, int drawEnd, int textureNum) {
     //sprite->setPosition(position);
-    rescale(drawStart, drawEnd, isHorizontal);
+    rescale(drawStart, drawEnd);
     if(isHorizontal)    sprite->setTextureRect(sf::IntRect(size.x * textureNum, dist, size.x, 1));
     else                sprite->setTextureRect(sf::IntRect(dist + (textureNum*size.x), textureNum, 1, size.y));
 }
