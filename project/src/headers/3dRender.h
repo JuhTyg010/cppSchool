@@ -19,12 +19,11 @@ private:
     sf::Vector2i windowSize;
     sf::Vector2f textureSize;
     std::vector<std::vector<int>>& map;
-    std::vector<std::unique_ptr<Stripe>> stripes;
+    std::vector<std::unique_ptr<VisibleObject>> stripes;
 
 public:
     Camera(sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Texture& texture);
     Camera(int windowWidth, int windowHeight, std::vector<std::vector<int>>& map, Texture& texture);
-    Camera(const Camera& other);
 
 
     void render(const Vector2d& position, const Vector2d& direction, const Vector2d& plane, sf::RenderWindow& window);
