@@ -21,5 +21,6 @@ add_executable(project classes/main.cpp
         classes/Stripe.cpp
         classes/button.cpp
         headers/button.h
-        headers/VisibleObject.h)
+        headers/VisibleObject.h
+        headers/item.h)
 target_link_libraries(project sfml-graphics sfml-audio sfml-window)
