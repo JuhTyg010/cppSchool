@@ -5,7 +5,15 @@
 #include "../headers/Stripe.h"
 
 Stripe::Stripe(sf::Vector2f position, Texture& texture, bool isHorizontal)
-    : VisibleObject(texture, position, sf::Vector2f(1, texture.getSize().y)), scale(1), isHorizontal(isHorizontal) {}
+    : VisibleObject(texture, position, sf::Vector2f(1, texture.getSize().y)), scale(1), isHorizontal(isHorizontal) {
+    if(isHorizontal) {
+        size = sf::Vector2f(texture.getSize().x, 1);
+        sprite->setOrigin(sf::Vector2f(texture.getSize().x/2, 0));
+    } else {
+        size = sf::Vector2f(1, texture.getSize().y);
+        sprite->setOrigin(sf::Vector2f(0, texture.getSize().y/2));
+    }
+}
 
 Stripe::Stripe(const Stripe& other) : VisibleObject(other), scale(other.scale), isHorizontal(other.isHorizontal) {}
 

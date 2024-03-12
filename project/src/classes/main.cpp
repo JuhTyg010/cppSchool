@@ -110,7 +110,6 @@ int main() {
 
             renderer.setTextureRect(sf::IntRect(m++, 0, 1, 64));
         }
-        std::cout << "lap " <<  std::endl;
 
         //renderer.Render(window);
         window.display();

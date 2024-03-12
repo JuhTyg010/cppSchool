@@ -17,19 +17,13 @@ private:
 public:
     sf::Sprite sprite;
 
-    /**
-     * @brief Construct a new sprite Renderer object
-     * 
-     */
-    spriteRenderer() = default;
+
     /**
      * @brief Construct a new sprite Renderer object
      * 
      * @param texture 
      * @param position 
-     * @param scale 
-     * @param size 
-     * @param matrix 
+     * @param size
      */
     spriteRenderer(Texture& texture, sf::Vector2f position, sf::Vector2f  size);
 
@@ -61,6 +55,8 @@ public:
      * @param window 
      */
     void Render(sf::RenderWindow &window);
+
+    void setOrigin(sf::Vector2f origin);
     /**
      * @brief Set the Position of the object
      * 

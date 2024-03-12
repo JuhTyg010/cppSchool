@@ -5,8 +5,7 @@
 #include "../headers/spriteRenderer.h"
 
 
-spriteRenderer::spriteRenderer(Texture& texture, sf::Vector2f position,
-                               sf::Vector2f size) : texture(texture){
+spriteRenderer::spriteRenderer(Texture& texture, sf::Vector2f position, sf::Vector2f size) : texture(texture){
     sf::Vector2f scale = divide(size, texture.getSize());
     sprite.setTexture(texture.getTexture());
     //TODO: fix the origin cause for stripes it 1/2 == 0.5, also using texture.getSize() is not good
@@ -76,6 +75,10 @@ void spriteRenderer::setPosition(sf::Vector2f pos) {
 
 void spriteRenderer::setScale(sf::Vector2f scale_) {
     sprite.setScale(scale_);
+}
+
+void spriteRenderer::setOrigin(sf::Vector2f origin) {
+    sprite.setOrigin(origin);
 }
 
 sf::Vector2f spriteRenderer::getTextureSize() {
