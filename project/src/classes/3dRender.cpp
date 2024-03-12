@@ -73,8 +73,22 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
             if(map.at(mapPos.x).at(mapPos.y) > 0)     {
                 if(map.at(mapPos.x).at(mapPos.y) > 4 ) {
                     //TODO: Item pickup
+                    if(isXAxis)     perpWallDist = sideDist.x - deltaDist.x;
+                    else            perpWallDist = sideDist.y - deltaDist.y;
                     Item thisItem(item);
-                    thisItem.Update(sf::Vector2f(mapPos.x, mapPos.y), sf::Vector2f(4/perpWallDist, 4/perpWallDist));
+                    //TODO: calculate position from my position and square on map to place the ite in the middle
+                    /* ? x sholud be calculated by triangles and grid, y uses prep wall and high of the ground*/
+
+                    double whereHit; //where exactly the block was hit
+                    if(isXAxis) whereHit = position.y + perpWallDist * rayDir.y;
+                    else whereHit = position.x + perpWallDist * rayDir.x;
+                    whereHit -= std::floor(whereHit);
+
+
+                    sf::Vector2f itemPos = sf::Vector2f(mapPos.x, mapPos.y);
+                    itemPos.y = windowSize.y / perpWallDist / 2;
+                    itemPos.x = i;
+                    thisItem.Update(itemPos, sf::Vector2f(100,100));
                     toRender.emplace_back(std::make_shared<Item>(thisItem));
                 } else {
                     isHit = true;
