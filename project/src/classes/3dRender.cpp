@@ -86,7 +86,7 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
 
 
                     sf::Vector2f itemPos = sf::Vector2f(mapPos.x, mapPos.y);
-                    itemPos.y = windowSize.y / perpWallDist / 2;
+                    itemPos.y = windowSize.y / perpWallDist + (windowSize.y >> 1);
                     itemPos.x = i;
                     thisItem.Update(itemPos, sf::Vector2f(100,100));
                     toRender.emplace_back(std::make_shared<Item>(thisItem));
