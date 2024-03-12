@@ -92,7 +92,6 @@ int main() {
             window.clear();
             window.draw(sky);
             player.Render(window);
-            std::cout << "lap " <<  std::endl;
 
             map.render(window);
         } else {

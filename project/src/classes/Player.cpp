@@ -9,7 +9,7 @@
 
 Player::Player(Texture &texture, Vector2d position, sf::Vector2i windowSize, sf::Vector2u textureSize,
                std::vector<std::vector<int>> &map, Item &item)
-               : plane(Vector2d(0, 0.66)), direction(Vector2d(-1, 0)), position(position), speed(2), rotationSpeed(30),
+               : plane(Vector2d(0, 0.66)), direction(Vector2d(-1, 0)), position(position), speed(2), rotationSpeed(15),
                map(map), lastMousePositionX(400){
     camera = std::make_unique<Camera>(Camera(windowSize, map, texture, item)); }
 

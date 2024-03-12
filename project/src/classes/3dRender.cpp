@@ -6,8 +6,10 @@
 
 
 Camera::Camera(sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Texture& texture, Item& item) :
-                windowSize(windowSize), textureSize(texture.getSize()), map(map), item(item){
-        stripe = std::make_unique<Stripe>(sf::Vector2f (0, (float) windowSize.y / 2), texture, false);
+                windowSize(windowSize), textureSize(texture.getSize()), map(map), item(item) {
+    for(int i = 0; i < windowSize.x; i++){
+        stripes.emplace_back(std::make_shared<Stripe>(sf::Vector2f ((float)i, (float) windowSize.y / 2), texture, false));
+    }
 }
 
 Camera::Camera(int windowWidth, int windowHeight, std::vector<std::vector<int>>& map, Texture& texture, Item& item) :
@@ -105,21 +107,23 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         if(!isXAxis && rayDir.y < 0) texX = (int)textureSize.x - texX - 1;
 
         //Update Stripe of wall is Vertical
-        Stripe thisStripe(*stripe);
-            thisStripe.Update(texX, drawStart, drawEnd, textureNum);
-            thisStripe.setPosition(sf::Vector2f(i, windowSize.y / 2));
-            toRender.emplace_back(std::make_shared<Stripe>(thisStripe));
+        if(auto stripe = dynamic_cast<Stripe*>(stripes[i].get())){
+            stripe->Update(texX, drawStart, drawEnd, textureNum);
+            toRender.emplace_back(stripes[i]);
+        } else {
+            throw std::runtime_error("Stripe is not a Stripe");
+        }
+
     }
     std::sort(toRender.begin(), toRender.end(), [](const std::shared_ptr<VisibleObject>& a, const std::shared_ptr<VisibleObject>& b){
         return a->getPosition().x < b->getPosition().x;
     }
     );
-    std::cout << "ToRender size: " << toRender.size() << std::endl;
 
     for(auto& object : toRender){
 
         object->Render(window);
 
     }
-    std::cout << "Rendered" << std::endl;
+
 }

@@ -20,7 +20,7 @@ private:
     sf::Vector2i windowSize;
     sf::Vector2f textureSize;
     std::vector<std::vector<int>>& map;
-    std::unique_ptr<Stripe> stripe;
+    std::vector<std::shared_ptr<Stripe>> stripes;
     Item& item;
 
 public:
