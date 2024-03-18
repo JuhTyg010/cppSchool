@@ -6,7 +6,7 @@
 
 
 Camera::Camera(sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Texture& texture, Item& item) :
-                windowSize(windowSize), textureSize(texture.getSize()), map(map), item(item) {
+                windowSize(windowSize), textureSize(texture.getSize()), map(map) {
     for(int i = 0; i < windowSize.x; i++){
         stripes.emplace_back(std::make_shared<Stripe>(sf::Vector2f ((float)i, (float) windowSize.y / 2), texture, false));
     }
@@ -19,12 +19,12 @@ Camera::Camera(int windowWidth, int windowHeight, std::vector<std::vector<int>>&
 void Camera::render(const Vector2d &position, const Vector2d &direction, const Vector2d &plane, sf::RenderWindow &window) {
     //plane calculation
     std::vector<std::shared_ptr<VisibleObject>> toRender;
+    std::vector<sf::Vector2i> items;
 
     for(int i = 0; i < windowSize.x; i++){
-        //calculate ray position and direction
-        double cameraX = 2 * i / double(windowSize.x) - 1;
 
-        Vector2d rayDir = direction + plane * cameraX;
+        //calculate ray position and direction
+        Vector2d rayDir = direction + plane * ((double) (i << 1) / windowSize.x - 1);
 
         //which box of the map we're in
         sf::Vector2i mapPos = sf::Vector2i((int)position.x, (int)position.y);
@@ -72,24 +72,10 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
             //Check if ray has hit a wall
             if(map.at(mapPos.x).at(mapPos.y) > 0)     {
                 if(map.at(mapPos.x).at(mapPos.y) > 4 ) {
-                    //TODO: Item pickup
-                    if(isXAxis)     perpWallDist = sideDist.x - deltaDist.x;
-                    else            perpWallDist = sideDist.y - deltaDist.y;
-                    Item thisItem(item);
-                    //TODO: calculate position from my position and square on map to place the ite in the middle
-                    /* ? x sholud be calculated by triangles and grid, y uses prep wall and high of the ground*/
+                    //TODO: items
+                    auto item = std::find(items.begin(), items.end(), mapPos);
+                    if(item == items.end())     items.emplace_back(mapPos);
 
-                    double whereHit; //where exactly the block was hit
-                    if(isXAxis) whereHit = position.y + perpWallDist * rayDir.y;
-                    else whereHit = position.x + perpWallDist * rayDir.x;
-                    whereHit -= std::floor(whereHit);
-
-
-                    sf::Vector2f itemPos = sf::Vector2f(mapPos.x, mapPos.y);
-                    itemPos.y = windowSize.y / perpWallDist + (windowSize.y >> 1);
-                    itemPos.x = i;
-                    thisItem.Update(itemPos, sf::Vector2f(100,100));
-                    toRender.emplace_back(std::make_shared<Item>(thisItem));
                 } else {
                     isHit = true;
                 }

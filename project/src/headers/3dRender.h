@@ -9,6 +9,7 @@
 #include <cmath>
 #include <vector>
 #include <memory>
+#include <set>
 #include "Stripe.h"
 #include "Item.h"
 #include "Utils.h"
@@ -21,7 +22,6 @@ private:
     sf::Vector2f textureSize;
     std::vector<std::vector<int>>& map;
     std::vector<std::shared_ptr<Stripe>> stripes;
-    Item& item;
 
 public:
     Camera(sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Texture& , Item& item);
