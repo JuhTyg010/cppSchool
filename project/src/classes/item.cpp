@@ -18,7 +18,6 @@ void Item::Update(sf::Vector2f position, sf::Vector2f size) {
     sprite->setPosition(position);
     sf::Vector2f scale = divide(size, sprite->getTextureSize());
     sprite->setScale(scale);
-    std::cout << "Item::Update: " << position.x << " " << position.y  << std::endl;
 }
 
 Item Item::copy() const {

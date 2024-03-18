@@ -19,22 +19,17 @@ void Player::Update(float dt) {
     map.at(static_cast<int>(position.x)).at(static_cast<int>(position.y))  = 0;    //set 2 to 0 so if we move we dont have to find the old position
 
     //when rotating we need to rotate both direction and plane vectors
-    if(sf::Mouse::getPosition().x > lastMousePosition.x){
+    if(sf::Mouse::getPosition().x != lastMousePosition.x){
+        double rotationSpeed1 = (lastMousePosition.x - sf::Mouse::getPosition().x) * dt *0.5;
         Vector2d oldDir = direction;
-        direction.x = direction.x * std::cos(-rotationSpeed * dt) - direction.y * std::sin(-rotationSpeed * dt);
-        direction.y = oldDir.x * std::sin(-rotationSpeed * dt) + direction.y * std::cos(-rotationSpeed * dt);
+        direction.x = direction.x * std::cos(rotationSpeed1) - direction.y * std::sin(rotationSpeed1);
+        direction.y = oldDir.x * std::sin(rotationSpeed1) + direction.y * std::cos(rotationSpeed1);
         Vector2d oldPlane = plane;
-        plane.x = plane.x * std::cos(-rotationSpeed * dt) - plane.y * std::sin(-rotationSpeed * dt);
-        plane.y = oldPlane.x * std::sin(-rotationSpeed * dt) + plane.y * std::cos(-rotationSpeed * dt);
-    } else if(sf::Mouse::getPosition().x < lastMousePosition.x){
-        Vector2d oldDir = direction;
-        direction.x = direction.x * std::cos(rotationSpeed * dt) - direction.y * std::sin(rotationSpeed * dt);
-        direction.y = oldDir.x * std::sin(rotationSpeed * dt) + direction.y * std::cos(rotationSpeed * dt);
-        Vector2d oldPlane = plane;
-        plane.x = plane.x * std::cos(rotationSpeed * dt) - plane.y * std::sin(rotationSpeed * dt);
-        plane.y = oldPlane.x * std::sin(rotationSpeed * dt) + plane.y * std::cos(rotationSpeed * dt);
+        plane.x = plane.x * std::cos(rotationSpeed1) - plane.y * std::sin(rotationSpeed1);
+        plane.y = oldPlane.x * std::sin(rotationSpeed1) + plane.y * std::cos(rotationSpeed1);
     }
-    camera->pitch += (lastMousePosition.y - sf::Mouse::getPosition().y) * 0.5;
+
+    camera->pitch += (lastMousePosition.y - sf::Mouse::getPosition().y);
 
     //move forward and backwards
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
