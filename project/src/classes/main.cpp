@@ -52,7 +52,7 @@ int main() {
 
     sf::Font font;
     font.loadFromFile(extPath + "advanced_pixel-7.ttf");
-
+    sf::Mouse::setPosition(sf::Vector2i(WIDTH/2, HEIGHT/2), window);
 
     auto playerTex = getTextureByName("wall", textures);
     auto itemTex = getTextureByName("wall", textures);
@@ -92,7 +92,7 @@ int main() {
             window.clear();
             window.draw(sky);
             player.Render(window);
-
+            sf::Mouse::setPosition(sf::Vector2i(WIDTH/2, HEIGHT/2), window);
             map.render(window);
         } else {
             window.setMouseCursorVisible(true);

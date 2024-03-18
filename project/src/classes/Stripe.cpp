@@ -29,11 +29,13 @@ void Stripe::rescale(int drawStart, int drawEnd) {
     }
 }
 
-void Stripe::Update(int dist, int drawStart, int drawEnd, int textureNum) {
+void Stripe::Update(int dist, int drawStart, int drawEnd, int textureNum, float pitch) {
     //sprite->setPosition(position);
     rescale(drawStart, drawEnd);
     if(isHorizontal)    sprite->setTextureRect(sf::IntRect(size.x * textureNum, dist, size.x, 1));
     else                sprite->setTextureRect(sf::IntRect(dist + (textureNum*size.x), textureNum, 1, size.y));
+    position.y = pitch;
+    sprite->setPosition(position);
 }
 
 

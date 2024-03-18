@@ -22,8 +22,10 @@ private:
     sf::Vector2f textureSize;
     std::vector<std::vector<int>>& map;
     std::vector<std::shared_ptr<Stripe>> stripes;
+    Item& item;
 
 public:
+    double pitch;
     Camera(sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Texture& , Item& item);
     Camera(int windowWidth, int windowHeight, std::vector<std::vector<int>>& map, Texture& texture, Item& item);
 

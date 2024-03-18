@@ -46,7 +46,7 @@ public:
      * @param textureNum
      * @param isHorizontal
      */
-    void Update(int dist, int drawStart, int drawEnd, int textureNum);
+    void Update(int dist, int drawStart, int drawEnd, int textureNum, float pitch);
 
     void Update(float dt) override {}
 

@@ -9,8 +9,8 @@
 
 Player::Player(Texture &texture, Vector2d position, sf::Vector2i windowSize, sf::Vector2u textureSize,
                std::vector<std::vector<int>> &map, Item &item)
-               : plane(Vector2d(0, 0.66)), direction(Vector2d(-1, 0)), position(position), speed(2), rotationSpeed(15),
-               map(map), lastMousePositionX(400){
+               : plane(Vector2d(0, 1)), direction(Vector2d(-1, 0)), position(position), speed(2), rotationSpeed(15),
+               map(map), lastMousePosition(sf::Mouse::getPosition()) {
     camera = std::make_unique<Camera>(Camera(windowSize, map, texture, item)); }
 
 
@@ -19,16 +19,14 @@ void Player::Update(float dt) {
     map.at(static_cast<int>(position.x)).at(static_cast<int>(position.y))  = 0;    //set 2 to 0 so if we move we dont have to find the old position
 
     //when rotating we need to rotate both direction and plane vectors
-    if(sf::Mouse::getPosition().x > lastMousePositionX){
+    if(sf::Mouse::getPosition().x > lastMousePosition.x){
         Vector2d oldDir = direction;
         direction.x = direction.x * std::cos(-rotationSpeed * dt) - direction.y * std::sin(-rotationSpeed * dt);
         direction.y = oldDir.x * std::sin(-rotationSpeed * dt) + direction.y * std::cos(-rotationSpeed * dt);
         Vector2d oldPlane = plane;
         plane.x = plane.x * std::cos(-rotationSpeed * dt) - plane.y * std::sin(-rotationSpeed * dt);
         plane.y = oldPlane.x * std::sin(-rotationSpeed * dt) + plane.y * std::cos(-rotationSpeed * dt);
-    }
-    //rotate to the left using mouse x-axes
-    if(sf::Mouse::getPosition().x < lastMousePositionX){
+    } else if(sf::Mouse::getPosition().x < lastMousePosition.x){
         Vector2d oldDir = direction;
         direction.x = direction.x * std::cos(rotationSpeed * dt) - direction.y * std::sin(rotationSpeed * dt);
         direction.y = oldDir.x * std::sin(rotationSpeed * dt) + direction.y * std::cos(rotationSpeed * dt);
@@ -36,7 +34,8 @@ void Player::Update(float dt) {
         plane.x = plane.x * std::cos(rotationSpeed * dt) - plane.y * std::sin(rotationSpeed * dt);
         plane.y = oldPlane.x * std::sin(rotationSpeed * dt) + plane.y * std::cos(rotationSpeed * dt);
     }
-    sf::Mouse::setPosition(sf::Vector2i(400, 300)); //set mouse position to the middle of the screen
+    camera->pitch += (lastMousePosition.y - sf::Mouse::getPosition().y) * 0.5;
+
     //move forward and backwards
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
         if(isLegalPosition(Vector2d(position.x + (direction.x * speed * dt), position.y))) position.x += direction.x * speed * dt;

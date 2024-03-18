@@ -18,7 +18,7 @@ private:
     Vector2d position;
     Vector2d direction;
     Vector2d plane;
-    int lastMousePositionX;
+    sf::Vector2i lastMousePosition;
     std::unique_ptr<Camera> camera;
     std::vector<std::vector<int>>& map;
     bool isLegalPosition(const Vector2d& position);
