@@ -42,5 +42,4 @@ public:
 
 };
 
-
 #endif //INC_3D_GAME_VISIBLEOBJECT_H

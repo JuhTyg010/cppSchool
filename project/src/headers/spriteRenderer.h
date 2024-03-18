@@ -25,7 +25,7 @@ public:
      * @param position 
      * @param size
      */
-    spriteRenderer(Texture& texture, sf::Vector2f position, sf::Vector2f  size);
+    spriteRenderer(Texture& texture, sf::Vector2f position, sf::Vector2f size);
 
     spriteRenderer(const spriteRenderer& other);
     /**

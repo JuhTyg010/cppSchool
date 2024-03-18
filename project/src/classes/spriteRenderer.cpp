@@ -8,7 +8,6 @@
 spriteRenderer::spriteRenderer(Texture& texture, sf::Vector2f position, sf::Vector2f size) : texture(texture){
     sf::Vector2f scale = divide(size, texture.getSize());
     sprite.setTexture(texture.getTexture());
-    //TODO: fix the origin cause for stripes it 1/2 == 0.5, also using texture.getSize() is not good
     sprite.setOrigin(divide(texture.getSize(), 2));
     sprite.setPosition(position);
     sprite.setScale(scale);
