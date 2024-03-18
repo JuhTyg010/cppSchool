@@ -60,9 +60,7 @@ int main() {
 
     Player player(playerTex, pos, sf::Vector2i(WIDTH, HEIGHT), sf::Vector2u(64,64), map_data, item);
     std::cout << "Player position: " << std::endl;
-    sf::RectangleShape sky(sf::Vector2f(WIDTH, HEIGHT / 2));
-    sky.setFillColor(sf::Color::Cyan);
-    sky.setPosition(0, 0);
+
 
 
     auto buttonTex = getTextureByName("button", textures);
@@ -90,7 +88,6 @@ int main() {
             player.Update(dt.asSeconds());
             window.setMouseCursorVisible(false);
             window.clear();
-            window.draw(sky);
             player.Render(window);
             sf::Mouse::setPosition(sf::Vector2i(WIDTH/2, HEIGHT/2) + window.getPosition());
             map.render(window);
@@ -101,7 +98,6 @@ int main() {
                 else if(quit.isClicked(sf::Mouse::getPosition(window)))     window.close();
             }
             window.clear();
-            window.draw(sky);
             player.Render(window);
             resume.Render(window);
             quit.Render(window);

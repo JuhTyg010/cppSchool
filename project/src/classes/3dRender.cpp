@@ -21,6 +21,18 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
     std::vector<std::shared_ptr<VisibleObject>> toRender;
     std::vector<sf::Vector2i> items;
 
+    //Draw the floor and ceiling
+
+    sf::RectangleShape ceiling(sf::Vector2f(windowSize.x, windowSize.y / 2 + pitch));
+    ceiling.setFillColor(sf::Color(50, 50, 50));
+    ceiling.setPosition(0, 0);
+    window.draw(ceiling);
+
+    sf::RectangleShape floor(sf::Vector2f(windowSize.x, windowSize.y + std::abs(pitch)));
+    floor.setFillColor(sf::Color(100, 100, 100));
+    floor.setPosition(0, pitch);
+    window.draw(floor);
+
     for(int i = 0; i < windowSize.x; i++){
 
         //calculate ray position and direction
@@ -135,6 +147,7 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         //c = std::floor(c);
         double Y = windowSize.y / dist;
         Y += windowSize.y / 2;
+        Y += pitch;
 
         sf::Vector2f itemSize = sf::Vector2f(200, 200) /(float) dist;
         Item newItem(item);
