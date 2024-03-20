@@ -32,6 +32,7 @@ std::vector<Texture> LoadTextures(std::string& extPath) {
 int main() {
     std::string extPath = getExternalPath();
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Working Title");
+    window.setVerticalSyncEnabled(true);
     std::vector<Texture> textures;
     std::vector<std::vector<int>> map_data;
     textures = LoadTextures(extPath);
@@ -68,6 +69,7 @@ int main() {
     Button quit(buttonTex, sf::Vector2f(WIDTH/2, HEIGHT/2+100), sf::Vector2f(200, 100), "Quit", font, sf::Color::Black);
 
     spriteRenderer renderer(playerTex, sf::Vector2f(WIDTH/2, HEIGHT/2), sf::Vector2f(64, 64));
+
     sf::Clock clock;
     bool isPaused = false;
     int m=0;

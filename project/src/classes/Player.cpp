@@ -20,13 +20,15 @@ void Player::Update(float dt) {
 
     //when rotating we need to rotate both direction and plane vectors
     if(sf::Mouse::getPosition().x != lastMousePosition.x){
-        double rotationSpeed1 = (lastMousePosition.x - sf::Mouse::getPosition().x) * dt *0.5;
-        Vector2d oldDir = direction;
-        direction.x = direction.x * std::cos(rotationSpeed1) - direction.y * std::sin(rotationSpeed1);
-        direction.y = oldDir.x * std::sin(rotationSpeed1) + direction.y * std::cos(rotationSpeed1);
-        Vector2d oldPlane = plane;
-        plane.x = plane.x * std::cos(rotationSpeed1) - plane.y * std::sin(rotationSpeed1);
-        plane.y = oldPlane.x * std::sin(rotationSpeed1) + plane.y * std::cos(rotationSpeed1);
+        float x  = (sf::Mouse::getPosition().x - lastMousePosition.x) * -1;
+
+            Vector2d oldDir = direction;
+            direction.x = direction.x * std::cos(x * rotationSpeed * dt) - direction.y * std::sin(x * rotationSpeed * dt);
+            direction.y = oldDir.x * std::sin( x * rotationSpeed * dt) + direction.y * std::cos(x * rotationSpeed * dt);
+            Vector2d oldPlane = plane;
+            plane.x = plane.x * std::cos(x * rotationSpeed * dt) - plane.y * std::sin(x * rotationSpeed * dt);
+            plane.y = oldPlane.x * std::sin(x * rotationSpeed * dt) + plane.y * std::cos(x * rotationSpeed * dt);
+
     }
 
     camera->pitch += (lastMousePosition.y - sf::Mouse::getPosition().y);

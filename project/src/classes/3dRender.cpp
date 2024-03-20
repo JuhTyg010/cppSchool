@@ -138,20 +138,24 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         Vector2d itemVect = Vector2d(itemPos.x, itemPos.y) - position;
         double dist = std::sqrt(std::pow(itemVect.x, 2) + std::pow(itemVect.y, 2));
 
-        //normalize itemVect
-        itemVect = itemVect / dist;
+        //transform sprite with the inverse camera matrix
+        // [ planeX   dirX ] -1                                       [ dirY      -dirX ]
+        // [               ]       =  1/(planeX*dirY-dirX*planeY) *   [                 ]
+        // [ planeY   dirY ]                                          [ -planeY  planeX ]
 
-        double scalar = plane.x * itemVect.x + plane.y * itemVect.y;
-        //   (c << 1 / windowSize.x - 1) = scalar
-        double c = (scalar + 1) * windowSize.x / 2;
-        //c = std::floor(c);
-        double Y = windowSize.y / dist;
-        Y += windowSize.y / 2;
-        Y += pitch;
+        double invDet = 1 / (plane.x * direction.y - direction.x * plane.y); //required for correct matrix multiplication
+
+        sf::Vector2f transform = sf::Vector2f(direction.y * itemVect.x - direction.x * itemVect.y,
+                                              -plane.y * itemVect.x + plane.x * itemVect.y) * (float) invDet; //this is actually the depth inside the screen, that what Z is in 3D
+
+        int itemScreenX = int((windowSize.x / 2) * (1 + transform.x / transform.y));
+        int itemHeight = std::abs(int(windowSize.y / transform.y));
+        int itemScreenY = windowSize.y - itemHeight / 2 + pitch;
+
 
         sf::Vector2f itemSize = sf::Vector2f(200, 200) /(float) dist;
         Item newItem(item);
-        newItem.Update(sf::Vector2f((float) c, Y), itemSize);
+        newItem.Update(sf::Vector2f((float) itemScreenX, itemScreenY), itemSize);
         toRender.emplace_back(std::make_shared<Item>(newItem));
 
 
