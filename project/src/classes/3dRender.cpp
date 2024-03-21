@@ -135,7 +135,7 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
     for(auto& itemPos : items){
         //TODO: recalculate position of item to real position on the screen
 
-        Vector2d itemVect = Vector2d(itemPos.x, itemPos.y) - position;
+        Vector2d itemVect = Vector2d(itemPos.x + .5, itemPos.y + .5) - position;//+.5 to get the center of the square
         double dist = std::sqrt(std::pow(itemVect.x, 2) + std::pow(itemVect.y, 2));
 
         //transform sprite with the inverse camera matrix
@@ -149,8 +149,7 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
                                               -plane.y * itemVect.x + plane.x * itemVect.y) * (float) invDet; //this is actually the depth inside the screen, that what Z is in 3D
 
         int itemScreenX = int((windowSize.x / 2) * (1 + transform.x / transform.y));
-        int itemHeight = std::abs(int(windowSize.y / transform.y));
-        int itemScreenY = windowSize.y - itemHeight / 2 + pitch;
+        int itemScreenY = (windowSize.y / 2 - 100) / dist + pitch; // -100 to be 100 above the ground
 
 
         sf::Vector2f itemSize = sf::Vector2f(200, 200) /(float) dist;
@@ -160,10 +159,14 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
 
 
     }
+    std::sort(toRender.begin(), toRender.end(), [](const std::shared_ptr<VisibleObject>& a, const std::shared_ptr<VisibleObject>& b){
+        return a->getScale().x < b->getScale().x;
+    }
+    );
+
+
     for(auto& object : toRender){
-
         object->Render(window);
-
     }
 
 }

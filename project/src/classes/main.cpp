@@ -25,6 +25,7 @@ std::vector<Texture> LoadTextures(std::string& extPath) {
     textures.emplace_back("player", extPath + "direction.png", sf::Vector2f(64, 64), sf::Vector2f(1, 1));
     textures.emplace_back("button", extPath + "button.png", sf::Vector2f(128, 64), sf::Vector2f(1, 1));
     textures.emplace_back("wall", extPath + "wall.png", sf::Vector2f(64, 64), sf::Vector2f(1, 1));
+    textures.emplace_back("item", extPath + "item.png", sf::Vector2f(64, 64), sf::Vector2f(1, 1));
 
     return textures;
 }
@@ -56,8 +57,8 @@ int main() {
     sf::Mouse::setPosition(sf::Vector2i(WIDTH/2, HEIGHT/2) + window.getPosition());
 
     auto playerTex = getTextureByName("wall", textures);
-    auto itemTex = getTextureByName("wall", textures);
-    Item item(itemTex, sf::Vector2f(64, 64), sf::Vector2f(1, 1));
+    auto itemTex = getTextureByName("item", textures);
+    Item item(itemTex, sf::Vector2f(200, 200), sf::Vector2f(1, 1));
 
     Player player(playerTex, pos, sf::Vector2i(WIDTH, HEIGHT), map_data, item);
     std::cout << "Player position: " << std::endl;

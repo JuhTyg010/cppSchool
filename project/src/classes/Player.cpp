@@ -38,7 +38,7 @@ bool Player::isLegalPosition(const Vector2d &pos) {
     }
 }
 
-void Player::move(float dt, float maxSpeed, float accel){   //TODO: add acceleration
+void Player::move(float dt, float maxSpeed, float accel){
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) speed += accel;
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) speed -= accel;
@@ -89,14 +89,8 @@ void Player::rotate(float dt, float rotSpeed, float rotAccel) {
 
     //set mouse position if its on border of the window
     bool setMouse = false;
-
-    //TODO: make sqere behind the game where we can use mouse with limits
-    // if window is 400x400 on position 400 600 legal range is from x 500-700 and y 700-900
-
     sf::Vector2i maxPos = windowPosition + camera->getWindowSize();
-
     int delta = 10;
-
 
     if(mousePos.x <= windowPosition.x){
         mousePos.x = maxPos.x - delta;
