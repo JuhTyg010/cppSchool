@@ -15,6 +15,7 @@ protected:
     sf::Vector2f size;
 
 public:
+    double distance = 0;
     VisibleObject() = default;
     VisibleObject(Texture& texture, sf::Vector2f position, sf::Vector2f size): position(position), size(size){
         sprite = std::make_unique<spriteRenderer>(texture, position, size);

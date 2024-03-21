@@ -121,16 +121,13 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         //Update Stripe of wall is Vertical
         if(auto stripe = dynamic_cast<Stripe*>(stripes[i].get())){
             stripe->Update(texX, drawStart, drawEnd, textureNum, pitch);
+            stripes[i]->distance = perpWallDist;
             toRender.emplace_back(stripes[i]);
         } else {
             throw std::runtime_error("Stripe is not a Stripe");
         }
 
     }
-    std::sort(toRender.begin(), toRender.end(), [](const std::shared_ptr<VisibleObject>& a, const std::shared_ptr<VisibleObject>& b){
-        return a->getPosition().x < b->getPosition().x;
-    }
-    );
 
     for(auto& itemPos : items){
         //TODO: recalculate position of item to real position on the screen
@@ -156,17 +153,17 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         Item newItem(item);
         newItem.Update(sf::Vector2f((float) itemScreenX, itemScreenY), itemSize);
         toRender.emplace_back(std::make_shared<Item>(newItem));
-
+        toRender.back()->distance = dist;   //if set before it won't be sorted correctly
 
     }
-    std::sort(toRender.begin(), toRender.end(), [](const std::shared_ptr<VisibleObject>& a, const std::shared_ptr<VisibleObject>& b){
-        return a->getScale().x < b->getScale().x;
-    }
-    );
 
+    std::ranges::sort(toRender.begin(), toRender.end(), [](const std::shared_ptr<VisibleObject>& a, const std::shared_ptr<VisibleObject>& b){
+        return a->distance > b->distance;
+    });
 
     for(auto& object : toRender){
         object->Render(window);
+        std::cout  << object->distance << std::endl;
     }
 
 }

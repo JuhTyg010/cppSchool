@@ -105,7 +105,6 @@ int main() {
             quit.Render(window);
         }
 
-        //std::cout << "FPS: " << 1/dt.asSeconds() << std::endl;
         window.display();
 
     }
