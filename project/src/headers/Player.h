@@ -18,7 +18,7 @@ private:
     Vector2d position;
     Vector2d direction;
     Vector2d plane;
-    sf::Vector2i lastMousePosition;
+    sf::Vector2i lastMousePos;
     std::unique_ptr<Camera> camera;
     std::vector<std::vector<int>>& map;
     bool isLegalPosition(const Vector2d& position);
@@ -32,7 +32,7 @@ public:
      * @param textureSize 
      * @param map 
      */
-    Player(Texture& texture, Vector2d position, sf::Vector2i windowSize, sf::Vector2u textureSize, std::vector<std::vector<int>>& map, Item& item);
+    Player(Texture& texture, Vector2d position, sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Item& item);
     
     /**
      * @brief Get the Position of the object

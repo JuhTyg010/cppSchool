@@ -32,7 +32,7 @@ std::vector<Texture> LoadTextures(std::string& extPath) {
 int main() {
     std::string extPath = getExternalPath();
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Working Title");
-    window.setVerticalSyncEnabled(true);
+   // window.setVerticalSyncEnabled(true);
     std::vector<Texture> textures;
     std::vector<std::vector<int>> map_data;
     textures = LoadTextures(extPath);
@@ -59,7 +59,7 @@ int main() {
     auto itemTex = getTextureByName("wall", textures);
     Item item(itemTex, sf::Vector2f(64, 64), sf::Vector2f(1, 1));
 
-    Player player(playerTex, pos, sf::Vector2i(WIDTH, HEIGHT), sf::Vector2u(64,64), map_data, item);
+    Player player(playerTex, pos, sf::Vector2i(WIDTH, HEIGHT), map_data, item);
     std::cout << "Player position: " << std::endl;
 
 
