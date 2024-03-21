@@ -4,23 +4,46 @@
 
 #include "../headers/map.h"
 
-Map::Map(const std::string& file, const std::string& config, float Width, float Height, std::vector<std::vector<int>>& map)
+Map::Map(const std::string& config, float Width, float Height, std::vector<std::vector<int>>& map)
         : map(map), Width(Width), Height(Height) {
-    std::ifstream openfile(file);
+    std::string file;
+    std::string folder;
 
-    std::unordered_map<std::string, std::string> settings;
+    std::unordered_map<std::string, char> settings;
     std::ifstream openconfig(config);
     std::string line;
     //loads from config
+    std::cout << config << std::endl;
     while(std::getline(openconfig, line)) {
-        std::string key;
-        std::string value;
         std::stringstream ss(line);
-        ss >> key >> value;
-        settings.insert(std::make_pair(key, value));
+        std::string key;
+        ss >> key;
+        if(key == "map_file:"){
+            ss >> file;
+        } else if(key == "map_legend:") {
+            std::string legend;
+            legend = line.substr(key.size() + 1);
+            for(int i = 0; legend[i] != ']'; ++i) {
+                if(legend[i] == '[' || legend[i] == ',') {
+                    std::string key;
+                    while(legend[i] == ' ') i++;
+                    while(legend[i] != ':') {
+                        key += legend[i];
+                        i++;
+                    }
+                    i++;
+                    settings.emplace(key, legend[i]);
+                }
+            }
+        } else if(key == "resource_folder:") {
+            ss >> folder;
+            if(folder.back() != '/') folder += '/';
+        }
     }
     openconfig.close();
+    std::cout << folder + file << std::endl;
     //loads from file
+    std::ifstream openfile(folder + file);
     std::getline(openfile, line);
     float width;
     float height;
@@ -35,14 +58,14 @@ Map::Map(const std::string& file, const std::string& config, float Width, float 
     while(std::getline(openfile, line)) {
         for(int i = 0; i < line.size(); i++) {
             try{
-                if(line[i] == '#') {
+                if(line[i] == settings.at("wall")) {
                     map.at(row).at(i) = 1;
-                } else if(line[i] == 'P') {
+                } else if(line[i] == settings.at("player")) {
                     if(player == 0) {
                         player = 1;
                         map.at(row).at(i) = 2;
                     }
-                } else if(line[i] == 'i') {
+                } else if(line[i] == settings.at("item")) {
                     map.at(row).at(i) = 5;
                 }
             } catch (std::out_of_range& e) {
@@ -57,7 +80,7 @@ Map::Map(const std::string& file, const std::string& config, float Width, float 
 
 
 void Map::render(sf::RenderWindow& window) {
-    sf::Vector2f size(Width / map.at(0).size(), Height / map.size());
+    sf::Vector2f size(Width /(float) map.at(0).size(), Height /(float) map.size());
     sf::RectangleShape background(sf::Vector2(Width, Height));
     background.setFillColor(sf::Color::Black);
     background.setPosition(0, 0);

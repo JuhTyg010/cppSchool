@@ -5,39 +5,96 @@
 #include "../headers/Player.h"
 #include "../headers/map.h"
 #include "../headers/button.h"
-#include "../headers/Item.h"
-#include <memory>
 #include <algorithm>
 
-using texture_ptr = std::unique_ptr<sf::Texture>;
-using texture_ptrs = std::vector<std::unique_ptr<sf::Texture>>;
 
 
-constexpr int WIDTH = 900;
-constexpr int HEIGHT = 600;
-constexpr int BUTTON_TEXTURE = 1;
-constexpr int WALL_TEXTURE = 2;
+void loadConfig(const std::string& path, int& width, int& height, std::vector<Texture>& textures, sf::Font& font){
+    std::ifstream openfile(path);
+    std::string line;
+    std::string value;
+    std::string resourceFolder;
+    std::string fontFile;
+    std::map<std::string, std::string> texturePaths;
+    std::map<std::string, sf::Vector2f> textureSizes;
 
+    try {
 
-std::vector<Texture> LoadTextures(std::string& extPath) {
-    std::vector<Texture> textures;
+        while (std::getline(openfile, line)) {
+            std::string key;
+            std::stringstream ss(line);
+            ss >> key;
 
-    textures.emplace_back("player", extPath + "direction.png", sf::Vector2f(64, 64), sf::Vector2f(1, 1));
-    textures.emplace_back("button", extPath + "button.png", sf::Vector2f(128, 64), sf::Vector2f(1, 1));
-    textures.emplace_back("wall", extPath + "wall.png", sf::Vector2f(64, 64), sf::Vector2f(1, 1));
-    textures.emplace_back("item", extPath + "item.png", sf::Vector2f(64, 64), sf::Vector2f(1, 1));
+            if (key == "window_size:") {
+                ss >> width >> height;
 
-    return textures;
+            } else if (key == "button_texture:") {
+                ss >> value;
+                texturePaths.try_emplace("button", value);
+
+            } else if (key == "wall_texture:") {
+                ss >> value;
+                texturePaths.try_emplace("wall", value);
+            } else if (key == "player_texture:") {
+                ss >> value;
+                texturePaths.try_emplace("player", value);
+            } else if (key == "item_texture:") {
+                ss >> value;
+                texturePaths.try_emplace("item", value);
+            } else if (key == "button_texture_size:") {
+                float x, y;
+                ss >> x >> y;
+                textureSizes.try_emplace("button", sf::Vector2f(x, y));
+            } else if (key == "wall_texture_size:") {
+                float x, y;
+                ss >> x >> y;
+                textureSizes.try_emplace("wall", sf::Vector2f(x, y));
+            } else if (key == "player_texture_size:") {
+                float x, y;
+                ss >> x >> y;
+                textureSizes.try_emplace("player", sf::Vector2f(x, y));
+            } else if (key == "item_texture_size:") {
+                float x, y;
+                ss >> x >> y;
+                textureSizes.try_emplace("item", sf::Vector2f(x, y));
+            } else if (key == "resource_folder:") {
+                ss >> resourceFolder;
+                if (resourceFolder.back() != '/') resourceFolder += '/';
+            } else if(key == "font_file:"){
+                ss >> value;
+                fontFile = value;
+            }
+        }
+        if(resourceFolder.empty()) throw std::runtime_error("Resource folder not specified");
+        for (auto &[key, val]: texturePaths) {
+            textures.emplace_back(key, resourceFolder + val, textureSizes[key], sf::Vector2f(1, 1));
+            std::cout << "Texture loaded: " << resourceFolder + val << std::endl;
+        }
+        font.loadFromFile(resourceFolder + fontFile);
+    } catch (std::exception& e) {
+        std::cerr << "Error while loading from config: " << e.what() << std::endl;
+        exit (1);
+    }
 }
 
-int main() {
-    std::string extPath = getExternalPath();
-    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Working Title");
-    window.setVerticalSyncEnabled(true);
+
+int main(int argc, char *argv[]) {
     std::vector<Texture> textures;
     std::vector<std::vector<int>> map_data;
-    textures = LoadTextures(extPath);
-    Map map(extPath + "map1.txt", extPath + "config.txt",300 , 200, map_data);
+    sf::Font font;
+
+    int WIDTH, HEIGHT;
+    if(argc < 2){
+        std::cerr << "No config file provided" << std::endl;
+        return 1;
+    }
+    loadConfig(argv[1], WIDTH, HEIGHT, textures, font);
+    std::cout << "Config loaded" << std::endl;
+    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Working Title");
+    std::cout << "Window size: " << WIDTH << "x" << HEIGHT << std::endl;
+    window.setVerticalSyncEnabled(true);
+    Map map( argv[1],WIDTH/3 , HEIGHT/4, map_data);
+    std::cout << "Map loaded" << std::endl;
     Vector2d pos;
     /*if(auto result = std::find_if(map_data.begin(), map_data.end(),
                                   [](std::vector<int> a) {return std::find(a.begin(), a.end(), 2) == a.end(); }); result == map_data.end()){
@@ -51,9 +108,6 @@ int main() {
             }
         }
     }
-
-    sf::Font font;
-    font.loadFromFile(extPath + "advanced_pixel-7.ttf");
     sf::Mouse::setPosition(sf::Vector2i(WIDTH/2, HEIGHT/2) + window.getPosition());
 
     auto playerTex = getTextureByName("wall", textures);
@@ -66,14 +120,13 @@ int main() {
 
 
     auto buttonTex = getTextureByName("button", textures);
-    Button resume(buttonTex, sf::Vector2f(WIDTH/2, HEIGHT/2 -100), sf::Vector2f(200, 100), "Resume", font, sf::Color::Black);
-    Button quit(buttonTex, sf::Vector2f(WIDTH/2, HEIGHT/2+100), sf::Vector2f(200, 100), "Quit", font, sf::Color::Black);
+    Button resume(buttonTex, sf::Vector2f((float)WIDTH/2, (float)HEIGHT/2 -100), sf::Vector2f(200, 100), "Resume", font, sf::Color::Black);
+    Button quit(buttonTex, sf::Vector2f((float)WIDTH/2, (float)HEIGHT/2+100), sf::Vector2f(200, 100), "Quit", font, sf::Color::Black);
 
-    spriteRenderer renderer(playerTex, sf::Vector2f(WIDTH/2, HEIGHT/2), sf::Vector2f(64, 64));
+    spriteRenderer renderer(playerTex, sf::Vector2f((float)WIDTH/2, (float)HEIGHT/2), sf::Vector2f(64, 64));
 
     sf::Clock clock;
     bool isPaused = false;
-    int m=0;
 
     std::cout << "here" << std::endl;
     while (window.isOpen()) {
@@ -111,6 +164,5 @@ int main() {
 
     return 0;
 }
-
 
 
