@@ -13,15 +13,24 @@
 class Player{
 private:
     const int legal[2] = {0,2};
-    float speed;
-    float rotationSpeed;
+    float sideSpeed = 0;
+    float speed = 0;
+    float rotationSpeed = 0;
+
     Vector2d position;
     Vector2d direction;
     Vector2d plane;
     sf::Vector2i lastMousePos;
+    sf::Vector2i windowPosition;
+
     std::unique_ptr<Camera> camera;
     std::vector<std::vector<int>>& map;
+
     bool isLegalPosition(const Vector2d& position);
+
+    void move(float dt, float speed, float acceleration);
+
+    void rotate(float dt, float rotationSpeed, float rotAccel);
 public:
     /**
      * @brief Construct a new Player object
@@ -61,6 +70,7 @@ public:
      * @param window to render
      */
     void Render(sf::RenderWindow &window) ;
+
 
 
 };

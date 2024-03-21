@@ -32,7 +32,7 @@ std::vector<Texture> LoadTextures(std::string& extPath) {
 int main() {
     std::string extPath = getExternalPath();
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Working Title");
-   // window.setVerticalSyncEnabled(true);
+    window.setVerticalSyncEnabled(true);
     std::vector<Texture> textures;
     std::vector<std::vector<int>> map_data;
     textures = LoadTextures(extPath);
@@ -91,7 +91,6 @@ int main() {
             window.setMouseCursorVisible(false);
             window.clear();
             player.Render(window);
-            sf::Mouse::setPosition(sf::Vector2i(WIDTH/2, HEIGHT/2) + window.getPosition());
             map.render(window);
         } else {
             window.setMouseCursorVisible(true);
@@ -104,13 +103,8 @@ int main() {
             resume.Render(window);
             quit.Render(window);
         }
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::G)){
 
-            renderer.setTextureRect(sf::IntRect(m++, 0, 1, 64));
-        }
-
-        std::cout << "FPS: " << 1/dt.asSeconds() << std::endl;
-        //renderer.Render(window);
+        //std::cout << "FPS: " << 1/dt.asSeconds() << std::endl;
         window.display();
 
     }
