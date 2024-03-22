@@ -162,7 +162,6 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
 
     for(auto& object : toRender){
         object->Render(window);
-        std::cout  << object->distance << std::endl;
     }
 
 }

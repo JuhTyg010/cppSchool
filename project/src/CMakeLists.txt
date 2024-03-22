@@ -13,7 +13,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(SFML COMPONENTS  window graphics)
 
 include_directories(include Utils)
-include_directories(include external)
 
 add_executable(project classes/main.cpp
         classes/map.cpp headers/map.h

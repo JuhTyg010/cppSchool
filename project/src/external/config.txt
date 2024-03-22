@@ -3,7 +3,7 @@ window_size: 1200 800
 resource_folder: /home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/sadovsm/project/src/external
 
 map_file: map1.txt
-map_legend: [wall: #, player: P, item: I, empty: .]
+map_legend: [wall: #, player: P, item: i, empty: .]
 
 button_texture: button.png
 button_texture_size: 128 64

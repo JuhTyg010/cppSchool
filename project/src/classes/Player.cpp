@@ -16,7 +16,7 @@ Player::Player(Texture &texture, Vector2d position, sf::Vector2i windowSize, std
 
 void Player::Update(float dt) {
     map.at(static_cast<int>(position.x)).at(static_cast<int>(position.y))  = 0;    //set 2 to 0 so if we move we don't have to find the old position
-    rotate(dt, 3, .1);
+    rotate(dt, 10, .2);
     move(dt, 2, .2);
     map.at(static_cast<int>(position.x)).at(static_cast<int>(position.y)) = 2; //set 2 to the new position
 }
@@ -69,8 +69,8 @@ void Player::rotate(float dt, float rotSpeed, float rotAccel) {
 
     rotationSpeed = std::max(std::min((float) rotSpeed, rotationSpeed),(float) -rotSpeed);
 
-    if(mousePos.x > lastMousePos.x) rotationSpeed -= rotAccel;
-    else if(mousePos.x < lastMousePos.x) rotationSpeed += rotAccel;
+    if(mousePos.x > lastMousePos.x) rotationSpeed -= (rotAccel * (mousePos.x - lastMousePos.x));
+    else if(mousePos.x < lastMousePos.x) rotationSpeed += (rotAccel * (lastMousePos.x - mousePos.x));
 
     else rotationSpeed *= 0.5;
 
