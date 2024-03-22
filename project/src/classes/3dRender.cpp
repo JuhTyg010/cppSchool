@@ -83,10 +83,11 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
             }
             //Check if ray has hit a wall
             if(map.at(mapPos.x).at(mapPos.y) > 0)     {
-                if(map.at(mapPos.x).at(mapPos.y) > 4 ) {
-                    //TODO: items
+                if(map.at(mapPos.x).at(mapPos.y) == 5 ) {
                     auto it = std::find(items.begin(), items.end(), mapPos);
                     if(it == items.end())     items.emplace_back(mapPos);
+
+                } else if(map.at(mapPos.x).at(mapPos.y) == 6){
 
                 } else {
                     isHit = true;

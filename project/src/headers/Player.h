@@ -12,8 +12,9 @@
 
 class Player{
 private:
+    int finishNum = 2;
     int playerNum = 3;
-    const int legal[2] = {0,playerNum};
+    const int legal[3] = {0,playerNum, 5};
     float sideSpeed = 0;
     float speed = 0;
     float rotationSpeed = 0;

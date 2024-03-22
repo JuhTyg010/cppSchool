@@ -19,13 +19,10 @@ add_executable(project classes/main.cpp
         headers/Player.h classes/Player.cpp
         Utils/Utils.cpp Utils/Utils.h
         headers/spriteRenderer.h classes/spriteRenderer.cpp
-        headers/3dRender.h
-        classes/3dRender.cpp
-        headers/Stripe.h
-        classes/Stripe.cpp
-        classes/button.cpp
-        headers/button.h
+        headers/3dRender.h classes/3dRender.cpp
+        headers/Stripe.h classes/Stripe.cpp
+        classes/button.cpp headers/button.h
         headers/VisibleObject.h
-        headers/Item.h
-        classes/item.cpp)
+        headers/Item.h classes/item.cpp
+        headers/UIText.h classes/UIText.cpp)
 target_link_libraries(project PRIVATE sfml-graphics sfml-window)

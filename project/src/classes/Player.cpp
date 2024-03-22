@@ -40,6 +40,10 @@ void Player::Render(sf::RenderWindow &window) {
 bool Player::isLegalPosition(const Vector2d &pos) {
     try {
         int x = map.at(static_cast<int>(pos.x)).at(static_cast<int>(pos.y));
+        if(x == finishNum) {
+            std::cout << "You won!" << std::endl;
+            exit(0);
+        }
         return std::ranges::any_of(legal, [x](int i) {return x == i;});
 
     } catch (std::out_of_range &e) {
