@@ -37,6 +37,8 @@ public:
      * @param window 
      */
     void render(sf::RenderWindow& window);
+
+    int getItemCount() const;
 };
 
 
