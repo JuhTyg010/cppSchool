@@ -7,10 +7,19 @@
 #include <cmath>
 
 
-Player::Player(Texture &texture, Vector2d position, sf::Vector2i windowSize, std::vector<std::vector<int>> &map, Item &item)
-               : plane(Vector2d(0, 1)), direction(Vector2d(-1, 0)), position(position),
-                 map(map), lastMousePos(sf::Mouse::getPosition()) {
-    camera = std::make_unique<Camera>(Camera(windowSize, map, texture, item)); }
+Player::Player(Texture &texture, sf::Vector2i windowSize, std::vector<std::vector<int>> &map, Item &item)
+               : plane(Vector2d(0, 1)), direction(Vector2d(-1, 0)), map(map), lastMousePos(sf::Mouse::getPosition()) {
+
+    camera = std::make_unique<Camera>(Camera(windowSize, map, texture, item));
+    for(int i = 0; i < map.size(); i++){
+        for(int j = 0; j < map.at(i).size(); j++){
+            if(map.at(i).at(j) == playerNum) {
+                position = Vector2d(i, j);
+                break;
+            }
+        }
+    }
+}
 
 
 

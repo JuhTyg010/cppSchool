@@ -12,7 +12,7 @@
 
 class Player{
 private:
-    int playerNum = 3
+    int playerNum = 3;
     const int legal[2] = {0,playerNum};
     float sideSpeed = 0;
     float speed = 0;
@@ -42,7 +42,7 @@ public:
      * @param textureSize 
      * @param map 
      */
-    Player(Texture& texture, Vector2d position, sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Item& item);
+    Player(Texture& texture, sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Item& item);
     
     /**
      * @brief Get the Position of the object

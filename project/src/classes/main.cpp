@@ -5,12 +5,12 @@
 #include "../headers/Player.h"
 #include "../headers/map.h"
 #include "../headers/button.h"
-#include <algorithm>
+#include "../headers/UIText.h"
 
 
-
-void loadConfig(const std::string& path, int& width, int& height, std::vector<Texture>& textures, sf::Font& font){
+bool loadConfig(const std::string& path, int& width, int& height, std::vector<Texture>& textures, sf::Font& font){
     std::ifstream openfile(path);
+    bool goal;
     std::string line;
     std::string value;
     std::string resourceFolder;
@@ -63,6 +63,9 @@ void loadConfig(const std::string& path, int& width, int& height, std::vector<Te
             } else if(key == "font_file:"){
                 ss >> value;
                 fontFile = value;
+            } else if(key == "goal:"){
+                ss >> value;
+                goal = value == "collect";
             }
         }
         if(resourceFolder.empty()) throw std::runtime_error("Resource folder not specified");
@@ -75,6 +78,7 @@ void loadConfig(const std::string& path, int& width, int& height, std::vector<Te
         std::cerr << "Error while loading from config: " << e.what() << std::endl;
         exit (1);
     }
+    return goal;
 }
 
 
@@ -83,49 +87,42 @@ int main(int argc, char *argv[]) {
     std::vector<Texture> textures;
     std::vector<std::vector<int>> map_data;
     sf::Font font;
+    int allItems, collectedItems;
+    float timeFromStart = 0;
 
     int WIDTH, HEIGHT;
     if(argc < 2){
         std::cerr << "No config file provided" << std::endl;
         return 1;
     }
-    loadConfig(argv[1], WIDTH, HEIGHT, textures, font);
-    std::cout << "Config loaded" << std::endl;
+    bool goal = loadConfig(argv[1], WIDTH, HEIGHT, textures, font);
+    std::cout << "Config loaded with game goal: " << (goal ? "collect" : "escape") << std::endl;
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Working Title");
     std::cout << "Window size: " << WIDTH << "x" << HEIGHT << std::endl;
     window.setVerticalSyncEnabled(true);
     Map map( argv[1],WIDTH/3 , HEIGHT/4, map_data);
     std::cout << "Map loaded" << std::endl;
-    Vector2d pos;
-    /*if(auto result = std::find_if(map_data.begin(), map_data.end(),
-                                  [](std::vector<int> a) {return std::find(a.begin(), a.end(), 2) == a.end(); }); result == map_data.end()){
-        pos = Vector2d(map_data.end()-result, std::find (result->begin(), result->end(), 2) - result->begin());
-
-    }*/
-    for(int i = 0; i < map_data.size(); i++){
-        for(int j = 0; j < map_data[i].size(); j++){
-            if(map_data[i][j] == 2){
-                pos = Vector2d(i, j);
-                std::cout << "Player position: " << i << " " << j << std::endl;
-            }
-        }
+    if(goal){
+        allItems = map.getItemCount();
+        collectedItems = 0;
     }
+
     sf::Mouse::setPosition(sf::Vector2i(WIDTH/2, HEIGHT/2) + window.getPosition());
 
     auto playerTex = getTextureByName("wall", textures);
     auto itemTex = getTextureByName("item", textures);
     Item item(itemTex, sf::Vector2f(200, 200), sf::Vector2f(1, 1));
 
-    Player player(playerTex, pos, sf::Vector2i(WIDTH, HEIGHT), map_data, item);
-    std::cout << "Player position: " << pos.x << " " << pos.y << std::endl;
-
-
+    Player player(playerTex, sf::Vector2i(WIDTH, HEIGHT), map_data, item);
 
     auto buttonTex = getTextureByName("button", textures);
     Button resume(buttonTex, sf::Vector2f((float)WIDTH/2, (float)HEIGHT/2 -100), sf::Vector2f(200, 100), "Resume", font, sf::Color::Black);
     Button quit(buttonTex, sf::Vector2f((float)WIDTH/2, (float)HEIGHT/2+100), sf::Vector2f(200, 100), "Quit", font, sf::Color::Black);
 
-    spriteRenderer renderer(playerTex, sf::Vector2f((float)WIDTH/2, (float)HEIGHT/2), sf::Vector2f(64, 64));
+    UIText collectedText("Collected: " + std::to_string(collectedItems) + "/" + std::to_string(allItems),
+                         font, sf::Vector2f(10, 10), sf::Color::White, 20);
+
+    UIText escapeText("Time: 0", font, sf::Vector2f(10, 10), sf::Color::White, 20);
 
     sf::Clock clock;
     bool isPaused = false;
@@ -142,12 +139,22 @@ int main(int argc, char *argv[]) {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)){
             isPaused = true;
         }
+
+
         if(!isPaused){
             player.Update(dt.asSeconds());
             window.setMouseCursorVisible(false);
             window.clear();
             player.Render(window);
-            map.render(window);
+            if(goal){
+                collectedItems = allItems - map.getItemCount();
+                collectedText.UpdateText("Collected: " + std::to_string(collectedItems) + "/" + std::to_string(allItems));
+                collectedText.Render(window);
+            } else {
+                timeFromStart += dt.asSeconds();
+                escapeText.UpdateText("Time: " + std::to_string(timeFromStart));
+                escapeText.Render(window);
+            }
         } else {
             window.setMouseCursorVisible(true);
             if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
@@ -156,6 +163,14 @@ int main(int argc, char *argv[]) {
             }
             window.clear();
             player.Render(window);
+            if(goal){
+                collectedItems = allItems - map.getItemCount();
+                collectedText.UpdateText("Collected: " + std::to_string(collectedItems) + "/" + std::to_string(allItems));
+                collectedText.Render(window);
+            } else {
+                escapeText.UpdateText("Time: " + std::to_string(timeFromStart));
+                escapeText.Render(window);
+            }
             resume.Render(window);
             quit.Render(window);
         }
