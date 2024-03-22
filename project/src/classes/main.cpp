@@ -83,7 +83,6 @@ bool loadConfig(const std::string& path, int& width, int& height, std::vector<Te
 
 
 int main(int argc, char *argv[]) {
-    std::cout << std::filesystem::current_path().string();
     std::vector<Texture> textures;
     std::vector<std::vector<int>> map_data;
     sf::Font font;
@@ -120,14 +119,13 @@ int main(int argc, char *argv[]) {
     Button quit(buttonTex, sf::Vector2f((float)WIDTH/2, (float)HEIGHT/2+100), sf::Vector2f(200, 100), "Quit", font, sf::Color::Black);
 
     UIText collectedText("Collected: " + std::to_string(collectedItems) + "/" + std::to_string(allItems),
-                         font, sf::Vector2f(10, 10), sf::Color::White, 20);
+                         font, sf::Vector2f(10, 10), sf::Color::White, 30);
 
-    UIText escapeText("Time: 0", font, sf::Vector2f(10, 10), sf::Color::White, 20);
+    UIText escapeText("Time: 0", font, sf::Vector2f(10, 10), sf::Color::White, 30);
 
     sf::Clock clock;
     bool isPaused = false;
 
-    std::cout << "here" << std::endl;
     while (window.isOpen()) {
         sf::Event event{};
         sf::Time dt = clock.restart();
@@ -147,9 +145,15 @@ int main(int argc, char *argv[]) {
             window.clear();
             player.Render(window);
             if(goal){
+                if(collectedItems == allItems){
+                    std::cout << "You won" << std::endl;
+                    window.close();
+                }
+
                 collectedItems = allItems - map.getItemCount();
                 collectedText.UpdateText("Collected: " + std::to_string(collectedItems) + "/" + std::to_string(allItems));
                 collectedText.Render(window);
+
             } else {
                 timeFromStart += dt.asSeconds();
                 escapeText.UpdateText("Time: " + std::to_string(timeFromStart));
