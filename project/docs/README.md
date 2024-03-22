@@ -1,3 +1,8 @@
-## Project source files
+## README 
 
-Put your main project files (`CMakeLists.txt`, `.vcxproj` etc.) here. Put your source files here or in subdirectories.
+### User Guide
+- [User Guide](UserGuide.md)
+
+### Developer Guide
+- [Developer Guide](DeveloperGuide.md)
+- [Configuration](Configuration.md)
