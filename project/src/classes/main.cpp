@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
     auto itemTex = getTextureByName("item", textures);
     Item item(itemTex, sf::Vector2f(200, 200), sf::Vector2f(1, 1));
 
-    Player player(playerTex, sf::Vector2i(WIDTH, HEIGHT), map_data, item);
+    Player player(playerTex, sf::Vector2i(WIDTH, HEIGHT), map_data, item, !goal);
 
     auto buttonTex = getTextureByName("button", textures);
     Button resume(buttonTex, sf::Vector2f((float)WIDTH/2, (float)HEIGHT/2 -100), sf::Vector2f(200, 100), "Resume", font, sf::Color::Black);

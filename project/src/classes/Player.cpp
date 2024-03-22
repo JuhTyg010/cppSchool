@@ -7,8 +7,8 @@
 #include <cmath>
 
 
-Player::Player(Texture &texture, sf::Vector2i windowSize, std::vector<std::vector<int>> &map, Item &item)
-               : plane(Vector2d(0, 1)), direction(Vector2d(-1, 0)), map(map), lastMousePos(sf::Mouse::getPosition()) {
+Player::Player(Texture &texture, sf::Vector2i windowSize, std::vector<std::vector<int>> &map, Item &item, bool goal)
+               : plane(Vector2d(0, 1)), direction(Vector2d(-1, 0)), map(map), lastMousePos(sf::Mouse::getPosition()), isFinishable(goal) {
 
     camera = std::make_unique<Camera>(Camera(windowSize, map, texture, item));
     for(int i = 0; i < map.size(); i++){
@@ -40,7 +40,7 @@ void Player::Render(sf::RenderWindow &window) {
 bool Player::isLegalPosition(const Vector2d &pos) {
     try {
         int x = map.at(static_cast<int>(pos.x)).at(static_cast<int>(pos.y));
-        if(x == finishNum) {
+        if(x == finishNum && isFinishable) {
             std::cout << "You won!" << std::endl;
             exit(0);
         }

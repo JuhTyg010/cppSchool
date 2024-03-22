@@ -12,6 +12,7 @@
 
 class Player{
 private:
+    bool isFinishable = false;
     int finishNum = 2;
     int playerNum = 3;
     const int legal[3] = {0,playerNum, 5};
@@ -43,7 +44,7 @@ public:
      * @param textureSize 
      * @param map 
      */
-    Player(Texture& texture, sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Item& item);
+    Player(Texture& texture, sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Item& item, bool isFinishable = false);
     
     /**
      * @brief Get the Position of the object
