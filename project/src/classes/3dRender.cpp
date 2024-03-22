@@ -23,14 +23,14 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
 
     //Draw the floor and ceiling
 
-    sf::RectangleShape ceiling(sf::Vector2f(windowSize.x, windowSize.y / 2 + pitch));
+    sf::RectangleShape ceiling(sf::Vector2f((float)windowSize.x, (float) ((windowSize.y >> 1) + pitch)));
     ceiling.setFillColor(sf::Color(50, 50, 50));
     ceiling.setPosition(0, 0);
     window.draw(ceiling);
 
-    sf::RectangleShape floor(sf::Vector2f(windowSize.x, windowSize.y + std::abs(pitch)));
+    sf::RectangleShape floor(sf::Vector2f((float)windowSize.x, (float)(windowSize.y + std::abs(pitch))));
     floor.setFillColor(sf::Color(100, 100, 100));
-    floor.setPosition(0, pitch);
+    floor.setPosition(0, (float)pitch);
     window.draw(floor);
 
     for(int i = 0; i < windowSize.x; i++){
@@ -85,8 +85,8 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
             if(map.at(mapPos.x).at(mapPos.y) > 0)     {
                 if(map.at(mapPos.x).at(mapPos.y) > 4 ) {
                     //TODO: items
-                    auto item = std::find(items.begin(), items.end(), mapPos);
-                    if(item == items.end())     items.emplace_back(mapPos);
+                    auto it = std::find(items.begin(), items.end(), mapPos);
+                    if(it == items.end())     items.emplace_back(mapPos);
 
                 } else {
                     isHit = true;
@@ -120,7 +120,7 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
 
         //Update Stripe of wall is Vertical
         if(auto stripe = dynamic_cast<Stripe*>(stripes[i].get())){
-            stripe->Update(texX, drawStart, drawEnd, textureNum, pitch);
+            stripe->Update(texX, drawStart, drawEnd, textureNum, (float) pitch);
             stripes[i]->distance = perpWallDist;
             toRender.emplace_back(stripes[i]);
         } else {
@@ -130,7 +130,6 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
     }
 
     for(auto& itemPos : items){
-        //TODO: recalculate position of item to real position on the screen
 
         Vector2d itemVect = Vector2d(itemPos.x + .5, itemPos.y + .5) - position;//+.5 to get the center of the square
         double dist = std::sqrt(std::pow(itemVect.x, 2) + std::pow(itemVect.y, 2));
@@ -145,8 +144,8 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         sf::Vector2f transform = sf::Vector2f(direction.y * itemVect.x - direction.x * itemVect.y,
                                               -plane.y * itemVect.x + plane.x * itemVect.y) * (float) invDet; //this is actually the depth inside the screen, that what Z is in 3D
 
-        int itemScreenX = int((windowSize.x / 2) * (1 + transform.x / transform.y));
-        int itemScreenY = (windowSize.y / 2 - 100) / dist + pitch; // -100 to be 100 above the ground
+        float itemScreenX = (windowSize.x >> 1) * (1 + transform.x / transform.y);
+        float itemScreenY = (windowSize.y / 2 - 100) / dist + pitch; // -100 to be 100 above the ground
 
 
         sf::Vector2f itemSize = sf::Vector2f(200, 200) /(float) dist;
