@@ -18,7 +18,7 @@ void Player::Update(float dt) {
     map.at(static_cast<int>(position.x)).at(static_cast<int>(position.y))  = 0;    //set 2 to 0 so if we move we don't have to find the old position
     rotate(dt, 10, .2);
     move(dt, 2, .2);
-    map.at(static_cast<int>(position.x)).at(static_cast<int>(position.y)) = 2; //set 2 to the new position
+    map.at(static_cast<int>(position.x)).at(static_cast<int>(position.y)) = playerNum; //set 2 to the new position
 }
 
 
