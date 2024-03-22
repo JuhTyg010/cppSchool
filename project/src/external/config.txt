@@ -1,4 +1,4 @@
-window_size: 800 600
+window_size: 1200 800
 
 resource_folder: /home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/sadovsm/project/src/external
 

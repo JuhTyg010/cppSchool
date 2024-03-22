@@ -26,12 +26,14 @@ Map::Map(const std::string& config, float Width, float Height, std::vector<std::
             for(int i = 0; legend[i] != ']'; ++i) {
                 if(legend[i] == '[' || legend[i] == ',') {
                     std::string key;
+                    i++;
                     while(legend[i] == ' ') i++;
                     while(legend[i] != ':') {
                         key += legend[i];
                         i++;
                     }
-                    i++;
+                    i++;    //skip ':'
+                    while(legend[i] == ' ') i++;
                     settings.emplace(key, legend[i]);
                 }
             }
@@ -41,6 +43,9 @@ Map::Map(const std::string& config, float Width, float Height, std::vector<std::
         }
     }
     openconfig.close();
+    for(auto& [key, value] : settings) {
+        std::cout << key << " " << settings.at(key) << std::endl;
+    }
     std::cout << folder + file << std::endl;
     //loads from file
     std::ifstream openfile(folder + file);
@@ -60,16 +65,20 @@ Map::Map(const std::string& config, float Width, float Height, std::vector<std::
             try{
                 if(line[i] == settings.at("wall")) {
                     map.at(row).at(i) = 1;
+                    std::cout << "wall" << std::endl;
                 } else if(line[i] == settings.at("player")) {
                     if(player == 0) {
                         player = 1;
                         map.at(row).at(i) = 2;
+                        std::cout << "player" << std::endl;
                     }
                 } else if(line[i] == settings.at("item")) {
                     map.at(row).at(i) = 5;
-                }
+                    std::cout << "item" << std::endl;
+                } else std::cout << line[i] << std::endl;
             } catch (std::out_of_range& e) {
-                std::cerr << "Corrupted file" << std::endl;
+                std::cerr << "Corrupted map file" << std::endl;
+                exit (1);
             }
         }
         row++;

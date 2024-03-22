@@ -1,12 +1,17 @@
 cmake_minimum_required(VERSION 3.27)
+
+# Set the cmake toolchain file
+set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+
 project("3D game" VERSION 1.0.0 DESCRIPTION "todo" LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Find SFML package
+find_package(SFML COMPONENTS  window graphics)
 
-find_package(SFML COMPONENTS graphics audio window REQUIRED)
 include_directories(include Utils)
 include_directories(include external)
 
@@ -24,4 +29,4 @@ add_executable(project classes/main.cpp
         headers/VisibleObject.h
         headers/Item.h
         classes/item.cpp)
-target_link_libraries(project sfml-graphics sfml-audio sfml-window)
+target_link_libraries(project PRIVATE sfml-graphics sfml-window)

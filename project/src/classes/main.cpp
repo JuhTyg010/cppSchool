@@ -79,6 +79,7 @@ void loadConfig(const std::string& path, int& width, int& height, std::vector<Te
 
 
 int main(int argc, char *argv[]) {
+    std::cout << std::filesystem::current_path().string();
     std::vector<Texture> textures;
     std::vector<std::vector<int>> map_data;
     sf::Font font;
@@ -105,6 +106,7 @@ int main(int argc, char *argv[]) {
         for(int j = 0; j < map_data[i].size(); j++){
             if(map_data[i][j] == 2){
                 pos = Vector2d(i, j);
+                std::cout << "Player position: " << i << " " << j << std::endl;
             }
         }
     }
@@ -115,7 +117,7 @@ int main(int argc, char *argv[]) {
     Item item(itemTex, sf::Vector2f(200, 200), sf::Vector2f(1, 1));
 
     Player player(playerTex, pos, sf::Vector2i(WIDTH, HEIGHT), map_data, item);
-    std::cout << "Player position: " << std::endl;
+    std::cout << "Player position: " << pos.x << " " << pos.y << std::endl;
 
 
 
