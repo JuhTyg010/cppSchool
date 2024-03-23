@@ -382,12 +382,14 @@ to the item and the texture to render. Project the sprite on the camera plane
 (in 2D): subtract the player position from the sprite position, then multiply 
 the result with the inverse of the 2x2 camera matrix
 
-|planeX   dirX| 
-|planeY   dirY|
+$$
+\begin{pmatrix}
+planeX & dirX \\ 
+planeY & dirY
+\end{pmatrix}
+$$
 
-_\_\_\_\_\_\_\_\_\_\_1___________    |dirY      -dirX|
-
-(planeX*dirY-dirX*planeY) * |-planeY  planeX|
+$$ {1 \over (planeX*dirY-dirX*planeY)} * \begin{pmatrix} dirY & -dirX \\ -planeY & planeX \end{pmatrix} $$
 
 
 
@@ -399,7 +401,7 @@ through the depth, and then translate and scale it so that it's in pixel coordin
 And then we sort items and stripes by distance and render them.
 $$
 \begin{pmatrix}
-`cos(a)` & `-sin(a)` \\
-`sin(a)` & `cos(a)`
+planeX & `-sin(a)` \\
+sin(a) & cos(a`
 \end{pmatrix}
 $$
