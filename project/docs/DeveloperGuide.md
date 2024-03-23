@@ -401,9 +401,3 @@ To project it on screen, divide X
 through the depth, and then translate and scale it so that it's in pixel coordinates.
 
 And then we sort items and stripes by distance and render them.
-$$
-\begin{pmatrix}
-planeX & `-sin(a)` \\
-sin(a) & cos(a`
-\end{pmatrix}
-$$
