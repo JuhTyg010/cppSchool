@@ -21,9 +21,8 @@ private:
     float Height;
 public:
     /**
-     * @brief Construct a new Map object
+     * @brief Construct a new Map object from config file
      * 
-     * @param file 
      * @param config 
      * @param Width 
      * @param Height 
@@ -38,6 +37,11 @@ public:
      */
     void render(sf::RenderWindow& window);
 
+    /**
+     * @brief returns the number of items on the map
+     * 
+     * @return int 
+     */
     int getItemCount() const;
 };
 

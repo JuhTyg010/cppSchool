@@ -15,11 +15,24 @@ protected:
     sf::Vector2f size;
 
 public:
-    double distance = 0;
+    double distance = 0;    // used for sorting
     VisibleObject() = default;
+
+    /**
+     * @brief Construct a new Visible Object object
+     * 
+     * @param texture 
+     * @param position 
+     * @param size 
+     */
     VisibleObject(Texture& texture, sf::Vector2f position, sf::Vector2f size): position(position), size(size){
         sprite = std::make_unique<spriteRenderer>(texture, position, size);
     }
+
+    /**
+     * @brief Copy constructor
+     * 
+     */
     VisibleObject(const VisibleObject& other): position(other.position), size(other.size),
             sprite(std::make_unique<spriteRenderer>(*other.sprite)){}
 

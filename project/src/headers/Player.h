@@ -12,10 +12,12 @@
 
 class Player{
 private:
+    // if goal is to only collect items than its false
     bool isFinishable = false;
-    int finishNum = 2;
-    int playerNum = 3;
-    const int legal[3] = {0,playerNum, 5};
+
+    int finishNum = 2; //convection on map
+    int playerNum = 3; //convection on map
+    const int legal[3] = {0,playerNum, 5};  //0 is empty and 5 is item
     float sideSpeed = 0;
     float speed = 0;
     float rotationSpeed = 0;
@@ -29,10 +31,31 @@ private:
     std::unique_ptr<Camera> camera;
     std::vector<std::vector<int>>& map;
 
+    /**
+     * @brief looks if the position on the map is accessible (there is no wall)
+     * 
+     * @param position 
+     * @return true 
+     * @return false 
+     */
     bool isLegalPosition(const Vector2d& position);
 
+    /**
+     * @brief move handles input for movement
+     * 
+     * @param dt 
+     * @param speed 
+     * @param acceleration 
+     */
     void move(float dt, float speed, float acceleration);
 
+    /**
+     * @brief rotate handles input for rotation
+     * 
+     * @param dt 
+     * @param rotationSpeed 
+     * @param rotAccel 
+     */
     void rotate(float dt, float rotationSpeed, float rotAccel);
 public:
     /**
@@ -72,9 +95,7 @@ public:
      * 
      * @param window to render
      */
-    void Render(sf::RenderWindow &window) ;
-
-
+    void Render(sf::RenderWindow &window);
 
 };
 

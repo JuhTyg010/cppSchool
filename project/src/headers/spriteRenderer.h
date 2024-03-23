@@ -27,6 +27,11 @@ public:
      */
     spriteRenderer(Texture& texture, sf::Vector2f position, sf::Vector2f size);
 
+    /**
+     * @brief Copy construct a new sprite Renderer object
+     * 
+     * @param other 
+     */
     spriteRenderer(const spriteRenderer& other);
     /**
      * @brief nextFrame calculate position of the frame on the right side of the texture (is circular)
@@ -56,6 +61,11 @@ public:
      */
     void Render(sf::RenderWindow &window);
 
+    /**
+     * @brief Set the Origin object
+     * 
+     * @param origin 
+     */
     void setOrigin(sf::Vector2f origin);
     /**
      * @brief Set the Position of the object
@@ -82,6 +92,11 @@ public:
      */
     sf::Vector2f getCurrentFrame();
 
+    /**
+     * @brief Get the Texture Size of the object
+     * 
+     * @return sf::Vector2f 
+     */
     sf::Vector2f getTextureSize();
 
 };

@@ -34,6 +34,11 @@ public:
      */
     Stripe(sf::Vector2f position, Texture& texture, bool isHorizontal);
 
+    /**
+     * @brief Copy construct a new Stripe object
+     * 
+     * @param other 
+     */
     Stripe(const Stripe& other);
 
 
@@ -48,6 +53,11 @@ public:
      */
     void Update(int dist, int drawStart, int drawEnd, int textureNum, float pitch);
 
+    /**
+     * @brief only for parent class
+     * 
+     * @param dt 
+     */
     void Update(float dt) override {}
 
 };
