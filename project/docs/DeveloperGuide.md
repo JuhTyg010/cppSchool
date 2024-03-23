@@ -389,7 +389,7 @@ planeY & dirY
 \end{pmatrix}
 $$
 
-$$ {1 \over (planeX*dirY-dirX*planeY)} * \begin{pmatrix} dirY & -dirX \\ -planeY & planeX \end{pmatrix} $$
+$$ \frac {1} {(planeX*dirY-dirX*planeY)} * \begin{pmatrix} dirY & -dirX \\ -planeY & planeX \end{pmatrix} $$
 
 
 
