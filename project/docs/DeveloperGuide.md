@@ -385,9 +385,11 @@ the result with the inverse of the 2x2 camera matrix
 |planeX   dirX| 
 |planeY   dirY|
 
-____________1___________    |dirY      -dirX|
+_\_\_\_\_\_\_\_\_\_\_1___________    |dirY      -dirX|
 
 (planeX*dirY-dirX*planeY) * |-planeY  planeX|
+
+
 
 Then you get the X and Y coordinate of the sprite in camera space, where Y is
 the depth inside the screen (in a true 3D engine, Z is the depth).
@@ -395,9 +397,11 @@ To project it on screen, divide X
 through the depth, and then translate and scale it so that it's in pixel coordinates.
 
 And then we sort items and stripes by distance and render them.
+$$
 \[
 \begin{matrix}
 `cos(a)` & `-sin(a)` \\
 `sin(a)` & `cos(a)`
 \end{matrix}
 \]
+$$
