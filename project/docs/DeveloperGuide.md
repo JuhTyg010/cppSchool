@@ -390,7 +390,7 @@ planeY & dirY
 $$
 
 $$ 
-\frac {1} {(planeX*dirY-dirX*planeY)} 
+\frac {1} {(planeX*dirY-dirX*planeY)} * \begin{pmatrix} dirY & -dirX \\ -planeY & planeX \end{pmatrix}
 $$
 
 
