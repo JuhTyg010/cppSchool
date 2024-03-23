@@ -398,10 +398,8 @@ through the depth, and then translate and scale it so that it's in pixel coordin
 
 And then we sort items and stripes by distance and render them.
 $$
-\[
-\begin{matrix}
+\begin{pmatrix}
 `cos(a)` & `-sin(a)` \\
 `sin(a)` & `cos(a)`
-\end{matrix}
-\]
+\end{pmatrix}
 $$
