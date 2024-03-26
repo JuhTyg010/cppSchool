@@ -12,13 +12,14 @@
 #include <set>
 #include "Stripe.h"
 #include "Item.h"
+#include "map.h"
 #include "Utils.h"
 
 class Camera {
 private:
     sf::Vector2i windowSize;
     sf::Vector2f textureSize;
-    std::vector<std::vector<int>>& map;
+    Map& map;
     std::vector<std::shared_ptr<Stripe>> stripes;
     Item& item;
 
@@ -31,7 +32,7 @@ public:
      * @param map 
      * @param item 
      */
-    Camera(sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Texture& , Item& item);
+    Camera(sf::Vector2i windowSize, Map& map, Texture& textures, Item& item);
 
     /**
      * @brief Construct a new Camera object
@@ -41,7 +42,7 @@ public:
      * @param map 
      * @param item 
      */
-    Camera(int windowWidth, int windowHeight, std::vector<std::vector<int>>& map, Texture& texture, Item& item);
+    Camera(int windowWidth, int windowHeight, Map& map, Texture& texture, Item& item);
 
     /**
      * @brief render recalculates the stripes and items which can be seen and draws them on the screen

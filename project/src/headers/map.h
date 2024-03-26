@@ -11,12 +11,17 @@
 #include <fstream>
 #include <unordered_map>
 #include <iostream>
+#include "Utils.h"
 
 
 
 class Map {
 private:
-    std::vector<std::vector<int>>& map;
+    std::vector<std::vector<bool>> walls;
+    std::vector<std::vector<bool>> items;
+    Vector2d playerPosition;
+    sf::Vector2i finishPosition;
+
     float Width;
     float Height;
 public:
@@ -28,7 +33,7 @@ public:
      * @param Height 
      * @param map 
      */
-    Map( const std::string& config, float Width, float Height,  std::vector<std::vector<int>>& map, std::vector<sf::Vector2i>& items);
+    Map( const std::string& config, float Width, float Height);
 
     /**
      * @brief renders the map from top-down view 
@@ -43,6 +48,46 @@ public:
      * @return int 
      */
     int getItemCount() const;
+
+    /**
+     * @brief returns if the position is a wall
+     *
+     * @return bool
+     */
+    bool isWall(int x, int y) const;
+    bool isWall(sf::Vector2i vec) const;
+
+
+    /**
+     * @brief returns if the position is a finish
+     *
+     * @return bool
+     */
+    bool isFinish(int x, int y) const;
+    bool isFinish(sf::Vector2i vec) const;
+
+    /**
+     * @brief returns the position of the player
+     *
+     * @return sf::Vector2f
+     */
+    Vector2d getPlayerPosition() const;
+
+    /**
+     * @brief sets the position of the player
+     *
+     * @param pos
+     */
+    void setPlayerPosition(const Vector2d& pos);
+
+
+    /**
+     * @brief returns if the position is an item
+     *
+     * @return bool
+     */
+    bool isItem(int x, int y) const;
+    bool isItem(sf::Vector2i vec) const;
 };
 
 

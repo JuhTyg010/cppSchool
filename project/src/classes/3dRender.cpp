@@ -5,14 +5,14 @@
 #include "../headers/3dRender.h"
 
 
-Camera::Camera(sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Texture& texture, Item& item) :
+Camera::Camera(sf::Vector2i windowSize, Map& map, Texture& texture, Item& item) :
                 windowSize(windowSize), textureSize(texture.getSize()), map(map), item(item){
     for(int i = 0; i < windowSize.x; i++){
         stripes.emplace_back(std::make_shared<Stripe>(sf::Vector2f ((float)i, (float) windowSize.y / 2), texture, false));
     }
 }
 
-Camera::Camera(int windowWidth, int windowHeight, std::vector<std::vector<int>>& map, Texture& texture, Item& item) :
+Camera::Camera(int windowWidth, int windowHeight, Map& map, Texture& texture, Item& item) :
         Camera(sf::Vector2i (windowWidth, windowHeight), map, texture, item){}
 
 
@@ -20,6 +20,7 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
     //plane calculation
     std::vector<std::shared_ptr<VisibleObject>> toRender;
     std::vector<sf::Vector2i> items;
+
 
     //Draw the floor and ceiling
 
@@ -40,6 +41,10 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
 
         //which box of the map we're in
         sf::Vector2i mapPos = sf::Vector2i((int)position.x, (int)position.y);
+        if(map.isItem(mapPos)){
+            auto it = std::find(items.begin(), items.end(), mapPos);
+            if(it == items.end())     items.emplace_back(mapPos);
+        }
 
         //length of ray from current position to next x or y-side for more see docs
         Vector2d sideDist{};
@@ -82,17 +87,13 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
                 isXAxis = false;
             }
             //Check if ray has hit a wall
-            if(map.at(mapPos.x).at(mapPos.y) > 0)     {
-                if(map.at(mapPos.x).at(mapPos.y) == 5 ) {
-                    auto it = std::find(items.begin(), items.end(), mapPos);
-                    if(it == items.end())     items.emplace_back(mapPos);
-
-                } else if(map.at(mapPos.x).at(mapPos.y) == 6){
-
-                } else {
-                    isHit = true;
-                }
+            if(map.isItem(mapPos)) {
+                auto it = std::find(items.begin(), items.end(), mapPos);
+                if(it == items.end())     items.emplace_back(mapPos);
             }
+
+            isHit = map.isWall(mapPos);
+
         }
         if(isXAxis)     perpWallDist = sideDist.x - deltaDist.x;
         else            perpWallDist = sideDist.y - deltaDist.y;
@@ -106,8 +107,7 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         int drawEnd = -lineHeight + (windowSize.y >> 1);
         if(drawEnd < -4 * windowSize.y) drawEnd = -4 * windowSize.y;
 
-        int textureNum = map[mapPos.x][mapPos.y] - 1; //to start from 0
-        //TODO: Create Stripe with some texture and draw it or make buffer then draw it
+        int textureNum = map.isFinish(mapPos) ? 1 : 0; //to start from 0
 
         double wallX; //where exactly the wall was hit
         if(isXAxis)     wallX = position.y + perpWallDist * rayDir.y;

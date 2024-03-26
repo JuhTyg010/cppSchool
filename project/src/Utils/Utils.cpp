@@ -44,6 +44,7 @@ const std::string& Texture::getName() {
     return name;
 }
 
+
 const Texture& getTextureByName(const std::string& name, std::vector<Texture>& textures){
     for(Texture& texture : textures){
         if(texture.getName() == name){

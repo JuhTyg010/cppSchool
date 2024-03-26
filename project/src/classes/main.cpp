@@ -82,13 +82,14 @@ bool loadConfig(const std::string& path, int& width, int& height, std::vector<Te
 }
 
 
+
 int main(int argc, char *argv[]) {
     std::vector<Texture> textures;
-    std::vector<std::vector<int>> map_data;
-    std::vector<sf::Vector2i> items;
+
     sf::Font font;
     int allItems, collectedItems;
     float timeFromStart = 0;
+
 
     int WIDTH, HEIGHT;
     if(argc < 2){
@@ -100,7 +101,7 @@ int main(int argc, char *argv[]) {
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Working Title");
     std::cout << "Window size: " << WIDTH << "x" << HEIGHT << std::endl;
     window.setVerticalSyncEnabled(true);
-    Map map( argv[1],WIDTH/3 , HEIGHT/4, map_data);
+    Map map( argv[1],WIDTH/3 , HEIGHT/4);
     std::cout << "Map loaded" << std::endl;
     if(goal){
         allItems = map.getItemCount();
@@ -113,7 +114,7 @@ int main(int argc, char *argv[]) {
     auto itemTex = getTextureByName("item", textures);
     Item item(itemTex, sf::Vector2f(200, 200), sf::Vector2f(1, 1));
 
-    Player player(playerTex, sf::Vector2i(WIDTH, HEIGHT), map_data, items, item, !goal);
+    Player player(playerTex, sf::Vector2i(WIDTH, HEIGHT), map, item, !goal);
 
     auto buttonTex = getTextureByName("button", textures);
     Button resume(buttonTex, sf::Vector2f((float)WIDTH/2, (float)HEIGHT/2 -100), sf::Vector2f(200, 100), "Resume", font, sf::Color::Black);

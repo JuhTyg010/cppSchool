@@ -7,6 +7,7 @@
 #include <SFML/Graphics.hpp>
 #include "3dRender.h"
 #include "Utils.h"
+#include "map.h"
 #include <memory>
 #include "Item.h"
 
@@ -22,15 +23,13 @@ private:
     float speed = 0;
     float rotationSpeed = 0;
 
-    Vector2d position;
     Vector2d direction;
     Vector2d plane;
     sf::Vector2i lastMousePos;
     sf::Vector2i windowPosition;
 
     std::unique_ptr<Camera> camera;
-    std::vector<std::vector<int>>& map;
-    std::vector<sf::Vector2i>& items;
+    Map& map;
 
     /**
      * @brief looks if the position on the map is accessible (there is no wall)
@@ -71,7 +70,7 @@ public:
      * @param item
      * @param isFinishable
      */
-    Player(Texture& texture, sf::Vector2i windowSize, std::vector<std::vector<int>>& map, std::vector<sf::Vector2i>& items, Item& item, bool isFinishable = false);
+    Player(Texture& texture, sf::Vector2i windowSize, Map& map, Item& item, bool isFinishable = false);
     
     /**
      * @brief Get the Position of the object

@@ -4,8 +4,8 @@
 
 #include "../headers/map.h"
 
-Map::Map(const std::string& config, float Width, float Height, std::vector<std::vector<int>>& map, std::vector<sf::Vector2i>& items)
-        : map(map), Width(Width), Height(Height) {
+Map::Map(const std::string& config, float Width, float Height)
+        : Width(Width), Height(Height) {
     std::string file;
     std::string folder;
 
@@ -51,9 +51,15 @@ Map::Map(const std::string& config, float Width, float Height, std::vector<std::
     float height;
     std::stringstream ss(line);
     ss  >> width >> height;
-    map.resize(static_cast<int>(height));
+    //resize the map
+    walls.resize(static_cast<int>(height));
     for(int i = 0; i < static_cast<int>(height); i++) {
-        map[i].resize(static_cast<int>(width));
+        walls.at(i).resize(static_cast<int>(width));
+    }
+
+    items.resize(static_cast<int>(height));
+    for(int i = 0; i < static_cast<int>(height); i++) {
+        items.at(i).resize(static_cast<int>(width));
     }
     int row = 0;
     int player = 0;
@@ -61,16 +67,16 @@ Map::Map(const std::string& config, float Width, float Height, std::vector<std::
         for(int i = 0; i < line.size(); i++) {
             try{
                 if(line[i] == settings.at("wall")) {
-                    map.at(row).at(i) = 1;
+                    walls.at(row).at(i) = true;
                 } else if(line[i] == settings.at("player")) {
                     if(player == 0) {
                         player = 1;
-                        map.at(row).at(i) = 3;
+                        playerPosition = Vector2d(row, i);
                     }
                 } else if(line[i] == settings.at("item")) {
-                    items.emplace_back(sf::Vector2i(i, row));
+                    items.at(row).at(i) = true;
                 } else if (line[i] == settings.at("finish")) {
-                    map.at(row).at(i) = 2;
+                    finishPosition = sf::Vector2i(row, i);
                 }
             } catch (std::out_of_range& e) {
                 std::cerr << "Corrupted map file" << std::endl;
@@ -85,36 +91,79 @@ Map::Map(const std::string& config, float Width, float Height, std::vector<std::
 
 
 void Map::render(sf::RenderWindow& window) {
-    sf::Vector2f size(Width /(float) map.at(0).size(), Height /(float) map.size());
+    sf::Vector2f size(Width / (float) walls.at(0).size(), Height / (float) walls.size());
     sf::RectangleShape background(sf::Vector2(Width, Height));
     background.setFillColor(sf::Color::Black);
     background.setPosition(0, 0);
     window.draw(background);
 
-    for(int i = 0; i < map.size(); i++) {
-        for(int j = 0; j < map.at(i).size(); j++) {
-            if(map.at(i).at(j) == 1) {
+    for (int i = 0; i < walls.size(); i++) {
+        for (int j = 0; j < walls.at(i).size(); j++) {
+            if (walls.at(i).at(j)) {
                 sf::RectangleShape rectangle;
                 rectangle.setSize(size);
                 rectangle.setPosition(j * size.x, i * size.y);
                 rectangle.setFillColor(sf::Color::White);
                 window.draw(rectangle);
-            } else if(map.at(i).at(j) == 2) {
+            } else if (items.at(i).at(j)) {
                 sf::RectangleShape rectangle;
                 rectangle.setSize(size / 2.0f);
-                rectangle.setPosition((j+.25f) * size.x, (i+.25f) * size.y);
+                rectangle.setPosition((j + .25f) * size.x, (i + .25f) * size.y);
                 rectangle.setFillColor(sf::Color::Green);
+                window.draw(rectangle);
+            } else if (finishPosition.x == i && finishPosition.y == j) {
+                sf::RectangleShape rectangle;
+                rectangle.setSize(size / 2.0f);
+                rectangle.setPosition((j + .25f) * size.x, (i + .25f) * size.y);
+                rectangle.setFillColor(sf::Color::Red);
+                window.draw(rectangle);
+            } else if (playerPosition.x == i && playerPosition.y == j) {
+                sf::RectangleShape rectangle;
+                rectangle.setSize(size / 2.0f);
+                rectangle.setPosition((j + .25f) * size.x, (i + .25f) * size.y);
+                rectangle.setFillColor(sf::Color::Blue);
                 window.draw(rectangle);
             }
         }
     }
 }
 
+bool Map::isWall(int x, int y) const {
+    return walls.at(x).at(y);
+}
+bool Map::isWall(sf::Vector2i pos) const {
+    return walls.at(pos.x).at(pos.y);
+}
+
+bool Map::isItem(int x, int y) const {
+    return items.at(x).at(y);
+}
+
+bool Map::isItem(sf::Vector2i pos) const {
+    return items.at(pos.x).at(pos.y);
+}
+
+bool Map::isFinish(int x, int y) const {
+    return finishPosition.x == x && finishPosition.y == y;
+}
+
+bool Map::isFinish(sf::Vector2i pos) const {
+    return finishPosition == pos;
+}
+
+Vector2d Map::getPlayerPosition() const {
+    return playerPosition;
+}
+
+void Map::setPlayerPosition(const Vector2d &pos) {
+    playerPosition = pos;
+}
+
 int Map::getItemCount() const {
     int count = 0;
-    for(auto & i : map) {
-        for(int j : i) {
-            if(j == 5) count++;
+    for(auto & i : items) {
+        for(bool j : i) {
+            if(j) count++;
         }
     }
     return count;

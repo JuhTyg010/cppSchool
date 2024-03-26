@@ -7,45 +7,28 @@
 #include <cmath>
 
 
-Player::Player(Texture &texture, sf::Vector2i windowSize, std::vector<std::vector<int>> &map, std::vector<sf::Vector2i>& items,
-               Item &item, bool goal): plane(Vector2d(0, 1)), direction(Vector2d(-1, 0)), map(map), items(items),
-               lastMousePos(sf::Mouse::getPosition()), isFinishable(goal) {
-
+Player::Player(Texture &texture, sf::Vector2i windowSize, Map &map, Item &item, bool goal): plane(Vector2d(0, 1)),
+    direction(Vector2d(-1, 0)), map(map), lastMousePos(sf::Mouse::getPosition()), isFinishable(goal) {
     camera = std::make_unique<Camera>(Camera(windowSize, map, texture, item));
-    for(int i = 0; i < map.size(); i++){
-        for(int j = 0; j < map.at(i).size(); j++){
-            if(map.at(i).at(j) == playerNum) {
-                position = Vector2d(i, j);
-                break;
-            }
-        }
-    }
 }
 
 
 
 void Player::Update(float dt) {
-    map.at(static_cast<int>(position.x)).at(static_cast<int>(position.y))  = 0;    //set 2 to 0 so if we move we don't have to find the old position
     rotate(dt, 10, .2);
     move(dt, 2, .2);
-    map.at(static_cast<int>(position.x)).at(static_cast<int>(position.y)) = playerNum; //set 2 to the new position
 }
 
 
 void Player::Render(sf::RenderWindow &window) {
     windowPosition = window.getPosition();
-    camera->render(position, direction, plane, window);
+    camera->render(this->map.getPlayerPosition(), direction, plane, window);
 
 }
 
 bool Player::isLegalPosition(const Vector2d &pos) {
     try {
-        int x = map.at(static_cast<int>(pos.x)).at(static_cast<int>(pos.y));
-        if(x == finishNum && isFinishable) {
-            std::cout << "You won!" << std::endl;
-            exit(0);
-        }
-        return std::ranges::any_of(legal, [x](int i) {return x == i;});
+        return !map.isWall((int) pos.x, (int) pos.y);
 
     } catch (std::out_of_range &e) {
         return false;
@@ -53,6 +36,7 @@ bool Player::isLegalPosition(const Vector2d &pos) {
 }
 
 void Player::move(float dt, float maxSpeed, float accel){
+    Vector2d position = this->map.getPlayerPosition();
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) speed += accel;
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) speed -= accel;
@@ -76,6 +60,7 @@ void Player::move(float dt, float maxSpeed, float accel){
         if(isLegalPosition(Vector2d(position.x - realSpeed.x, position.y)))  position.x -= realSpeed.x;
         if(isLegalPosition(Vector2d(position.x, position.y - realSpeed.y)))  position.y -= realSpeed.y;
     }
+    this->map.setPlayerPosition(position);
 }
 
 void Player::rotate(float dt, float rotSpeed, float rotAccel) {
