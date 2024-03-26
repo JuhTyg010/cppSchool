@@ -28,7 +28,7 @@ public:
      * @param Height 
      * @param map 
      */
-    Map( const std::string& config, float Width, float Height,  std::vector<std::vector<int>>& map);
+    Map( const std::string& config, float Width, float Height,  std::vector<std::vector<int>>& map, std::vector<sf::Vector2i>& items);
 
     /**
      * @brief renders the map from top-down view 

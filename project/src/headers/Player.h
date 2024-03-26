@@ -30,6 +30,7 @@ private:
 
     std::unique_ptr<Camera> camera;
     std::vector<std::vector<int>>& map;
+    std::vector<sf::Vector2i>& items;
 
     /**
      * @brief looks if the position on the map is accessible (there is no wall)
@@ -65,9 +66,12 @@ public:
      * @param position 
      * @param windowSize 
      * @param textureSize 
-     * @param map 
+     * @param map
+     * @param items
+     * @param item
+     * @param isFinishable
      */
-    Player(Texture& texture, sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Item& item, bool isFinishable = false);
+    Player(Texture& texture, sf::Vector2i windowSize, std::vector<std::vector<int>>& map, std::vector<sf::Vector2i>& items, Item& item, bool isFinishable = false);
     
     /**
      * @brief Get the Position of the object

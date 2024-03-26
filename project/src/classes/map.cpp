@@ -4,7 +4,7 @@
 
 #include "../headers/map.h"
 
-Map::Map(const std::string& config, float Width, float Height, std::vector<std::vector<int>>& map)
+Map::Map(const std::string& config, float Width, float Height, std::vector<std::vector<int>>& map, std::vector<sf::Vector2i>& items)
         : map(map), Width(Width), Height(Height) {
     std::string file;
     std::string folder;
@@ -68,7 +68,7 @@ Map::Map(const std::string& config, float Width, float Height, std::vector<std::
                         map.at(row).at(i) = 3;
                     }
                 } else if(line[i] == settings.at("item")) {
-                    map.at(row).at(i) = 5;
+                    items.emplace_back(sf::Vector2i(i, row));
                 } else if (line[i] == settings.at("finish")) {
                     map.at(row).at(i) = 2;
                 }
