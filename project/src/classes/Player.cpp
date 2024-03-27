@@ -24,6 +24,7 @@ void Player::Update(float dt) {
         if(map.isItem(playerPos)){
             Item item = this->map.getItem(playerPos);
             item.OnAction();
+            this->map.removeItem(playerPos);
         }
     }
 }

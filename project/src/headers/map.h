@@ -101,6 +101,8 @@ public:
     bool isItem(int x, int y) const;
     bool isItem(sf::Vector2i vec) const;
 
+    void removeItem(int x, int y);
+    void removeItem(sf::Vector2i vec);
 };
 
 

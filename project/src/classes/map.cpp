@@ -4,7 +4,7 @@
 
 #include "../headers/map.h"
 
-Map::Map(const std::string& config, float Width, float Height, Item& item)
+Map::Map(const std::string& config, float Width, float Height, Item &item)
         : Width(Width), Height(Height) {
     std::string file;
     std::string folder;
@@ -172,7 +172,7 @@ int Map::getItemCount() const {
 }
 
 Item Map::getItem(int x, int y) const {
-    if(items.at(x).at(y) == 0) return Item();
+    if(items.at(x).at(y) == 0) throw std::out_of_range("No item on this position");
     return itemObjects.at(items.at(x).at(y) - 1);   //indexing from 1
 }
 
@@ -180,4 +180,11 @@ Item Map::getItem(sf::Vector2i vec) const {
     return getItem(vec.x, vec.y);
 }
 
+void Map::removeItem(int x, int y) {
+    items.at(x).at(y) = 0;
+}
+
+void Map::removeItem(sf::Vector2i vec) {
+    removeItem(vec.x, vec.y);
+}
 

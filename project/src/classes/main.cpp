@@ -8,6 +8,8 @@
 #include "../headers/UIText.h"
 
 
+int collectedItems = 0;
+
 bool loadConfig(const std::string& path, int& width, int& height, std::vector<Texture>& textures, sf::Font& font){
     std::ifstream openfile(path);
     bool goal;
@@ -81,15 +83,12 @@ bool loadConfig(const std::string& path, int& width, int& height, std::vector<Te
     return goal;
 }
 
-
-
 int main(int argc, char *argv[]) {
     std::vector<Texture> textures;
 
     sf::Font font;
-    int allItems, collectedItems;
+    int allItems;// collectedItems;
     float timeFromStart = 0;
-
 
     int WIDTH, HEIGHT;
     if(argc < 2){
@@ -102,10 +101,11 @@ int main(int argc, char *argv[]) {
     std::cout << "Window size: " << WIDTH << "x" << HEIGHT << std::endl;
     window.setVerticalSyncEnabled(true);
 
+
     auto itemTex = getTextureByName("item", textures);
     Item item(itemTex, sf::Vector2f(200, 200), sf::Vector2f(1, 1), []{
         std::cout << "Item collected" << std::endl;
-        //collectedItems++;
+        collectedItems++;
 
     });
 
@@ -157,7 +157,7 @@ int main(int argc, char *argv[]) {
                     window.close();
                 }
 
-                collectedItems = allItems - map.getItemCount();
+                //collectedItems = allItems - map.getItemCount();
                 collectedText.UpdateText("Collected: " + std::to_string(collectedItems) + "/" + std::to_string(allItems));
                 collectedText.Render(window);
 
@@ -175,7 +175,7 @@ int main(int argc, char *argv[]) {
             window.clear();
             player.Render(window);
             if(goal){
-                collectedItems = allItems - map.getItemCount();
+                //collectedItems = allItems - map.getItemCount();
                 collectedText.UpdateText("Collected: " + std::to_string(collectedItems) + "/" + std::to_string(allItems));
                 collectedText.Render(window);
             } else {

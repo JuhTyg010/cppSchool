@@ -31,9 +31,6 @@ public:
      */
     Item(const Item& other);
 
-    Item() = default;
-
-    ~Item() = default;
 
     /**
      * @brief this is not implemented is there only for parent class
