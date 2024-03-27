@@ -26,3 +26,6 @@ There are two variants of the game:
 - D - move right
 ### Rotation
 - mouse - look around
+
+### Action key
+- E - pick up item
