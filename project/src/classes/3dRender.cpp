@@ -92,7 +92,7 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
                 if(it == items.end())     items.emplace_back(mapPos);
             }
 
-            isHit = map.isWall(mapPos);
+            isHit = map.isWall(mapPos) || map.isFinish(mapPos); //finish is also a wall
 
         }
         if(isXAxis)     perpWallDist = sideDist.x - deltaDist.x;

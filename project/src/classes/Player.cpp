@@ -38,6 +38,10 @@ void Player::Render(sf::RenderWindow &window) {
 
 bool Player::isLegalPosition(const Vector2d &pos) {
     try {
+        if(isFinishable && map.isFinish((int) pos.x, (int) pos.y)) {
+            std::cout << "You won" << std::endl;
+            exit(0);
+        }
         return !map.isWall((int) pos.x, (int) pos.y);
 
     } catch (std::out_of_range &e) {
