@@ -161,6 +161,7 @@ void Map::setPlayerPosition(const Vector2d &pos) {
     playerPosition = pos;
 }
 
+//could return the size of itemObjects, but we don't destroy them when we remove them from the map
 int Map::getItemCount() const {
     int count = 0;
     for(auto & i : items) {

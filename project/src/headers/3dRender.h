@@ -21,7 +21,6 @@ private:
     sf::Vector2f textureSize;
     Map& map;
     std::vector<std::shared_ptr<Stripe>> stripes;
-    Item& item;
 
 public:
     double pitch = 0;
@@ -30,9 +29,8 @@ public:
      * 
      * @param windowSize 
      * @param map 
-     * @param item 
      */
-    Camera(sf::Vector2i windowSize, Map& map, Texture& textures, Item& item);
+    Camera(sf::Vector2i windowSize, Map& map, Texture& textures);
 
     /**
      * @brief Construct a new Camera object
@@ -40,9 +38,8 @@ public:
      * @param windowWidth 
      * @param windowHeight 
      * @param map 
-     * @param item 
      */
-    Camera(int windowWidth, int windowHeight, Map& map, Texture& texture, Item& item);
+    Camera(int windowWidth, int windowHeight, Map& map, Texture& texture);
 
     /**
      * @brief render recalculates the stripes and items which can be seen and draws them on the screen

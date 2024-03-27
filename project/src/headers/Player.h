@@ -16,9 +16,6 @@ private:
     // if goal is to only collect items than its false
     bool isFinishable = false;
 
-    int finishNum = 2; //convection on map
-    int playerNum = 3; //convection on map
-    const int legal[3] = {0,playerNum, 5};  //0 is empty and 5 is item
     float sideSpeed = 0;
     float speed = 0;
     float rotationSpeed = 0;
@@ -62,29 +59,11 @@ public:
      * @brief Construct a new Player object
      * 
      * @param texture 
-     * @param position 
-     * @param windowSize 
-     * @param textureSize 
+     * @param windowSize
      * @param map
-     * @param items
-     * @param item
      * @param isFinishable
      */
-    Player(Texture& texture, sf::Vector2i windowSize, Map& map, Item& item, bool isFinishable = false);
-    
-    /**
-     * @brief Get the Position of the object
-     * 
-     * @return sf::Vector2f 
-     */
-    sf::Vector2f getPosition();
-    
-    /**
-     * @brief Get the Direction of the object
-     * 
-     * @return sf::Vector2f 
-     */
-    sf::Vector2f getDirection();
+    Player(Texture& texture, sf::Vector2i windowSize, Map& map, bool isFinishable = false);
 
     /**
      * @brief Update the player (check inputs, Update position)

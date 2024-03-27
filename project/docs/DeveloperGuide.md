@@ -23,10 +23,10 @@ determining which objects are visible, and rendering them onto the screen.
 
 #### 3. Constructor:
 
-- `Camera(sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Texture& texture, Item& item)`:
-    Constructs a new Camera object with the specified window size, map, texture, and item.
-- `Camera(int windowWidth, int windowHeight, std::vector<std::vector<int>>& map, Texture& texture, Item& item)`:
-    Constructs a new Camera object with the specified window width, window height, map, texture, and item.
+- `Camera(sf::Vector2i windowSize, Map& map, Texture& texture)`:
+    Constructs a new Camera object with the specified window size, map, texture.
+- `Camera(int windowWidth, int windowHeight, Map& map, Texture& texture)`:
+    Constructs a new Camera object with the specified window width, window height, map, texture.
 
 #### 4. Methods:
 
@@ -67,8 +67,8 @@ The `Item` class represents an item in the game world. It inherits from the `Vis
 
 #### 2. Constructors:
 
-- `Item(Texture &texture, sf::Vector2f position, sf::Vector2f size)`:
-  Constructs a new Item object with the specified texture, position, and size.
+- `Item(Texture &texture, sf::Vector2f position, sf::Vector2f size, std::function<void()> OnAction = [](){})`:
+  Constructs a new Item object with the specified texture, position, size and on action function.
 
 - `Item(const Item &other)`:
   Copy constructor to create a new Item object by copying another Item object.
@@ -80,6 +80,9 @@ The `Item` class represents an item in the game world. It inherits from the `Vis
 
 - `void Update(sf::Vector2f position, sf::Vector2f size)`:
   Updates the position and size of the item.
+
+- `void OnAction() `:
+  Calls the on action function of the item.
 
 - `Item copy() const`:
   Creates a copy of the current Item object and returns it.
@@ -97,11 +100,11 @@ in a top-down view.
 
 #### 2. Constructor:
 
-- `Map(const std::string& config, float Width, float Height, std::vector<std::vector<int>>& map)`:
+- `Map(const std::string& config, float Width, float Height)`:
   Constructs a new Map object by loading map data from the specified [configuration file](Configuration.md)
-    and setting the width, height, and reference to the map. For every configuration , the map make it universal.
-    where the map is a 2D vector of integers. Which represent : 0. empty space, 1. wall, 2. exit, 3. player, 5. item.
-    Others are reserved for future use.
+    and setting the width, height, and reference to the map. For every configuration , the map class make it universal.
+    Makes bool map with true on walls and false on empty space. And other int map with items which are stored in array.
+    Also sets the finish and player position.
 
 #### 3. Methods:
 
@@ -112,6 +115,26 @@ in a top-down view.
   Iterates through the map and returns the number of items present on the map. 
   Returns the number of items present on the map.
 
+- `Item getItem(int x, int y) const` & `Item getItem(sf::Vector2i vec) const`:
+  Returns the item at the specified position on the map.
+
+- `bool isWall(int x, int y) const` & `bool isWall(sf::Vector2i vec) const`:
+  Checks if the specified position on the map is a wall.
+
+- `bool isFinish(int x, int y) const` & `bool isFinish(sf::Vector2i vec) const`:
+  Checks if the specified position on the map is the finish position.
+
+- `Vector2d getPlayerPosition() const`:
+  Returns the player's position on the map.
+
+- `void setPlayerPosition(Vector2d position)`:
+  Sets the player's position on the map.
+
+- `bool isItem(int x, int y) const` & `bool isItem(sf::Vector2i vec) const`:
+  Checks if the specified position on the map contains an item.
+
+- `void removeItem(int x, int y)` & `void removeItem(sf::Vector2i vec)`:
+  Removes the item at the specified position on the map.
 
 ### Player
 
@@ -125,29 +148,25 @@ It handles player movement, rotation, and rendering through the camera.
 #### 2. Member Variables:
 
 - `bool isFinishable`: Specifies if the player's goal is only to collect items or escape.
-- `int finishNum`: Represents the convention on the map for the finish position.
-- `int playerNum`: Represents the convention on the map for the player position.
-- `const int legal[3]`: Array representing the legal positions on the map.
+
 - `float sideSpeed`: Represents the side movement speed of the player.
 - `float speed`: Represents the forward/backward movement speed of the player.
 - `float rotationSpeed`: Represents the rotation speed of the player.
-- `Vector2d position`: Represents the position of the player.
+
 - `Vector2d direction`: Represents the direction the player is facing.
 - `Vector2d plane`: Represents the plane of the player's view (for camera).
 - `sf::Vector2i lastMousePos`: Represents the last recorded mouse position.
 - `sf::Vector2i windowPosition`: Represents the position of the player's window.
 - `std::unique_ptr<Camera> camera`: Pointer to the camera representing the player's view.
-- `std::vector<std::vector<int>>& map`: Reference to the map representing the game environment.
+- `Map& map`: Reference to the map object.
 
 #### 3. Constructors:
 
-- `Player(Texture& texture, sf::Vector2i windowSize, std::vector<std::vector<int>>& map, Item& item, bool isFinishable = false)`:
-  Constructs a new Player object with the specified texture, window size, map, item, and goal status.
+- `Player(Texture& texture, sf::Vector2i windowSize, Map& map, bool isFinishable = false)`:
+  Constructs a new Player object with the specified texture, window size, map, and goal status.
 
 #### 4. Methods:
 
-- `sf::Vector2f getPosition()`: Returns the position of the player.
-- `sf::Vector2f getDirection()`: Returns the direction the player is facing.
 - `void Update(float dt)`: Updates the player's position and checks for inputs.
 - `void Render(sf::RenderWindow &window)`: Renders the player and the camera (player's view) onto the specified SFML RenderWindow.
 

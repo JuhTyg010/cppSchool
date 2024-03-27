@@ -7,9 +7,9 @@
 #include <cmath>
 
 
-Player::Player(Texture &texture, sf::Vector2i windowSize, Map &map, Item &item, bool goal): plane(Vector2d(0, 1)),
+Player::Player(Texture &texture, sf::Vector2i windowSize, Map &map, bool goal): plane(Vector2d(0, 1)),
     direction(Vector2d(-1, 0)), map(map), lastMousePos(sf::Mouse::getPosition()), isFinishable(goal) {
-    camera = std::make_unique<Camera>(Camera(windowSize, map, texture, item));
+    camera = std::make_unique<Camera>(Camera(windowSize, map, texture));
 }
 
 

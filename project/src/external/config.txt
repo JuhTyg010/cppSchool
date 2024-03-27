@@ -1,6 +1,6 @@
 window_size: 1200 800
 
-resource_folder: /home/juhtyg/Desktop/UK_Skola/Druhy-rok_zima/programming_cpp/sadovsm/project/src/external
+resource_folder: ./external
 
 map_file: map1.txt
 map_legend: [wall: #, player: P, item: i, empty: ., finish: F]

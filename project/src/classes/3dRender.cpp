@@ -5,15 +5,15 @@
 #include "../headers/3dRender.h"
 
 
-Camera::Camera(sf::Vector2i windowSize, Map& map, Texture& texture, Item& item) :
-                windowSize(windowSize), textureSize(texture.getSize()), map(map), item(item){
+Camera::Camera(sf::Vector2i windowSize, Map& map, Texture& texture) :
+                windowSize(windowSize), textureSize(texture.getSize()), map(map){
     for(int i = 0; i < windowSize.x; i++){
         stripes.emplace_back(std::make_shared<Stripe>(sf::Vector2f ((float)i, (float) windowSize.y / 2), texture, false));
     }
 }
 
-Camera::Camera(int windowWidth, int windowHeight, Map& map, Texture& texture, Item& item) :
-        Camera(sf::Vector2i (windowWidth, windowHeight), map, texture, item){}
+Camera::Camera(int windowWidth, int windowHeight, Map& map, Texture& texture) :
+        Camera(sf::Vector2i (windowWidth, windowHeight), map, texture){}
 
 
 void Camera::render(const Vector2d &position, const Vector2d &direction, const Vector2d &plane, sf::RenderWindow &window) {
@@ -99,7 +99,8 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         else            perpWallDist = sideDist.y - deltaDist.y;
 
         // Calculate height of line to draw on screen
-        int lineHeight = (int)(windowSize.y / perpWallDist / 2) ;   //divide by 2 to count only half of the screen
+        // a/b/c = a/(b*c)
+        int lineHeight = (int)(windowSize.y / (2 * perpWallDist));
 
         //calculate lowest and highest pixel to fill in current Stripe
         int drawStart = lineHeight + (windowSize.y >> 1);
@@ -133,11 +134,6 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
 
         Vector2d itemVect = Vector2d(itemPos.x + .5, itemPos.y + .5) - position;//+.5 to get the center of the square
         double dist = std::sqrt(std::pow(itemVect.x, 2) + std::pow(itemVect.y, 2));
-
-        //transform sprite with the inverse camera matrix
-        // [ planeX   dirX ] -1                                       [ dirY      -dirX ]
-        // [               ]       =  1/(planeX*dirY-dirX*planeY) *   [                 ]
-        // [ planeY   dirY ]                                          [ -planeY  planeX ]
 
         double invDet = 1 / (plane.x * direction.y - direction.x * plane.y); //required for correct matrix multiplication
 

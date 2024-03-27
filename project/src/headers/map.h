@@ -88,7 +88,7 @@ public:
     /**
      * @brief sets the position of the player
      *
-     * @param pos
+     * @param pos vector2d
      */
     void setPlayerPosition(const Vector2d& pos);
 
@@ -96,11 +96,18 @@ public:
     /**
      * @brief returns if the position is an item
      *
+     * @param x, y position
+     *
      * @return bool
      */
     bool isItem(int x, int y) const;
     bool isItem(sf::Vector2i vec) const;
 
+    /**
+     * @brief removes the item from the position
+     *
+     * @param x, y position
+     */
     void removeItem(int x, int y);
     void removeItem(sf::Vector2i vec);
 };
