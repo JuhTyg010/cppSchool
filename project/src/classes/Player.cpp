@@ -17,6 +17,15 @@ Player::Player(Texture &texture, sf::Vector2i windowSize, Map &map, Item &item, 
 void Player::Update(float dt) {
     rotate(dt, 10, .2);
     move(dt, 2, .2);
+
+    //action key pressed
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E)){
+        sf::Vector2i playerPos = sf::Vector2i(this->map.getPlayerPosition().x, this->map.getPlayerPosition().y);
+        if(map.isItem(playerPos)){
+            Item item = this->map.getItem(playerPos);
+            item.OnAction();
+        }
+    }
 }
 
 

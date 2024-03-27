@@ -4,7 +4,7 @@
 
 #include "../headers/map.h"
 
-Map::Map(const std::string& config, float Width, float Height)
+Map::Map(const std::string& config, float Width, float Height, Item& item)
         : Width(Width), Height(Height) {
     std::string file;
     std::string folder;
@@ -63,6 +63,7 @@ Map::Map(const std::string& config, float Width, float Height)
     }
     int row = 0;
     int player = 0;
+    int itemCount = 1;       //indexing from 1 cause 0 is empty
     while(std::getline(openfile, line)) {
         for(int i = 0; i < line.size(); i++) {
             try{
@@ -74,7 +75,8 @@ Map::Map(const std::string& config, float Width, float Height)
                         playerPosition = Vector2d(row, i);
                     }
                 } else if(line[i] == settings.at("item")) {
-                    items.at(row).at(i) = true;
+                    items.at(row).at(i) = itemCount++;
+                    itemObjects.emplace_back(Item(item));
                 } else if (line[i] == settings.at("finish")) {
                     finishPosition = sf::Vector2i(row, i);
                 }
@@ -136,11 +138,11 @@ bool Map::isWall(sf::Vector2i pos) const {
 }
 
 bool Map::isItem(int x, int y) const {
-    return items.at(x).at(y);
+    return items.at(x).at(y) != 0;
 }
 
 bool Map::isItem(sf::Vector2i pos) const {
-    return items.at(pos.x).at(pos.y);
+    return items.at(pos.x).at(pos.y) != 0;
 }
 
 bool Map::isFinish(int x, int y) const {
@@ -162,9 +164,20 @@ void Map::setPlayerPosition(const Vector2d &pos) {
 int Map::getItemCount() const {
     int count = 0;
     for(auto & i : items) {
-        for(bool j : i) {
-            if(j) count++;
+        for(int j : i) {
+            if(j != 0) count++;
         }
     }
     return count;
 }
+
+Item Map::getItem(int x, int y) const {
+    if(items.at(x).at(y) == 0) return Item();
+    return itemObjects.at(items.at(x).at(y) - 1);   //indexing from 1
+}
+
+Item Map::getItem(sf::Vector2i vec) const {
+    return getItem(vec.x, vec.y);
+}
+
+

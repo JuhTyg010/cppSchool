@@ -12,13 +12,15 @@
 #include <unordered_map>
 #include <iostream>
 #include "Utils.h"
+#include "Item.h"
 
 
 
 class Map {
 private:
     std::vector<std::vector<bool>> walls;
-    std::vector<std::vector<bool>> items;
+    std::vector<std::vector<int>> items;
+    std::vector<Item> itemObjects;
     Vector2d playerPosition;
     sf::Vector2i finishPosition;
 
@@ -33,7 +35,7 @@ public:
      * @param Height 
      * @param map 
      */
-    Map( const std::string& config, float Width, float Height);
+    Map( const std::string& config, float Width, float Height, Item& item);
 
     /**
      * @brief renders the map from top-down view 
@@ -48,6 +50,16 @@ public:
      * @return int 
      */
     int getItemCount() const;
+
+    /**
+     * @brief returns the item on the position
+     *
+     * @param x
+     * @param y
+     * @return Item
+     */
+    Item getItem(int x, int y) const;
+    Item getItem(sf::Vector2i vec) const;
 
     /**
      * @brief returns if the position is a wall
@@ -88,6 +100,7 @@ public:
      */
     bool isItem(int x, int y) const;
     bool isItem(sf::Vector2i vec) const;
+
 };
 
 

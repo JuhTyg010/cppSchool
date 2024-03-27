@@ -129,7 +129,6 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         }
 
     }
-
     for(auto& itemPos : items){
 
         Vector2d itemVect = Vector2d(itemPos.x + .5, itemPos.y + .5) - position;//+.5 to get the center of the square
@@ -150,7 +149,7 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
 
 
         sf::Vector2f itemSize = sf::Vector2f(200, 200) /(float) dist;
-        Item newItem(item);
+        Item newItem = this->map.getItem(itemPos);
         newItem.Update(sf::Vector2f((float) itemScreenX, itemScreenY), itemSize);
         toRender.emplace_back(std::make_shared<Item>(newItem));
         toRender.back()->distance = dist;   //if set before it won't be sorted correctly

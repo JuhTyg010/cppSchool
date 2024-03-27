@@ -4,9 +4,10 @@
 
 #include "../headers/Item.h"
 
-Item::Item(Texture &texture, sf::Vector2f position, sf::Vector2f size) : VisibleObject(texture, position, size) {}
+Item::Item(Texture &texture, sf::Vector2f position, sf::Vector2f size, std::function<void()> action)
+            : VisibleObject(texture, position, size), action(action) {}
 
-Item::Item(const Item &other) : VisibleObject(other) {}
+Item::Item(const Item &other) : VisibleObject(other) , action(other.action){}
 
 void Item::Update(float deltaTime) {
     
@@ -18,6 +19,11 @@ void Item::Update(sf::Vector2f position, sf::Vector2f size) {
     sprite->setPosition(position);
     sf::Vector2f scale = divide(size, sprite->getTextureSize());
     sprite->setScale(scale);
+}
+
+void Item::OnAction() {
+    action();
+    delete this;
 }
 
 Item Item::copy() const {

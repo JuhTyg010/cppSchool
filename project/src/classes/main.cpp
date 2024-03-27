@@ -101,7 +101,15 @@ int main(int argc, char *argv[]) {
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Working Title");
     std::cout << "Window size: " << WIDTH << "x" << HEIGHT << std::endl;
     window.setVerticalSyncEnabled(true);
-    Map map( argv[1],WIDTH/3 , HEIGHT/4);
+
+    auto itemTex = getTextureByName("item", textures);
+    Item item(itemTex, sf::Vector2f(200, 200), sf::Vector2f(1, 1), []{
+        std::cout << "Item collected" << std::endl;
+        //collectedItems++;
+
+    });
+
+    Map map( argv[1],WIDTH/3 , HEIGHT/4, item);
     std::cout << "Map loaded" << std::endl;
     if(goal){
         allItems = map.getItemCount();
@@ -111,9 +119,6 @@ int main(int argc, char *argv[]) {
     sf::Mouse::setPosition(sf::Vector2i(WIDTH/2, HEIGHT/2) + window.getPosition());
 
     auto playerTex = getTextureByName("wall", textures);
-    auto itemTex = getTextureByName("item", textures);
-    Item item(itemTex, sf::Vector2f(200, 200), sf::Vector2f(1, 1));
-
     Player player(playerTex, sf::Vector2i(WIDTH, HEIGHT), map, item, !goal);
 
     auto buttonTex = getTextureByName("button", textures);

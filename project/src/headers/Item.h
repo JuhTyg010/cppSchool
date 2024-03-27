@@ -6,8 +6,11 @@
 #define INC_3D_GAME_ITEM_H
 
 #include "VisibleObject.h"
+#include <functional>
 
 class Item : public VisibleObject {
+private:
+    std::function<void()> action;
 
 public:
 
@@ -16,9 +19,10 @@ public:
      * 
      * @param texture 
      * @param position 
-     * @param size 
+     * @param size
+     * @param action
      */
-    Item(Texture &texture, sf::Vector2f position, sf::Vector2f size);
+    Item(Texture &texture, sf::Vector2f position, sf::Vector2f size, std::function<void()> action = [](){});
 
     /**
      * @brief Copy construct a new Item object
@@ -26,6 +30,10 @@ public:
      * @param other 
      */
     Item(const Item& other);
+
+    Item() = default;
+
+    ~Item() = default;
 
     /**
      * @brief this is not implemented is there only for parent class
@@ -41,6 +49,13 @@ public:
      * @param size 
      */
     void Update(sf::Vector2f position, sf::Vector2f size);
+
+    /**
+     * @brief OnAction is called when the player collides with the item
+     *
+     * @param action
+     */
+    void OnAction();
 
     /**
      * @brief returns a copy of the item
