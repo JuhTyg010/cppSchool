@@ -2,7 +2,7 @@ window_size: 1200 800
 
 resource_folder: ./external
 
-map_file: andreja.txt
+map_file: map1.txt
 map_legend: [wall: #, player: P, item: i, empty: ., finish: F]
 
 button_texture: button.png
@@ -17,4 +17,4 @@ player_texture_size: 64 64
 item_texture: item.png
 item_texture_size: 64 64
 
-goal: collectw
+goal: collect
