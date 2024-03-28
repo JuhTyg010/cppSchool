@@ -10,13 +10,12 @@
 
 int collectedItems;
 
-bool loadConfig(const std::string& path, int& width, int& height, std::vector<Texture>& textures, sf::Font& font){
+bool loadConfig(const std::string& path, int& width, int& height, std::vector<Texture>& textures){
     std::ifstream openfile(path);
     bool goal;
     std::string line;
     std::string value;
     std::string resourceFolder;
-    std::string fontFile;
     std::map<std::string, std::string> texturePaths;
     std::map<std::string, sf::Vector2f> textureSizes;
 
@@ -62,9 +61,6 @@ bool loadConfig(const std::string& path, int& width, int& height, std::vector<Te
             } else if (key == "resource_folder:") {
                 ss >> resourceFolder;
                 if (resourceFolder.back() != '/') resourceFolder += '/';
-            } else if(key == "font_file:"){
-                ss >> value;
-                fontFile = value;
             } else if(key == "goal:"){
                 ss >> value;
                 goal = value == "collect";
@@ -75,7 +71,6 @@ bool loadConfig(const std::string& path, int& width, int& height, std::vector<Te
             textures.emplace_back(key, resourceFolder + val, textureSizes[key], sf::Vector2f(1, 1));
             std::cout << "Texture loaded: " << resourceFolder + val << std::endl;
         }
-        font.loadFromFile(resourceFolder + fontFile);
     } catch (std::exception& e) {
         std::cerr << "Error while loading from config: " << e.what() << std::endl;
         exit (1);
@@ -86,7 +81,7 @@ bool loadConfig(const std::string& path, int& width, int& height, std::vector<Te
 int main(int argc, char *argv[]) {
 
     std::vector<Texture> textures;
-    sf::Font font;
+
     int allItems;
     float timeFromStart = 0;
     int WIDTH, HEIGHT;
@@ -95,12 +90,14 @@ int main(int argc, char *argv[]) {
         std::cerr << "No config file provided" << std::endl;
         return 1;
     }
-    bool goal = loadConfig(argv[1], WIDTH, HEIGHT, textures, font);
+    bool goal = loadConfig(argv[1], WIDTH, HEIGHT, textures);
     std::cout << "Config loaded with game goal: " << (goal ? "collect" : "escape") << std::endl;
 
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "3D epic game");
     std::cout << "Window size: " << WIDTH << "x" << HEIGHT << std::endl;
     window.setVerticalSyncEnabled(true);
+    sf::Font font;
+    font.loadFromFile("./Utils/Montserrat-Regular.ttf");
 
     auto itemTex = getTextureByName("item", textures);
     Item item(itemTex, sf::Vector2f(200, 200), sf::Vector2f(1, 1), []{

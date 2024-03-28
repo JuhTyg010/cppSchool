@@ -6,10 +6,10 @@
 
 Button::Button(Texture& texture, sf::Vector2f position, sf::Vector2f size, const std::string& text,
                sf::Font& font, sf::Color color)
-        : text(text, font, 50) {
+        : text(text, font, 30) {
     sf::Vector2f scale(size.x / texture.getSize().x, size.y / texture.getSize().y);
     sprite = std::make_unique<spriteRenderer>(texture, position, size);
-    this->text.setOrigin(this->text.getGlobalBounds().width / 2, 40);
+    this->text.setOrigin(this->text.getLocalBounds().width / 2, this->text.getLocalBounds().height/2);
     this->text.setPosition(position.x , position.y );
     this->text.setFillColor(color);
 }

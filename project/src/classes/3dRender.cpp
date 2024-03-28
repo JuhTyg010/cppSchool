@@ -86,6 +86,7 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
                 mapPos.y += step.y;
                 isXAxis = false;
             }
+            try{
             //Check if ray has hit a wall
             if(map.isItem(mapPos)) {
                 auto it = std::find(items.begin(), items.end(), mapPos);
@@ -93,6 +94,9 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
             }
 
             isHit = map.isWall(mapPos) || map.isFinish(mapPos); //finish is also a wall
+            } catch (std::out_of_range& e){
+                isHit = true;
+            }
 
         }
         if(isXAxis)     perpWallDist = sideDist.x - deltaDist.x;
