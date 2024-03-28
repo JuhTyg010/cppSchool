@@ -26,3 +26,6 @@ add_executable(project classes/main.cpp
         headers/Item.h classes/item.cpp
         headers/UIText.h classes/UIText.cpp)
 target_link_libraries(project PRIVATE sfml-graphics sfml-window)
+
+add_executable(generator MapGeneration/MapGenerator.cpp)
+target_link_libraries(generator PRIVATE sfml-graphics sfml-window)
