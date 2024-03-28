@@ -4,7 +4,7 @@ This document provides a guide to the user interface of the application.
 
 To run the application, you will need vcpkg and then need to build it:
 
-``` cmake CMakeLists.txt```
+``` cmake .```
 
 Then run the application:
 

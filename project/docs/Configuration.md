@@ -13,7 +13,6 @@ Configuration file is a text file that contains the following parameters:
 - `item_texture_size` - the size (width, height) of the item texture in pixels.
 - `wall_texture` - the name of the file containing the texture of the wall (should be twice the size to show exit).
 - `wall_texture_size` - the size (width, height) of the wall texture in pixels.
-- `font_file` - the name of the file containing the font.
 - `goal` - the goal of the game (either `collect` or `escape`), but default is `escape`.
 
 The configuration file should be in the following format:
@@ -36,8 +35,6 @@ player_texture_size: 64 64
 
 item_texture: item.png
 item_texture_size: 64 64
-
-font_file: advanced_pixel-7.ttf
 
 goal: collect
 ```
