@@ -26,4 +26,4 @@ add_executable(project classes/main.cpp
 target_link_libraries(project PRIVATE sfml-graphics sfml-window)
 
 add_executable(editor MapGeneration/MapGenerator.cpp)
-target_link_libraries(generator PRIVATE sfml-graphics sfml-window)
+target_link_libraries(editor PRIVATE sfml-graphics sfml-window)
