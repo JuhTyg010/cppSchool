@@ -6,8 +6,12 @@
 
 Map::Map(const std::string& config, float Width, float Height, Item &item)
         : Width(Width), Height(Height) {
+
+    std::filesystem::path fullPath(config);
+    std::string folder = fullPath.parent_path().string();
+    folder += '/';
     std::string file;
-    std::string folder;
+    std::string resources;
 
     std::unordered_map<std::string, char> settings;
     std::ifstream openconfig(config);
@@ -38,8 +42,11 @@ Map::Map(const std::string& config, float Width, float Height, Item &item)
                 }
             }
         } else if(key == "resource_folder:") {
-            ss >> folder;
-            if(folder.back() != '/') folder += '/';
+            ss >> resources;
+            if(resources.back() != '/') resources += '/';
+            resources = resources.substr(2, resources.size());
+            folder += resources;
+            std::cout << folder << std::endl;
         }
     }
     openconfig.close();

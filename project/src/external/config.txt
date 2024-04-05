@@ -1,6 +1,6 @@
 window_size: 1200 800
 
-resource_folder: ./external
+resource_folder: .
 
 map_file: map1.txt
 map_legend: [wall: #, player: P, item: i, empty: ., finish: F]

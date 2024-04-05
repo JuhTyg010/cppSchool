@@ -3,13 +3,15 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Window.hpp>
 #include "../headers/Player.h"
-#include "../headers/map.h"
 #include "../headers/button.h"
 #include "../headers/UIText.h"
 
 
 
 bool loadConfig(const std::string& path, int& width, int& height, std::vector<Texture>& textures){
+
+    std::filesystem::path fullPath(path);
+    std::string folder = fullPath.parent_path().string();
     std::ifstream openfile(path);
     bool goal;
     std::string line;
@@ -60,6 +62,8 @@ bool loadConfig(const std::string& path, int& width, int& height, std::vector<Te
             } else if (key == "resource_folder:") {
                 ss >> resourceFolder;
                 if (resourceFolder.back() != '/') resourceFolder += '/';
+                resourceFolder = resourceFolder.substr(2, resourceFolder.size());
+                resourceFolder = folder + "/" + resourceFolder;
             } else if(key == "goal:"){
                 ss >> value;
                 goal = value == "collect";

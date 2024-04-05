@@ -47,7 +47,7 @@ void generateConfig(std::string mapFile){
     std::cout << configName + folder + mapFileName << std::endl;
 
     outStream << "window_size: 1200 800" << std::endl;
-    outStream << "resource_folder: " + folder << std::endl;
+    outStream << "resource_folder: ." << std::endl;
     outStream << "map_file: " + mapFileName << std::endl;
     outStream << legend << std::endl;
 
