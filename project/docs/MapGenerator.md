@@ -4,13 +4,21 @@ To make it easier to create maps there is small sub-program in which you can gen
 
 ## User guide
 
-To run the application, you will need vcpkg and then need to build it:
+To run the application, you will need SFML and then need to build it:
 
 ``` cmake .```
 
+If you don't have SFML installed, you can also build it using vcpkg:
+
+```cmake --preset vcpkg .```
+
+After building the cmake, you will need to build the project:
+
+``` make```
+
 Then run the application:
 
-``` ./generator <widthOfMap> <heightOfMap> "nameToStore"```
+``` ./editor <widthOfMap> <heightOfMap> "nameToStore"```
 
 It opens the window in which we can Draw the map, you can draw in black window.
 Default brush is wall (1) you can switch between the brushes via nums:

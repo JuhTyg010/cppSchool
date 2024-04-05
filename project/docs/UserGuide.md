@@ -18,12 +18,8 @@ Then run the application:
 
 ``` ./project "path_to_config"```
 
-If you want to run the map editor, you can run:
+If you want to run the map editor, go [here](MapGenerator.md).
 
-```./editor <width> <height> "path_to_map"```
-
-you can use config in ```src/external/config.txt``` which provides a simple demo of the application. 
-For more information on how to create your own config, see the [Configuration](Configuration.md).
 
 ## Game goal
 There are two variants of the game:

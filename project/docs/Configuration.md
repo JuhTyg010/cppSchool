@@ -2,7 +2,7 @@
  
 Configuration file is a text file that contains the following parameters:
 - `window_size` - the size (width, height separated by space) of the window in pixels.
-- `resource_folder` - the path to the folder with resources (better to use absolute).
+- `resource_folder` - the path to the folder with resources from config file (for example in same folder is . ).
 - `map_file` - the name of the file containing map information.
 - `map_legend` - the legend of the map file.
 - `button_texture` - the name of the file containing the texture of the button.
