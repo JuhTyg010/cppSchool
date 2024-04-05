@@ -82,8 +82,8 @@ void Player::rotate(float dt, float rotSpeed, float rotAccel) {
 
     rotationSpeed = std::max(std::min((float) rotSpeed, rotationSpeed),(float) -rotSpeed);
 
-    if(mousePos.x > lastMousePos.x) rotationSpeed -= (rotAccel * (mousePos.x - lastMousePos.x));
-    else if(mousePos.x < lastMousePos.x) rotationSpeed += (rotAccel * (lastMousePos.x - mousePos.x));
+    if(mousePos.x > lastMousePos.x) rotationSpeed -= rotAccel;
+    else if(mousePos.x < lastMousePos.x) rotationSpeed += rotAccel;
 
     else rotationSpeed *= 0.5;
 

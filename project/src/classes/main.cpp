@@ -8,7 +8,6 @@
 #include "../headers/UIText.h"
 
 
-int collectedItems;
 
 bool loadConfig(const std::string& path, int& width, int& height, std::vector<Texture>& textures){
     std::ifstream openfile(path);
@@ -77,10 +76,14 @@ bool loadConfig(const std::string& path, int& width, int& height, std::vector<Te
     }
     return goal;
 }
+struct gameData{
+    int collectedItems = 0;
+};
 
 int main(int argc, char *argv[]) {
 
     std::vector<Texture> textures;
+    gameData gameData;
 
     int allItems;
     float timeFromStart = 0;
@@ -93,15 +96,15 @@ int main(int argc, char *argv[]) {
     bool goal = loadConfig(argv[1], WIDTH, HEIGHT, textures);
     std::cout << "Config loaded with game goal: " << (goal ? "collect" : "escape") << std::endl;
 
-    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "3D epic game");
+    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "3D epic game", sf::Style::Titlebar | sf::Style::Close);
     std::cout << "Window size: " << WIDTH << "x" << HEIGHT << std::endl;
     window.setVerticalSyncEnabled(true);
     sf::Font font;
     font.loadFromFile("./Utils/Montserrat-Regular.ttf");
 
     auto itemTex = getTextureByName("item", textures);
-    Item item(itemTex, sf::Vector2f(200, 200), sf::Vector2f(1, 1), []{
-        collectedItems++;
+    Item item(itemTex, sf::Vector2f(200, 200), sf::Vector2f(1, 1), [&gameData]{
+        gameData.collectedItems++;
     });
 
     Map map( argv[1],WIDTH/3 , HEIGHT/4, item);
@@ -109,7 +112,7 @@ int main(int argc, char *argv[]) {
 
     if(goal){
         allItems = map.getItemCount();
-        collectedItems = 0;
+        gameData.collectedItems = 0;
     }
 
     sf::Mouse::setPosition(sf::Vector2i(WIDTH/2, HEIGHT/2) + window.getPosition());
@@ -121,7 +124,7 @@ int main(int argc, char *argv[]) {
     Button resume(buttonTex, sf::Vector2f((float)WIDTH/2, (float)HEIGHT/2 -100), sf::Vector2f(200, 100), "Resume", font, sf::Color::Black);
     Button quit(buttonTex, sf::Vector2f((float)WIDTH/2, (float)HEIGHT/2+100), sf::Vector2f(200, 100), "Quit", font, sf::Color::Black);
 
-    UIText collectedText("Collected: " + std::to_string(collectedItems) + "/" + std::to_string(allItems),
+    UIText collectedText("Collected: " + std::to_string(gameData.collectedItems) + "/" + std::to_string(allItems),
                          font, sf::Vector2f(10, 10), sf::Color::White, 30);
 
     UIText escapeText("Time: 0", font, sf::Vector2f(10, 10), sf::Color::White, 30);
@@ -136,6 +139,7 @@ int main(int argc, char *argv[]) {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)){
             isPaused = true;
@@ -148,13 +152,13 @@ int main(int argc, char *argv[]) {
             window.clear();
             player.Render(window);
             if(goal){
-                if(collectedItems == allItems){
+                if(gameData.collectedItems == allItems){
                     std::cout << "You won" << std::endl;
                     window.close();
                 }
 
                 //collectedItems = allItems - map.getItemCount();
-                collectedText.UpdateText("Collected: " + std::to_string(collectedItems) + "/" + std::to_string(allItems));
+                collectedText.UpdateText("Collected: " + std::to_string(gameData.collectedItems) + "/" + std::to_string(allItems));
                 collectedText.Render(window);
 
             } else {
@@ -172,7 +176,7 @@ int main(int argc, char *argv[]) {
             player.Render(window);
             if(goal){
                 //collectedItems = allItems - map.getItemCount();
-                collectedText.UpdateText("Collected: " + std::to_string(collectedItems) + "/" + std::to_string(allItems));
+                collectedText.UpdateText("Collected: " + std::to_string(gameData.collectedItems) + "/" + std::to_string(allItems));
                 collectedText.Render(window);
             } else {
                 escapeText.UpdateText("Time: " + std::to_string(timeFromStart));

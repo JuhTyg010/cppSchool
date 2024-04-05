@@ -51,6 +51,8 @@ public:
      */
     void render(const Vector2d& position, const Vector2d& direction, const Vector2d& plane, sf::RenderWindow& window);
 
+
+
     /**
      * @brief get the window size
      * 
