@@ -84,6 +84,79 @@ struct gameData{
     int collectedItems = 0;
 };
 
+bool lifeCycle(sf::RenderWindow& window, gameData& gameData, Player& player, Map& map, UIText& collectedText, UIText& escapeText,
+               Button& resume, Button& quit, bool goal){
+    sf::Clock clock;
+    bool isPaused = false;
+    float timeFromStart = 0;
+    int allItems = 0;
+    if(goal){
+        allItems = map.getItemCount();
+        gameData.collectedItems = 0;
+    }
+
+    while (window.isOpen()) {
+        sf::Event event{};
+        sf::Time dt = clock.restart();
+
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
+            isPaused = true;
+        }
+
+
+        if (!isPaused) {
+            player.Update(dt.asSeconds());
+            window.setMouseCursorVisible(false);
+            window.clear();
+            player.Render(window);
+            if (goal) {
+                if (gameData.collectedItems == allItems) {
+                    std::cout << "You won" << std::endl;
+                    window.close();
+                }
+
+                //collectedItems = allItems - map.getItemCount();
+                collectedText.UpdateText(
+                        "Collected: " + std::to_string(gameData.collectedItems) + "/" + std::to_string(allItems));
+                collectedText.Render(window);
+
+            } else {
+                timeFromStart += dt.asSeconds();
+                escapeText.UpdateText("Time: " + std::to_string(timeFromStart));
+                escapeText.Render(window);
+            }
+        } else {
+            window.setMouseCursorVisible(true);
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                if (resume.isClicked(sf::Mouse::getPosition(window))) isPaused = false;
+                else if (quit.isClicked(sf::Mouse::getPosition(window))) window.close();
+            }
+            window.clear();
+            player.Render(window);
+            if (goal) {
+                //collectedItems = allItems - map.getItemCount();
+                collectedText.UpdateText(
+                        "Collected: " + std::to_string(gameData.collectedItems) + "/" + std::to_string(allItems));
+                collectedText.Render(window);
+            } else {
+                escapeText.UpdateText("Time: " + std::to_string(timeFromStart));
+                escapeText.Render(window);
+            }
+            resume.Render(window);
+            quit.Render(window);
+        }
+
+        window.display();
+    }
+    return true;
+}
+
+
 int main(int argc, char *argv[]) {
 
     std::vector<Texture> textures;
@@ -136,63 +209,7 @@ int main(int argc, char *argv[]) {
     sf::Clock clock;
     bool isPaused = false;
 
-    while (window.isOpen()) {
-        sf::Event event{};
-        sf::Time dt = clock.restart();
-
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-
-        }
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)){
-            isPaused = true;
-        }
-
-
-        if(!isPaused){
-            player.Update(dt.asSeconds());
-            window.setMouseCursorVisible(false);
-            window.clear();
-            player.Render(window);
-            if(goal){
-                if(gameData.collectedItems == allItems){
-                    std::cout << "You won" << std::endl;
-                    window.close();
-                }
-
-                //collectedItems = allItems - map.getItemCount();
-                collectedText.UpdateText("Collected: " + std::to_string(gameData.collectedItems) + "/" + std::to_string(allItems));
-                collectedText.Render(window);
-
-            } else {
-                timeFromStart += dt.asSeconds();
-                escapeText.UpdateText("Time: " + std::to_string(timeFromStart));
-                escapeText.Render(window);
-            }
-        } else {
-            window.setMouseCursorVisible(true);
-            if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-                if(resume.isClicked(sf::Mouse::getPosition(window)))        isPaused = false;
-                else if(quit.isClicked(sf::Mouse::getPosition(window)))     window.close();
-            }
-            window.clear();
-            player.Render(window);
-            if(goal){
-                //collectedItems = allItems - map.getItemCount();
-                collectedText.UpdateText("Collected: " + std::to_string(gameData.collectedItems) + "/" + std::to_string(allItems));
-                collectedText.Render(window);
-            } else {
-                escapeText.UpdateText("Time: " + std::to_string(timeFromStart));
-                escapeText.Render(window);
-            }
-            resume.Render(window);
-            quit.Render(window);
-        }
-
-        window.display();
-
-    }
+    lifeCycle(window, gameData, player, map, collectedText, escapeText, resume, quit, goal);
 
     return 0;
 }

@@ -32,10 +32,16 @@ double getDistance(sf::Vector2f vec1, sf::Vector2f vec2);
  * @return T 
  */
 template <typename T>
+concept vec2dim = requires(T t) {
+    { t.x };
+    { t.y };
+};
+
+template <typename T> requires vec2dim<T>
 T divide(T a, T b){
     return {a.x / b.x, a.y / b.y};
 }
-template <typename T, typename C>
+template <typename T, typename C> requires vec2dim<T>
 T divide(T a, C b){
     return {a.x / b, a.y / b};
 }
@@ -137,7 +143,5 @@ public:
  * @return const Texture& 
  */
 const Texture& getTextureByName(const std::string& name, std::vector<Texture>& textures);
-
-
 
 #endif //INC_3D_GAME_UTILS_H
