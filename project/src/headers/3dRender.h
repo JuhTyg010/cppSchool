@@ -32,6 +32,16 @@ private:
      */
     void addItems(std::vector<sf::Vector2i>& items, std::vector<std::shared_ptr<VisibleObject>>& toRender);
 
+    /**
+     * @brief DigitalDifferentialAnalyzer
+     * @param rayDir
+     * @param deltaDist
+     * @param perpWallDist
+     * @param items
+     * @return
+     */
+    bool DigitalDifferentialAnalyzer(const Vector2d& rayDir, const Vector2d& deltaDist, double& perpWallDist, std::vector<sf::Vector2i>& items);
+
 public:
     double pitch = 0;
     /**

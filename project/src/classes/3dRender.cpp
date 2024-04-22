@@ -18,14 +18,12 @@ Camera::Camera(int windowWidth, int windowHeight, Map& map, Texture& texture, co
 
 void Camera::render(sf::RenderWindow &window) {
 
+    //update position
     position = map.getPlayerPosition();
-    //plane calculation
     std::vector<std::shared_ptr<VisibleObject>> toRender;
     std::vector<sf::Vector2i> items;
 
-
     //Draw the floor and ceiling
-
     sf::RectangleShape ceiling(sf::Vector2f((float)windowSize.x, (float) ((windowSize.y >> 1) + pitch)));
     ceiling.setFillColor(sf::Color(50, 50, 50));
     ceiling.setPosition(0, 0);
@@ -48,61 +46,11 @@ void Camera::render(sf::RenderWindow &window) {
             if(it == items.end())     items.emplace_back(mapPos);
         }
 
-        //length of ray from current position to next x or y-side for more see docs
-        Vector2d sideDist{};
-
         //length of ray from one x or y-side to next x or y-side (if rayDir.x or rayDir.y == 0 it will be infinity)
         Vector2d deltaDist = Vector2d(std::abs(1 / rayDir.x), std::abs(1 / rayDir.y));
         double perpWallDist;
 
-        //what direction to step in x or y-direction (either +1 or -1)
-        sf::Vector2i step;
-
-        bool isHit = false;
-        bool isXAxis; //was a NS(X) or a EW(Y) wall hit?
-
-        //calculate step and initial sideDist
-        if(rayDir.x < 0){
-            step.x = -1;
-            sideDist.x = (position.x - mapPos.x) * deltaDist.x;
-        } else {
-            step.x = 1;
-            sideDist.x = (mapPos.x + 1.0 - position.x) * deltaDist.x;
-        } if(rayDir.y < 0){
-            step.y = -1;
-            sideDist.y = (position.y - mapPos.y) * deltaDist.y;
-        } else {
-            step.y = 1;
-            sideDist.y = (mapPos.y + 1.0 - position.y) * deltaDist.y;
-        }
-
-        //perform Digital Differential Analysis
-        while(!isHit){
-            //jump to next map square, OR in x-direction, OR in y-direction
-            if(sideDist.x < sideDist.y){
-                sideDist.x += deltaDist.x;
-                mapPos.x += step.x;
-                isXAxis = true;
-            } else {
-                sideDist.y += deltaDist.y;
-                mapPos.y += step.y;
-                isXAxis = false;
-            }
-            try{
-            //Check if ray has hit a wall
-            if(map.isItem(mapPos)) {
-                auto it = std::find(items.begin(), items.end(), mapPos);
-                if(it == items.end())     items.emplace_back(mapPos);
-            }
-
-            isHit = map.isWall(mapPos) || map.isFinish(mapPos); //finish is also a wall
-            } catch (std::out_of_range& e){
-                isHit = true;
-            }
-
-        }
-        if(isXAxis)     perpWallDist = sideDist.x - deltaDist.x;
-        else            perpWallDist = sideDist.y - deltaDist.y;
+        bool isXAxis = DigitalDifferentialAnalyzer(rayDir, deltaDist, perpWallDist, items);
 
         // Calculate height of line to draw on screen
         // a/b/c = a/(b*c)
@@ -170,4 +118,57 @@ void Camera::addItems(std::vector <sf::Vector2i> &items, std::vector <std::share
         toRender.back()->distance = dist;   //if set before it won't be sorted correctly
 
     }
+}
+
+bool Camera::DigitalDifferentialAnalyzer(const Vector2d &rayDir, const Vector2d &deltaDist, double &perpWallDist, std::vector<sf::Vector2i> &items) {
+    bool isXAxis;
+    sf::Vector2i step;
+    //length of ray from current position to next x or y-side for more see docs
+    Vector2d sideDist;
+    sf::Vector2i mapPos = sf::Vector2i((int)position.x, (int)position.y);
+
+    if(rayDir.x < 0){
+        step.x = -1;
+        sideDist.x = (position.x - mapPos.x) * deltaDist.x;
+    } else {
+        step.x = 1;
+        sideDist.x = (mapPos.x + 1 - position.x) * deltaDist.x;
+    } if(rayDir.y < 0){
+        step.y = -1;
+        sideDist.y = (position.y - mapPos.y) * deltaDist.y;
+    } else {
+        step.y = 1;
+        sideDist.y = (mapPos.y + 1 - position.y) * deltaDist.y;
+    }
+
+    bool isHit = false;
+    //perform Digital Differential Analysis
+    while(!isHit){
+        //jump to next map square, OR in x-direction, OR in y-direction
+        if(sideDist.x < sideDist.y){
+            sideDist.x += deltaDist.x;
+            mapPos.x += step.x;
+            isXAxis = true;
+        } else {
+            sideDist.y += deltaDist.y;
+            mapPos.y += step.y;
+            isXAxis = false;
+        }
+        try{
+            //Check if ray has hit a wall
+            if(map.isItem(mapPos)) {
+                auto it = std::find(items.begin(), items.end(), mapPos);
+                if(it == items.end())     items.emplace_back(mapPos);
+            }
+
+            isHit = map.isWall(mapPos) || map.isFinish(mapPos); //finish is also a wall
+        } catch (std::out_of_range& e){
+            isHit = true;
+        }
+
+    }
+    if(isXAxis)     perpWallDist = sideDist.x - deltaDist.x;
+    else            perpWallDist = sideDist.y - deltaDist.y;
+
+    return isXAxis;
 }
