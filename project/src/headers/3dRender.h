@@ -40,7 +40,14 @@ private:
      * @param items
      * @return
      */
-    bool DigitalDifferentialAnalyzer(const Vector2d& rayDir, const Vector2d& deltaDist, double& perpWallDist, std::vector<sf::Vector2i>& items);
+    bool DigitalDifferentialAnalyzer(const Vector2d& rayDir, const Vector2d& deltaDist, double& perpWallDist, std::vector<sf::Vector2i>& items, sf::Vector2i& mapPos);
+
+    /**
+     * @brief updateStripe
+     * @param index
+     * @return stripe wrapper
+     */
+    Stripe updateStripe(int index, std::vector<sf::Vector2i>& items, sf::Vector2i mapPos);
 
 public:
     double pitch = 0;

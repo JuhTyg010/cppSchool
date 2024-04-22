@@ -34,55 +34,18 @@ void Camera::render(sf::RenderWindow &window) {
     floor.setPosition(0, (float)pitch);
     window.draw(floor);
 
+
+    //which box of the map we're in
+    sf::Vector2i mapPos = sf::Vector2i((int)position.x, (int)position.y);
+    if(map.isItem(mapPos)){
+        auto it = std::find(items.begin(), items.end(), mapPos);
+        if(it == items.end())     items.emplace_back(mapPos);
+    }
+
+
     for(int i = 0; i < windowSize.x; i++){
-
-        //calculate ray position and direction
-        Vector2d rayDir = direction + plane * ((double) (i << 1) / windowSize.x - 1);
-
-        //which box of the map we're in
-        sf::Vector2i mapPos = sf::Vector2i((int)position.x, (int)position.y);
-        if(map.isItem(mapPos)){
-            auto it = std::find(items.begin(), items.end(), mapPos);
-            if(it == items.end())     items.emplace_back(mapPos);
-        }
-
-        //length of ray from one x or y-side to next x or y-side (if rayDir.x or rayDir.y == 0 it will be infinity)
-        Vector2d deltaDist = Vector2d(std::abs(1 / rayDir.x), std::abs(1 / rayDir.y));
-        double perpWallDist;
-
-        bool isXAxis = DigitalDifferentialAnalyzer(rayDir, deltaDist, perpWallDist, items);
-
-        // Calculate height of line to draw on screen
-        // a/b/c = a/(b*c)
-        int lineHeight = (int)(windowSize.y / (2 * perpWallDist));
-
-        //calculate lowest and highest pixel to fill in current Stripe
-        int drawStart = lineHeight + (windowSize.y >> 1);
-        if(drawStart > 4 * windowSize.y) drawStart = 4*windowSize.y;
-        int drawEnd = -lineHeight + (windowSize.y >> 1);
-        if(drawEnd < -4 * windowSize.y) drawEnd = -4 * windowSize.y;
-
-        int textureNum = map.isFinish(mapPos) ? 1 : 0; //to start from 0
-
-        double wallX; //where exactly the wall was hit
-        if(isXAxis)     wallX = position.y + perpWallDist * rayDir.y;
-        else            wallX = position.x + perpWallDist * rayDir.x;
-        wallX -= std::floor(wallX);
-
-        //x coordinate on the texture
-        int texX = (int)(wallX * textureSize.x);
-        if(isXAxis && rayDir.x > 0) texX = (int)textureSize.x - texX - 1;
-        if(!isXAxis && rayDir.y < 0) texX = (int)textureSize.x - texX - 1;
-
-        //Update Stripe of wall is Vertical
-        if(auto stripe = dynamic_cast<Stripe*>(stripes[i].get())){
-            stripe->Update(texX, drawStart, drawEnd, textureNum, (float) pitch);
-            stripes[i]->distance = perpWallDist;
-            toRender.emplace_back(stripes[i]);
-        } else {
-            throw std::runtime_error("Stripe is not a Stripe");
-        }
-
+        updateStripe(i, items, mapPos);
+        toRender.emplace_back(stripes[i]);
     }
 
     addItems(items, toRender);
@@ -120,12 +83,11 @@ void Camera::addItems(std::vector <sf::Vector2i> &items, std::vector <std::share
     }
 }
 
-bool Camera::DigitalDifferentialAnalyzer(const Vector2d &rayDir, const Vector2d &deltaDist, double &perpWallDist, std::vector<sf::Vector2i> &items) {
+bool Camera::DigitalDifferentialAnalyzer(const Vector2d &rayDir, const Vector2d &deltaDist, double &perpWallDist, std::vector<sf::Vector2i> &items, sf::Vector2i &mapPos) {
     bool isXAxis;
     sf::Vector2i step;
     //length of ray from current position to next x or y-side for more see docs
     Vector2d sideDist;
-    sf::Vector2i mapPos = sf::Vector2i((int)position.x, (int)position.y);
 
     if(rayDir.x < 0){
         step.x = -1;
@@ -171,4 +133,44 @@ bool Camera::DigitalDifferentialAnalyzer(const Vector2d &rayDir, const Vector2d 
     else            perpWallDist = sideDist.y - deltaDist.y;
 
     return isXAxis;
+}
+
+Stripe Camera::updateStripe(int index, std::vector<sf::Vector2i> &items, sf::Vector2i mapPos) {
+
+    Vector2d rayDir = direction + plane * ((double) (index << 1) / windowSize.x - 1);
+
+    //length of ray from one x or y-side to next x or y-side (if rayDir.x or rayDir.y == 0 it will be infinity)
+    Vector2d deltaDist = Vector2d(std::abs(1 / rayDir.x), std::abs(1 / rayDir.y));
+    double perpWallDist;
+
+    bool isXAxis = DigitalDifferentialAnalyzer(rayDir, deltaDist, perpWallDist, items, mapPos);
+
+    // Calculate height of line to draw on screen (a/b)/c = a/(b*c)
+    int lineHeight = (int)(windowSize.y / (2 * perpWallDist));
+
+    //calculate lowest and highest pixel to fill in current Stripe
+    int drawStart = lineHeight + (windowSize.y >> 1);
+    if(drawStart > 4 * windowSize.y) drawStart = 4*windowSize.y;
+    int drawEnd = -lineHeight + (windowSize.y >> 1);
+    if(drawEnd < -4 * windowSize.y) drawEnd = -4 * windowSize.y;
+
+    int textureNum = map.isFinish(mapPos) ? 1 : 0; //to start from 0
+
+    double wallX; //where exactly the wall was hit
+    if(isXAxis)     wallX = position.y + perpWallDist * rayDir.y;
+    else            wallX = position.x + perpWallDist * rayDir.x;
+    wallX -= std::floor(wallX);
+
+    //x coordinate on the texture
+    int texX = (int)(wallX * textureSize.x);
+    if(isXAxis && rayDir.x > 0) texX = (int)textureSize.x - texX - 1;
+    if(!isXAxis && rayDir.y < 0) texX = (int)textureSize.x - texX - 1;
+
+    if(auto stripe = dynamic_cast<Stripe*>(stripes[index].get())){
+        stripe->Update(texX, drawStart, drawEnd, textureNum, (float) pitch);
+        stripes[index]->distance = perpWallDist;
+        return *stripe;
+    } else {
+        throw std::runtime_error("Stripe is not a Stripe");
+    }
 }
