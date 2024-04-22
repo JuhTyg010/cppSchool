@@ -21,6 +21,16 @@ private:
     sf::Vector2f textureSize;
     Map& map;
     std::vector<std::shared_ptr<Stripe>> stripes;
+    Vector2d position;
+    const Vector2d& direction;
+    const Vector2d& plane;
+
+    /**
+     * @brief addItems adds items to the render list
+     * @param items
+     * @param toRender
+     */
+    void addItems(std::vector<sf::Vector2i>& items, std::vector<std::shared_ptr<VisibleObject>>& toRender);
 
 public:
     double pitch = 0;
@@ -30,7 +40,7 @@ public:
      * @param windowSize 
      * @param map 
      */
-    Camera(sf::Vector2i windowSize, Map& map, Texture& textures);
+    Camera(sf::Vector2i windowSize, Map& map, Texture& textures, const Vector2d& direction, const Vector2d& plane);
 
     /**
      * @brief Construct a new Camera object
@@ -39,7 +49,7 @@ public:
      * @param windowHeight 
      * @param map 
      */
-    Camera(int windowWidth, int windowHeight, Map& map, Texture& texture);
+    Camera(int windowWidth, int windowHeight, Map& map, Texture& texture, const Vector2d& direction, const Vector2d& plane);
 
     /**
      * @brief render recalculates the stripes and items which can be seen and draws them on the screen
@@ -49,7 +59,7 @@ public:
      * @param plane 
      * @param window 
      */
-    void render(const Vector2d& position, const Vector2d& direction, const Vector2d& plane, sf::RenderWindow& window);
+    void render(sf::RenderWindow& window);
 
 
 

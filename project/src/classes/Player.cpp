@@ -9,7 +9,7 @@
 
 Player::Player(Texture &texture, sf::Vector2i windowSize, Map &map, bool goal): plane(Vector2d(0, 1)),
     direction(Vector2d(-1, 0)), map(map), lastMousePos(sf::Mouse::getPosition()), isFinishable(goal) {
-    camera = std::make_unique<Camera>(Camera(windowSize, map, texture));
+    camera = std::make_unique<Camera>(Camera(windowSize, map, texture, direction, plane));
 }
 
 
@@ -32,7 +32,7 @@ void Player::Update(float dt) {
 
 void Player::Render(sf::RenderWindow &window) {
     windowPosition = window.getPosition();
-    camera->render(this->map.getPlayerPosition(), direction, plane, window);
+    camera->render(window);
 
 }
 

@@ -5,18 +5,20 @@
 #include "../headers/3dRender.h"
 
 
-Camera::Camera(sf::Vector2i windowSize, Map& map, Texture& texture) :
-                windowSize(windowSize), textureSize(texture.getSize()), map(map){
+Camera::Camera(sf::Vector2i windowSize, Map& map, Texture& texture, const Vector2d& direction, const Vector2d& plane) :
+                windowSize(windowSize), textureSize(texture.getSize()), map(map), direction(direction), plane(plane){
     for(int i = 0; i < windowSize.x; i++){
         stripes.emplace_back(std::make_shared<Stripe>(sf::Vector2f ((float)i, (float) windowSize.y / 2), texture, false));
     }
 }
 
-Camera::Camera(int windowWidth, int windowHeight, Map& map, Texture& texture) :
-        Camera(sf::Vector2i (windowWidth, windowHeight), map, texture){}
+Camera::Camera(int windowWidth, int windowHeight, Map& map, Texture& texture, const Vector2d& direction, const Vector2d& plane) :
+        Camera(sf::Vector2i (windowWidth, windowHeight), map, texture, direction, plane){}
 
 
-void Camera::render(const Vector2d &position, const Vector2d &direction, const Vector2d &plane, sf::RenderWindow &window) {
+void Camera::render(sf::RenderWindow &window) {
+
+    position = map.getPlayerPosition();
     //plane calculation
     std::vector<std::shared_ptr<VisibleObject>> toRender;
     std::vector<sf::Vector2i> items;
@@ -134,6 +136,19 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         }
 
     }
+
+    addItems(items, toRender);
+
+    std::ranges::sort(toRender.begin(), toRender.end(), [](const std::shared_ptr<VisibleObject>& a, const std::shared_ptr<VisibleObject>& b){
+        return a->distance > b->distance;
+    });
+
+    for(auto& object : toRender){
+        object->Render(window);
+    }
+}
+
+void Camera::addItems(std::vector <sf::Vector2i> &items, std::vector <std::shared_ptr<VisibleObject>> &toRender) {
     for(auto& itemPos : items){
 
         Vector2d itemVect = Vector2d(itemPos.x + .5, itemPos.y + .5) - position;//+.5 to get the center of the square
@@ -155,13 +170,4 @@ void Camera::render(const Vector2d &position, const Vector2d &direction, const V
         toRender.back()->distance = dist;   //if set before it won't be sorted correctly
 
     }
-
-    std::ranges::sort(toRender.begin(), toRender.end(), [](const std::shared_ptr<VisibleObject>& a, const std::shared_ptr<VisibleObject>& b){
-        return a->distance > b->distance;
-    });
-
-    for(auto& object : toRender){
-        object->Render(window);
-    }
-
 }
