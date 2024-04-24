@@ -8,6 +8,27 @@ const std::string  legend = "map_legend: [wall: #, player: P, item: i, empty: .,
 
 using grid_t = std::vector<std::vector<int>>;
 
+struct Colors{
+public:
+    static const sf::Color backgroundColor;
+    static const sf::Color wallColor;
+    static const sf::Color itemColor;
+    static const sf::Color playerColor;
+    static const sf::Color finishColor;
+    static const sf::Color windowColor;
+};
+
+const sf::Color Colors::backgroundColor = sf::Color::Black;
+const sf::Color Colors::wallColor = sf::Color::White;
+const sf::Color Colors::itemColor = sf::Color::Red;
+const sf::Color Colors::playerColor = sf::Color::Green;
+const sf::Color Colors::finishColor = sf::Color::Blue;
+const sf::Color Colors::windowColor = sf::Color(69, 63, 120);
+
+const sf::Vector2f windowSize(800, 600);
+const sf::Vector2f drawAreaSize(600, 500);
+const sf::Vector2f drawAreaPosition(20, 20);
+
 // Function to save drawn image as a top-down map
 void saveMapToFile(const grid_t& grid, int width, int height, std::string filename) {
     std::ofstream outfile(filename);
@@ -100,6 +121,90 @@ grid_t loadMapFromFile(std::string filename, int width_, int height_) {
     }
 }
 
+void drawImage(sf::RenderWindow& window, const sf::Vector2f cellSize, const grid_t& grid, int width, int height){
+    for (int x = 0; x < width; ++x) {
+        for (int y = 0; y < height; ++y) {
+            if (grid[x][y] != 0) {
+                sf::RectangleShape cell(cellSize);
+                cell.setPosition(x * cellSize.x + drawAreaPosition.x, y * cellSize.y + drawAreaPosition.y);
+                switch (grid[x][y]) {
+                    case 1:
+                        cell.setFillColor(Colors::wallColor);
+                        break;
+                    case 2:
+                        cell.setFillColor(Colors::finishColor);
+                        break;
+                    case 3:
+                        cell.setFillColor(Colors::playerColor);
+                        break;
+                    case 4:
+                        cell.setFillColor(Colors::itemColor);
+                        break;
+                }
+                window.draw(cell);
+            }
+        }
+    }
+}
+
+void penDown(sf::Vector2i mousePos, grid_t& grid, const sf::Vector2f& cellSize, int selectedValue, bool& playerPlaced, bool& finishPlaced){
+    // Calculate the position of the cell in the grid
+    int x = (mousePos.x - drawAreaPosition.x) / cellSize.x;
+    int y = (mousePos.y - drawAreaPosition.y) / cellSize.y;
+
+    try {
+        if(selectedValue == 3){
+            if(!playerPlaced) {
+                if(grid.at(x).at(y) == 2) finishPlaced = false;
+                grid.at(x).at(y) = selectedValue;
+                playerPlaced = true;
+            }
+        } else if(selectedValue == 2){
+            if(!finishPlaced){
+                if(grid.at(x).at(y) == 3) playerPlaced = false;
+                grid.at(x).at(y) = selectedValue;
+                finishPlaced = true;
+            }
+        } else {
+            if(grid.at(x).at(y) == 3) playerPlaced = false;
+            if(grid.at(x).at(y) == 2) finishPlaced = false;
+            grid.at(x).at(y) = selectedValue;
+        }
+    } catch (std::out_of_range &e) {
+        return;
+    }
+
+}
+
+void erase(sf::Vector2i mousePos, grid_t& grid, const sf::Vector2f& cellSize, bool& playerPlaced, bool& finishPlaced){
+    // Calculate the position of the cell in the grid
+    int x = (mousePos.x - drawAreaPosition.x) / cellSize.x;
+    int y = (mousePos.y - drawAreaPosition.y) / cellSize.y;
+
+    try {
+        if(grid.at(x).at(y) == 3) playerPlaced = false;
+        if(grid.at(x).at(y) == 2) finishPlaced = false;
+        grid.at(x).at(y) = 0;
+    } catch (std::out_of_range &e) {
+        return;
+    }
+}
+
+int selectValue(sf::Keyboard::Key value) {
+    switch (value) {
+        case sf::Keyboard::Num1:
+            return 1;
+        case sf::Keyboard::Num2:
+            return 2;
+        case sf::Keyboard::Num3:
+            return 3;
+        case sf::Keyboard::Num4:
+            return 4;
+        default:
+            throw std::runtime_error("Invalid value");
+    }
+}
+
 int main(int argc, char* argv[]) {
     if (argc != 4) {
         std::cerr << "Usage: " << argv[0] << " <width> <height> <output_file>" << std::endl;
@@ -119,24 +224,13 @@ int main(int argc, char* argv[]) {
     }
     std::string filename = argv[3];
 
-    sf::Color backgroundColor = sf::Color::Black;
-    sf::Color wallColor = sf::Color::White;
-    sf::Color itemColor = sf::Color::Red;
-    sf::Color playerColor = sf::Color::Green;
-    sf::Color finishColor = sf::Color::Blue;
-    sf::Color windowColor = sf::Color(69, 63, 120);
-
-    sf::Vector2f windowSize(800, 600);
-    sf::Vector2f drawAreaSize(600, 500);
-    sf::Vector2f drawAreaPosition(20, 20);
-
     // Create SFML window
     sf::RenderWindow window(sf::VideoMode(windowSize.x, windowSize.y), "Grid Drawing");
 
 
     sf::RectangleShape drawArea(drawAreaSize);
     drawArea.setPosition(drawAreaPosition);
-    drawArea.setFillColor(backgroundColor);
+    drawArea.setFillColor(Colors::backgroundColor);
 
     std::string message = " wall press 1 \n finish press 2 \n player press 3 \n item press 4";
     sf::Font font;
@@ -167,17 +261,12 @@ int main(int argc, char* argv[]) {
             }
 
             else if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Num1) {
-                    selectedValue = 1;
-                }
-                else if (event.key.code == sf::Keyboard::Num2) {
-                    selectedValue = 2;
-                }
-                else if (event.key.code == sf::Keyboard::Num3) {
-                    selectedValue = 3;
-                }
-                else if (event.key.code == sf::Keyboard::Num4) {
-                    selectedValue = 4;
+                try{
+                    selectedValue = selectValue(event.key.code);
+                } catch (std::runtime_error &e){
+                    std::cerr << "Invalid value" << std::endl;
+                    std::cout << "Valid values are " + message << std::endl;
+                    continue;
                 }
             }
 
@@ -199,80 +288,17 @@ int main(int argc, char* argv[]) {
 
 
             if (isDrawing) {
-                    // Get the position of the mouse cursor
-                    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                penDown(sf::Mouse::getPosition(window), grid, cellSize, selectedValue, playerPlaced, finishPlaced);
 
-                    // Calculate the position of the cell in the grid
-                    int x = (mousePos.x - drawAreaPosition.x) / cellSize.x;
-                    int y = (mousePos.y - drawAreaPosition.y) / cellSize.y;
-
-                    try{
-                        if(selectedValue == 3){
-                            if(!playerPlaced) {
-                                if(grid.at(x).at(y) == 2) finishPlaced = false;
-                                grid.at(x).at(y) = selectedValue;
-                                playerPlaced = true;
-                            }
-                        } else if(selectedValue == 2){
-                            if(!finishPlaced){
-                                if(grid.at(x).at(y) == 3) playerPlaced = false;
-                                grid.at(x).at(y) = selectedValue;
-                                finishPlaced = true;
-                            }
-                        } else {
-                            if(grid.at(x).at(y) == 3) playerPlaced = false;
-                            if(grid.at(x).at(y) == 2) finishPlaced = false;
-                            grid.at(x).at(y) = selectedValue;
-                        }
-                    } catch (std::out_of_range& e) {
-                        continue;
-                    }
-                } else if (isErasing) {
-                    // Get the position of the mouse cursor
-                    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-
-                    // Calculate the position of the cell in the grid
-                    int x = (mousePos.x - drawAreaPosition.x) / cellSize.x;
-                    int y = (mousePos.y - drawAreaPosition.y) / cellSize.y;
-
-                    try {
-                        if(grid.at(x).at(y) == 3) playerPlaced = false;
-                        if(grid.at(x).at(y) == 2) finishPlaced = false;
-                        grid.at(x).at(y) = 0;
-                    } catch (std::out_of_range &e) {
-                        continue;
-                    }
-                }
-
-        }
-
-        window.clear(windowColor);
-        window.draw(drawArea);
-        window.draw(text);
-
-        for (int x = 0; x < width; ++x) {
-            for (int y = 0; y < height; ++y) {
-                if (grid[x][y] != 0) {
-                    sf::RectangleShape cell(cellSize);
-                    cell.setPosition(x * cellSize.x + drawAreaPosition.x, y * cellSize.y + drawAreaPosition.y);
-                    switch (grid[x][y]) {
-                        case 1:
-                            cell.setFillColor(wallColor);
-                            break;
-                        case 2:
-                            cell.setFillColor(finishColor);
-                            break;
-                        case 3:
-                            cell.setFillColor(playerColor);
-                            break;
-                        case 4:
-                            cell.setFillColor(itemColor);
-                            break;
-                    }
-                    window.draw(cell);
-                }
+            } else if (isErasing) {
+                erase(sf::Mouse::getPosition(window), grid, cellSize, playerPlaced, finishPlaced);
             }
         }
+
+        window.clear(Colors::windowColor);
+        window.draw(drawArea);
+        window.draw(text);
+        drawImage(window, cellSize, grid, width, height);
         window.display();
     }
 
