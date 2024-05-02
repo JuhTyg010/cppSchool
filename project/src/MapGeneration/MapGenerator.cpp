@@ -234,7 +234,7 @@ int main(int argc, char* argv[]) {
 
     std::string message = " wall press 1 \n finish press 2 \n player press 3 \n item press 4";
     sf::Font font;
-    font.loadFromFile("./Utils/Montserrat-Regular.ttf");
+    font.loadFromFile("./Montserrat-Regular.ttf");
     sf::Text text;
     text.setFont(font);
     text.setString(message);

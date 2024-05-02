@@ -176,7 +176,7 @@ int main(int argc, char *argv[]) {
     std::cout << "Window size: " << WIDTH << "x" << HEIGHT << std::endl;
     window.setVerticalSyncEnabled(true);
     sf::Font font;
-    font.loadFromFile("./Utils/Montserrat-Regular.ttf");
+    font.loadFromFile("./Montserrat-Regular.ttf");
 
     auto itemTex = getTextureByName("item", textures);
     Item item(itemTex, sf::Vector2f(200, 200), sf::Vector2f(1, 1), [&gameData]{

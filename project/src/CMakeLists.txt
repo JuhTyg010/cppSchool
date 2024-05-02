@@ -12,6 +12,15 @@ find_package(SFML COMPONENTS  window graphics)
 
 include_directories(include Utils, headers)
 
+set(RESOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Utils)
+set(RESOURCE_FONT Montserrat-Regular.ttf)
+
+function(copy_font target)
+    add_custom_command(TARGET ${target}
+            POST_BUILD COMMAND
+            ${CMAKE_COMMAND} -E copy ${RESOURCE_DIR}/${RESOURCE_FONT} ${CMAKE_CURRENT_BINARY_DIR}/)
+endfunction()
+
 add_executable(project classes/main.cpp
         classes/map.cpp
         classes/Player.cpp
@@ -23,6 +32,8 @@ add_executable(project classes/main.cpp
         classes/item.cpp
         classes/UIText.cpp)
 target_link_libraries(project PRIVATE sfml-graphics sfml-window)
+copy_font(project)
 
 add_executable(editor MapGeneration/MapGenerator.cpp)
 target_link_libraries(editor PRIVATE sfml-graphics sfml-window)
+copy_font(editor)
