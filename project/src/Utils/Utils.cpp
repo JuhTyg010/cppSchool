@@ -26,7 +26,7 @@ Texture::Texture(std::string name, const std::string &path, sf::Vector2f size, s
 }
 
 Texture::Texture(const Texture &other)
-: name(other.name), size(other.size), matrix(other.matrix), texture(std::make_unique<sf::Texture>(*other.texture)) {}
+: name(other.name), texture(std::make_unique<sf::Texture>(*other.texture)), size(other.size), matrix(other.matrix) {}
 
 const sf::Texture& Texture::getTexture()  {
     return *texture;

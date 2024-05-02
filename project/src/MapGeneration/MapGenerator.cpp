@@ -78,7 +78,7 @@ void generateConfig(std::string mapFile){
 
 grid_t loadMapFromFile(std::string filename, int width_, int height_) {
 
-    std::ifstream(infile);
+    std::ifstream infile;
     grid_t grid(width_, std::vector<int>(height_, 0));
     try {
         infile.open(filename);
@@ -214,7 +214,7 @@ int main(int argc, char* argv[]) {
     try {
          width = std::stoi(argv[1]);
          height = std::stoi(argv[2]);
-    } catch (std::exception e){
+    } catch (std::exception& e){
         std::cerr << "Invalid map size" << std::endl;
         return 1;
     }

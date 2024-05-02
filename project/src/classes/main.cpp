@@ -162,8 +162,8 @@ int main(int argc, char *argv[]) {
     std::vector<Texture> textures;
     gameData gameData;
 
-    int allItems;
-    int WIDTH, HEIGHT;
+    int allItems = 0xDEADC0DE;
+    int WIDTH = 0xDEADC0DE, HEIGHT = 0xDEADC0DE;
 
     if(argc < 2){
         std::cerr << "No config file provided" << std::endl;
