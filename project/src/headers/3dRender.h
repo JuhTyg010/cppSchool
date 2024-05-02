@@ -13,7 +13,7 @@
 #include "Stripe.h"
 #include "Item.h"
 #include "map.h"
-#include "Utils.h"
+#include "../Utils/Utils.h"
 
 class Camera {
 private:

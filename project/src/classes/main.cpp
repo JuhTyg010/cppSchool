@@ -163,7 +163,6 @@ int main(int argc, char *argv[]) {
     gameData gameData;
 
     int allItems;
-    float timeFromStart = 0;
     int WIDTH, HEIGHT;
 
     if(argc < 2){
@@ -205,9 +204,6 @@ int main(int argc, char *argv[]) {
                          font, sf::Vector2f(10, 10), sf::Color::White, 30);
 
     UIText escapeText("Time: 0", font, sf::Vector2f(10, 10), sf::Color::White, 30);
-
-    sf::Clock clock;
-    bool isPaused = false;
 
     lifeCycle(window, gameData, player, map, collectedText, escapeText, resume, quit, goal);
 

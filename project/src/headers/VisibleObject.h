@@ -33,10 +33,9 @@ public:
      * @brief Copy constructor
      * 
      */
-    VisibleObject(const VisibleObject& other): position(other.position), size(other.size),
-            sprite(std::make_unique<spriteRenderer>(*other.sprite)){}
+    VisibleObject(const VisibleObject& other): sprite(std::make_unique<spriteRenderer>(*other.sprite)),
+    position(other.position), size(other.size){}
 
-    virtual void Update(float dt) = 0;
     virtual void Render(sf::RenderWindow& window){
         sprite->Render(window);
     }

@@ -7,7 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
-#include "Utils.h"
+#include "../Utils/Utils.h"
 
 class spriteRenderer {
 private:

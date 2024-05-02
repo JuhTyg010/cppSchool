@@ -58,7 +58,6 @@ public:
      * 
      * @param dt 
      */
-    void Update(float dt) override {}
 
 };
 

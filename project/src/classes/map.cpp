@@ -72,7 +72,7 @@ Map::Map(const std::string& config, float Width, float Height, Item &item)
     int player = 0;
     int itemCount = 1;       //indexing from 1 cause 0 is empty
     while(std::getline(openfile, line)) {
-        for(int i = 0; i < line.size(); i++) {
+        for(size_t i = 0; i < line.size(); i++) {
             try{
                 if(line[i] == settings.at("wall")) {
                     walls.at(row).at(i) = true;
@@ -106,8 +106,8 @@ void Map::render(sf::RenderWindow& window) {
     background.setPosition(0, 0);
     window.draw(background);
 
-    for (int i = 0; i < walls.size(); i++) {
-        for (int j = 0; j < walls.at(i).size(); j++) {
+    for (size_t i = 0; i < walls.size(); i++) {
+        for (size_t j = 0; j < walls.at(i).size(); j++) {
             if (walls.at(i).at(j)) {
                 sf::RectangleShape rectangle;
                 rectangle.setSize(size);
@@ -120,7 +120,7 @@ void Map::render(sf::RenderWindow& window) {
                 rectangle.setPosition((j + .25f) * size.x, (i + .25f) * size.y);
                 rectangle.setFillColor(sf::Color::Green);
                 window.draw(rectangle);
-            } else if (finishPosition.x == i && finishPosition.y == j) {
+            } else if (finishPosition.x == (int) i && finishPosition.y == (int) j) {
                 sf::RectangleShape rectangle;
                 rectangle.setSize(size / 2.0f);
                 rectangle.setPosition((j + .25f) * size.x, (i + .25f) * size.y);

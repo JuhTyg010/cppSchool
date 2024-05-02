@@ -10,20 +10,21 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Find SFML package
 find_package(SFML COMPONENTS  window graphics)
 
-include_directories(include Utils)
+include_directories(include Utils, headers)
 
 add_executable(project classes/main.cpp
-        classes/map.cpp headers/map.h
-        headers/Player.h classes/Player.cpp
+        classes/map.cpp
+        classes/Player.cpp
         Utils/Utils.cpp Utils/Utils.h
-        headers/spriteRenderer.h classes/spriteRenderer.cpp
-        headers/3dRender.h classes/3dRender.cpp
-        headers/Stripe.h classes/Stripe.cpp
+        classes/spriteRenderer.cpp
+        classes/3dRender.cpp
+        classes/Stripe.cpp
         classes/button.cpp headers/button.h
-        headers/VisibleObject.h
-        headers/Item.h classes/item.cpp
-        headers/UIText.h classes/UIText.cpp)
+        classes/item.cpp
+        classes/UIText.cpp)
 target_link_libraries(project PRIVATE sfml-graphics sfml-window)
 
 add_executable(editor MapGeneration/MapGenerator.cpp)
 target_link_libraries(editor PRIVATE sfml-graphics sfml-window)
+
+target_compile_options(project PRIVATE -Wall -Wextra -pedantic)

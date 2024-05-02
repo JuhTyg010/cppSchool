@@ -31,14 +31,6 @@ public:
      */
     Item(const Item& other);
 
-
-    /**
-     * @brief this is not implemented is there only for parent class
-     * 
-     * @param deltaTime 
-     */
-    void Update(float deltaTime) override;
-
     /**
      * @brief updates position and size of the item
      * 

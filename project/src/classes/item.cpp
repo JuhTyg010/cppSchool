@@ -9,12 +9,6 @@ Item::Item(Texture &texture, sf::Vector2f position, sf::Vector2f size, std::func
 
 Item::Item(const Item &other) : VisibleObject(other) , action(other.action){}
 
-
-
-void Item::Update(float deltaTime) {
-    
-}
-
 void Item::Update(sf::Vector2f position, sf::Vector2f size) {
     this->position = position;
     this->size = size;

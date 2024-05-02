@@ -6,27 +6,25 @@
 #define INC_3D_GAME_PLAYER_H
 #include <SFML/Graphics.hpp>
 #include "3dRender.h"
-#include "Utils.h"
+#include "../Utils/Utils.h"
 #include "map.h"
 #include <memory>
 #include "Item.h"
 
 class Player{
 private:
-    // if goal is to only collect items than its false
-    bool isFinishable = false;
 
+    Vector2d plane;
+    Vector2d direction;
+    Map& map;
+    sf::Vector2i lastMousePos;
+    std::unique_ptr<Camera> camera;
+    bool isFinishable = false; // if goal is to only collect items than its false
     float sideSpeed = 0;
     float speed = 0;
     float rotationSpeed = 0;
-
-    Vector2d direction;
-    Vector2d plane;
-    sf::Vector2i lastMousePos;
     sf::Vector2i windowPosition;
 
-    std::unique_ptr<Camera> camera;
-    Map& map;
 
     /**
      * @brief looks if the position on the map is accessible (there is no wall)
