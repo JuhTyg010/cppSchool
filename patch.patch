@@ -1,0 +1,34 @@
+diff --git a/project/src/CMakeLists.txt b/project/src/CMakeLists.txt
+index 7dd46a6..e62d007 100644
+--- a/project/src/CMakeLists.txt
++++ b/project/src/CMakeLists.txt
+@@ -10,7 +10,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
+ # Find SFML package
+ find_package(SFML COMPONENTS  window graphics)
+ 
+-include_directories(include Utils, headers)
++include_directories(include Utils headers)
+ 
+ set(RESOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Utils)
+ set(RESOURCE_FONT Montserrat-Regular.ttf)
+@@ -24,11 +24,11 @@ endfunction()
+ add_executable(project classes/main.cpp
+         classes/map.cpp
+         classes/Player.cpp
+-        Utils/Utils.cpp Utils/Utils.h
++        Utils/Utils.cpp
+         classes/spriteRenderer.cpp
+         classes/3dRender.cpp
+         classes/Stripe.cpp
+-        classes/button.cpp headers/button.h
++        classes/button.cpp
+         classes/item.cpp
+         classes/UIText.cpp)
+ target_link_libraries(project PRIVATE sfml-graphics sfml-window)
+@@ -36,4 +36,4 @@ copy_font(project)
+ 
+ add_executable(editor MapGeneration/MapGenerator.cpp)
+ target_link_libraries(editor PRIVATE sfml-graphics sfml-window)
+-copy_font(editor)
+\ No newline at end of file
++copy_font(editor)
